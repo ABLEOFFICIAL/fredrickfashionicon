@@ -1,0 +1,41 @@
+API Endpoints Reference
+Auth Routes (/api/auth)
+
+POST /signup - Register new user
+POST /signin - Login user
+GET /google - Initiate Google OAuth
+GET /google/callback - Google OAuth callback
+POST /logout - Logout user
+GET /me - Get current user
+POST /forgot-password - Request password reset
+PUT /reset-password/:token - Reset password
+
+User Routes (/api/users)
+
+GET /profile - Get user profile with wishlist
+PUT /profile - Update user profile
+DELETE /account - Delete account (cascading delete)
+
+Product Routes (/api/products)
+
+GET / - Get all products (with pagination, search, category filter)
+POST / - Create new product (protected)
+PUT /:id - Update product (owner only)
+DELETE /:id - Delete product (owner only)
+POST /:id/like - Like/unlike product (protected)
+POST /:id/wishlist - Add/remove from wishlist (protected)
+
+Blog Routes (/api/blogs)
+
+GET / - Get all published blogs (with pagination)
+POST / - Create new blog (protected)
+PUT /:id - Update blog (author only)
+DELETE /:id - Delete blog (author only)
+
+Payment Routes (/api/payments) - Paystack Integration
+
+POST /initialize - Initialize payment transaction
+GET /verify/:reference - Verify payment status
+POST /webhook - Webhook for real-time notifications
+GET /history - Get user's payment history (with pagination)
+GET /:reference - Get single payment details
