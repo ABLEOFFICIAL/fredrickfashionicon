@@ -1,73 +1,115 @@
 "use client";
-import React, { useContext, useState } from "react";
-import { BsBox2 } from "react-icons/bs";
-import { CiMail } from "react-icons/ci";
-import { MdOutlinePayment } from "react-icons/md";
-import { UserProfile } from "../components/NavBarMd";
-import Like from "../components/Like";
+import React from "react";
+import {
+  Package,
+  Mail,
+  Heart,
+  CreditCard,
+  User,
+  LogOut,
+  ChevronRight,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
-import { LogOut } from "lucide-react";
+import { useSelector, useDispatch } from "react-redux";
 
-export const Order = () => {
-  return <BsBox2 className="size-5 stroke-1" />;
-};
-export const Mail = () => {
-  return <CiMail className="size-5 stroke-1" />;
-};
-export const Payment = () => {
-  return <MdOutlinePayment className="size-5" />;
-};
-
-const ProfileSide = () => {
+const ProfileSidebar = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const pathname = usePathname();
-  const currentPath = pathname.split("/").pop(); // gets the last segment
-  const { categories } = useSelector((state) => state.context);
+  const currentPath = pathname.split("/").pop();
+  const { user } = useSelector((state) => state.auth);
+
+  const menuItems = [
+    { title: "Profile", icon: User, path: "profile" },
+    { title: "Orders", icon: Package, path: "orders" },
+    { title: "Inbox", icon: Mail, path: "inbox" },
+    { title: "Wishlist", icon: Heart, path: "wishlist" },
+    { title: "Payment", icon: CreditCard, path: "payment" },
+  ];
+
+  const handleLogout = () => {
+    // Add your logout logic here
+    // dispatch(logoutUser());
+    router.push("/");
+  };
 
   return (
-    <div className="h-[450px] w-1/4 bg-[#4a4741] rounded-sm">
-      <div className="flex flex-col justify-between h-4/5">
-        <div className="flex flex-col gap-7 p-5">
-          {[
-            { title: "Profile", icon: <UserProfile /> },
-            { title: "Orders", icon: <Order /> },
-            { title: "Inbox", icon: <Mail /> },
-            {
-              title: "Wishlist",
-              icon: <Like className={"size-5 stroke-1"} />,
-            },
-            { title: "Payment", icon: <Payment /> },
-          ].map((item, idx) => {
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-8">
+      {/* User Profile Header */}
+      <div className="p-6 border-b border-gray-100 bg-linear-to-br from-gray-900 to-gray-800">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center">
+            <User className="w-7 h-7 text-gray-900" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-white truncate">
+              {user?.name || "User Name"}
+            </h3>
+            <p className="text-sm text-gray-300 truncate">
+              {user?.email || "user@email.com"}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation Menu */}
+      <nav className="p-3">
+        <div className="space-y-1">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = currentPath === item.path;
+
             return (
-              <span
-                onClick={() =>
-                  router.push(
-                    `/profile/${item.title.toLowerCase().replace(" ", "-")}`
-                  )
-                }
-                key={idx}
-                className={`flex items-center gap-3 ${
-                  currentPath === item.title.toLowerCase().replace(" ", "-")
-                    ? "bg-[#f7f1e8] text-[#4a4741] rounded-xl px-3 py-2"
-                    : "cursor-pointer text-[#f7f1e8]"
+              <button
+                key={item.path}
+                onClick={() => router.push(`/profile/${item.path}`)}
+                className={`w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl transition-all group ${
+                  isActive
+                    ? "bg-gray-900 text-white shadow-md"
+                    : "text-gray-700 hover:bg-gray-50"
                 }`}
               >
-                <span>{item.icon}</span>
-                <span>{item.title}</span>
-              </span>
+                <div className="flex items-center gap-3">
+                  <Icon
+                    className={`w-5 h-5 ${
+                      isActive
+                        ? "text-white"
+                        : "text-gray-600 group-hover:text-gray-900"
+                    }`}
+                  />
+                  <span
+                    className={`font-medium ${isActive ? "text-white" : ""}`}
+                  >
+                    {item.title}
+                  </span>
+                </div>
+                {isActive && <ChevronRight className="w-5 h-5 text-white" />}
+              </button>
             );
           })}
         </div>
-        <div>
-          <span className="text-base font-light pt-4 mx-start cursor-pointer w-max text-gray-300 flex items-center gap-2 px-5 py-2">
-            <LogOut />
-            Logout
-          </span>
-        </div>
+      </nav>
+
+      {/* Logout Button */}
+      <div className="p-3 border-t border-gray-100">
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 transition-all group"
+        >
+          <LogOut className="w-5 h-5" />
+          <span className="font-medium">Logout</span>
+        </button>
+      </div>
+
+      {/* Support Section */}
+      <div className="p-6 bg-gray-50 border-t border-gray-100">
+        <p className="text-xs text-gray-500 mb-2">Need help?</p>
+        <button className="text-sm text-gray-900 font-medium hover:underline">
+          Contact Support
+        </button>
       </div>
     </div>
   );
 };
 
-export default ProfileSide;
+export default ProfileSidebar;

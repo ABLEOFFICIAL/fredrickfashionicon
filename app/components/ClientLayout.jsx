@@ -9,6 +9,7 @@ import Sidebar from "./SideBar";
 import {
   fetchCart,
   fetchCurrentUser,
+  fetchOrders,
   fetchProduct,
   fetchUserAddresses,
   fetchUserProfile,
@@ -26,6 +27,7 @@ export default function ClientLayout({ children }) {
     dispatch(fetchWishlist());
     dispatch(fetchCart());
     dispatch(fetchUserAddresses());
+    dispatch(fetchOrders());
   }, [dispatch]);
   // const { wishList } = useSelector((state) => state.auth);
   // console.log("🌟 ClientLayout: wishList from Redux store:", wishList);

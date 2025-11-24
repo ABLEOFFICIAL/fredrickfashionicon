@@ -1,12 +1,12 @@
 // utils/helper.js
-import { authAPI, cartAPI, userAPI } from "@/lib/api";
+import { authAPI, cartAPI, orderAPI, userAPI } from "@/lib/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchCurrentUser = createAsyncThunk(
   "auth/fetchCurrentUser",
   async (_, { rejectWithValue }) => {
     try {
-      console.log("TOKEN:", localStorage.getItem("token"));
+      // console.log("TOKEN:", localStorage.getItem("token"));
 
       // Automatically uses your configured axios instance (with baseURL, interceptors, etc.)
       const { data } = await authAPI.getMe();
@@ -254,3 +254,23 @@ export const clearCart = createAsyncThunk(
     }
   }
 );
+
+//fetch addresses
+export const fetchOrders = createAsyncThunk(
+  "context/fetchOrders",
+  async (_, { rejectWithValue }) => {
+    try {
+      const { data } = await orderAPI.getAll();
+      console.log("Fetched orders:", data);
+      return data.orders || []; // must match your API response
+    } catch (error) {
+      console.error("Error fetching addresses:", error);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to load addresses"
+      );
+    }
+  }
+);
+
+// ✅ Fetch cart items
+// const { data } = await orderAPI.getAll();

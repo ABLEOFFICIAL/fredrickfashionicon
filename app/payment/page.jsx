@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   CheckCircle,
   ArrowLeft,
@@ -9,6 +9,7 @@ import {
   CreditCard,
   Smartphone,
 } from "lucide-react";
+import { clearCart } from "../utils/helper";
 
 const PaymentPage = () => {
   const { user } = useSelector((state) => state.auth);
@@ -19,7 +20,8 @@ const PaymentPage = () => {
   const [deliveryAddress, setDeliveryAddress] = useState(null);
   const [paymentStatus, setPaymentStatus] = useState("pending"); // pending, processing, success, failed
   const [copied, setCopied] = useState(false);
-
+  const dispatch = useDispatch();
+  const { cart } = useSelector((state) => state.context);
   // Payment processing states
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -92,13 +94,60 @@ const PaymentPage = () => {
     }, 1500);
   };
 
+  const handleAddToOrders = async () => {
+    try {
+      if (cart.length === 0) return;
+
+      // Prepare payload for API
+      const payload = {
+        cartItems: cart.map((item) => ({
+          product: {
+            _id: item.id, // adjust if your product id is differently named
+            name: item.name,
+            images: item.images,
+          },
+          price: item.price,
+          quantity: item.quantity,
+        })),
+        shippingAddress: deliveryAddress,
+        paymentReference: `ref_${Date.now()}`, // generate a reference or use your payment gateway ref
+        totalAmount: orderTotal,
+      };
+
+      const response = await fetch("/api/orders/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create order");
+      }
+
+      const data = await response.json();
+      console.log("Order created successfully:", data);
+
+      // Clear cart after successful order creation
+      dispatch(clearCart());
+      // localStorage.removeItem("cartItems");
+    } catch (error) {
+      console.error("Error adding order:", error);
+      alert("There was an error creating your order. Please try again.");
+    }
+  };
+
   const handleMobileBankingConfirm = () => {
     setIsProcessing(true);
     setPaymentStatus("processing");
 
     // Simulate payment verification
     setTimeout(() => {
+      dispatch(clearCart());
       setPaymentStatus("success");
+      handleAddToOrders();
       setIsProcessing(false);
 
       // Clear localStorage after successful payment
@@ -119,15 +168,23 @@ const PaymentPage = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 max-w-md w-full text-center">
-          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-12 h-12 text-green-600" />
+          {/* Change icon background to yellow for pending */}
+          <div className="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle className="w-12 h-12 text-yellow-600" />
           </div>
+
+          {/* Updated title */}
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Payment Successful!
+            Payment Received
           </h1>
+
+          {/* Updated message */}
           <p className="text-gray-600 mb-8">
-            Your order has been confirmed and will be delivered soon.
+            Your payment has been received and is pending verification. Our
+            management team will review your order and send a notification to
+            your inbox once it is approved.
           </p>
+
           <div className="bg-gray-50 rounded-xl p-4 mb-6 text-left">
             <div className="flex justify-between mb-2">
               <span className="text-gray-600">Order Total</span>
@@ -135,6 +192,7 @@ const PaymentPage = () => {
                 ₦{orderTotal.toLocaleString()}
               </span>
             </div>
+
             <div className="flex justify-between">
               <span className="text-gray-600">Payment Method</span>
               <span className="font-medium text-gray-900">
@@ -142,6 +200,7 @@ const PaymentPage = () => {
               </span>
             </div>
           </div>
+
           <button
             onClick={() => (window.location.href = "/")}
             className="w-full py-4 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 transition-colors"

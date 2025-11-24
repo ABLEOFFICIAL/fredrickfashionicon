@@ -2,6 +2,7 @@ import {
   addToCart,
   clearCart,
   fetchCart,
+  fetchOrders,
   fetchProduct,
   removeFromCart,
   updateCartQuantity,
@@ -24,6 +25,8 @@ const contextSlice = createSlice({
     error: null,
     showCartModal: false,
     showEditModal: true,
+    // order
+    orders: [],
   },
   reducers: {
     setDropDown(state, action) {
@@ -165,6 +168,18 @@ const contextSlice = createSlice({
       .addCase(clearCart.fulfilled, (state) => {
         state.cart = [];
         state.itemCount = 0;
+      })
+
+      // order
+      .addCase(fetchOrders.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchOrders.fulfilled, (state, action) => {
+        state.orders = action.payload.orders;
+      })
+      .addCase(fetchOrders.rejected, (state, action) => {
+        state.error = action.payload;
       });
   },
 });
