@@ -10,10 +10,10 @@ const FilterBlock = () => {
   return (
     <div className="py-5 block md:hidden">
       <div
-        className=" flex gap-4 items-center overflow-x-auto max-w-[1150px] mx-auto"
+        className="mx-5 md:mx-0 flex gap-4 items-center overflow-x-auto max-w-287.5"
         style={{ scrollbarWidth: "none" }}
       >
-        <div className="relative inline-block">
+        <div className="relative inline-block ">
           <select className="appearance-none bg-[#4a4741] text-[#f7f1e8] px-4 py-2 rounded-full text-sm font-light pr-6 cursor-pointer focus:outline-none">
             <option value="">Filters</option>
             <option value="Africa">Trending</option>

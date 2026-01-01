@@ -200,7 +200,7 @@ const CheckoutPage = () => {
                           </button>
                         </div>
 
-                        <div className="text-right min-w-[100px]">
+                        <div className="text-right min-w-25">
                           <p className="text-lg font-bold text-gray-900">
                             ₦{(item.price * item.quantity).toLocaleString()}
                           </p>

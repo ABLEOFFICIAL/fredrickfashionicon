@@ -62,8 +62,8 @@ const DisplayProducts = () => {
 
   return (
     <div className="py-10">
-      <div className="max-w-[1150px] mx-auto">
-        <div className="flex justify-between items-center mb-4">
+      <div className="max-w-287.5 mx-auto">
+        <div className="flex justify-between items-center mb-4 mx-5 md:mx-0">
           <span className="font-bold text-lg text-[#4a4741] block">
             <Link href="/">Home</Link> /
             {/* <span className="font-light"> Shop / {productCategory}</span> */}
@@ -81,7 +81,7 @@ const DisplayProducts = () => {
           )} */}
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-10">
+        <div className="mx-5 md:mx-0 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-10">
           {filteredProducts.length === 0 ? (
             <div className="col-span-full text-center text-gray-600">
               No products found.
