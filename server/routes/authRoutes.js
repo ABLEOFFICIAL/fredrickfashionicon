@@ -1,3 +1,4 @@
+// server/routes/authRoutes.js
 const router = require("express").Router();
 const crypto = require("crypto");
 const User = require("../models/User");
@@ -121,10 +122,13 @@ router.get("/me", protect, async (req, res) => {
       id: req.user._id,
       name: req.user.name,
       email: req.user.email,
-      avatar: req.user.avatar,
-      bio: req.user.bio,
+      // avatar: req.user.avatar,
+      // bio: req.user.bio,
       phone: req.user.phone,
-      address: req.user.address,
+      addresses: req.user.addresses,
+      createdAt: req.user.createdAt,
+      wishlist: req.user.wishlist,
+      role: req.user.role,
     },
   });
 });

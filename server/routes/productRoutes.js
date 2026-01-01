@@ -1,3 +1,4 @@
+// server/routes/productRoutes.js
 const router = require("express").Router();
 const Product = require("../models/Product");
 const User = require("../models/User");
@@ -85,34 +86,6 @@ router.get("/", async (req, res) => {
 });
 
 // ============================================
-// Get Single Product
-// ============================================
-router.get("/:id", async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id)
-      .populate("seller", "name email avatar")
-      .populate("reviews.user", "name avatar");
-
-    if (!product) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Product not found" });
-    }
-
-    // Transform to include isLiked boolean
-    const productObj = product.toObject();
-    const userId = req.user?._id;
-    productObj.isLiked = userId ? product.isLikedByUser(userId) : false;
-    productObj.likesCount = product.likes.length;
-    delete productObj.likes;
-
-    res.json({ success: true, product: productObj });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-
-// ============================================
 // Create Product with Sizes and Colors
 // ============================================
 router.post("/", protect, async (req, res) => {
@@ -165,6 +138,142 @@ router.post("/", protect, async (req, res) => {
     delete productObj.likes;
 
     res.status(201).json({ success: true, product: productObj });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// ============================================
+// Get Trending Products
+// ============================================
+router.get("/tags/trending", async (req, res) => {
+  try {
+    const { limit = 10 } = req.query;
+
+    const products = await Product.find({ "tags.isTrending": true })
+      .populate("seller", "name email")
+      .limit(Number(limit))
+      .sort({ createdAt: -1 });
+
+    const userId = req.user?._id;
+    const transformedProducts = products.map((product) => {
+      const productObj = product.toObject();
+      productObj.isLiked = userId ? product.isLikedByUser(userId) : false;
+      productObj.likesCount = product.likes.length;
+      delete productObj.likes;
+      return productObj;
+    });
+
+    res.json({ success: true, products: transformedProducts });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// ============================================
+// Get Popular Products
+// ============================================
+router.get("/tags/popular", async (req, res) => {
+  try {
+    const { limit = 10 } = req.query;
+
+    const products = await Product.find({ "tags.isPopular": true })
+      .populate("seller", "name email")
+      .limit(Number(limit))
+      .sort({ averageRating: -1 });
+
+    const userId = req.user?._id;
+    const transformedProducts = products.map((product) => {
+      const productObj = product.toObject();
+      productObj.isLiked = userId ? product.isLikedByUser(userId) : false;
+      productObj.likesCount = product.likes.length;
+      delete productObj.likes;
+      return productObj;
+    });
+
+    res.json({ success: true, products: transformedProducts });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// ============================================
+// Get On Sale Products
+// ============================================
+router.get("/tags/on-sale", async (req, res) => {
+  try {
+    const { limit = 10 } = req.query;
+
+    const products = await Product.find({ "tags.isOnSale": true })
+      .populate("seller", "name email")
+      .limit(Number(limit))
+      .sort({ salePercentage: -1 });
+
+    const userId = req.user?._id;
+    const transformedProducts = products.map((product) => {
+      const productObj = product.toObject();
+      productObj.isLiked = userId ? product.isLikedByUser(userId) : false;
+      productObj.likesCount = product.likes.length;
+      delete productObj.likes;
+      return productObj;
+    });
+
+    res.json({ success: true, products: transformedProducts });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// ============================================
+// Get New Arrivals
+// ============================================
+router.get("/tags/new-arrivals", async (req, res) => {
+  try {
+    const { limit = 10 } = req.query;
+
+    const products = await Product.find({ "tags.isNewArrival": true })
+      .populate("seller", "name email")
+      .limit(Number(limit))
+      .sort({ createdAt: -1 });
+
+    const userId = req.user?._id;
+    const transformedProducts = products.map((product) => {
+      const productObj = product.toObject();
+      productObj.isLiked = userId ? product.isLikedByUser(userId) : false;
+      productObj.likesCount = product.likes.length;
+      delete productObj.likes;
+      return productObj;
+    });
+
+    res.json({ success: true, products: transformedProducts });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// ============================================
+// Get Single Product
+// ============================================
+router.get("/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id)
+      .populate("seller", "name email avatar")
+      .populate("reviews.user", "name avatar");
+
+    if (!product) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
+    }
+
+    // Transform to include isLiked boolean
+    const productObj = product.toObject();
+    const userId = req.user?._id;
+    productObj.isLiked = userId ? product.isLikedByUser(userId) : false;
+    productObj.likesCount = product.likes.length;
+    delete productObj.likes;
+
+    res.json({ success: true, product: productObj });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -555,114 +664,6 @@ router.get("/:id/reviews", async (req, res) => {
       totalPages: Math.ceil(reviews.length / limit),
       currentPage: Number(page),
     });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-
-// ============================================
-// Get Trending Products
-// ============================================
-router.get("/tags/trending", async (req, res) => {
-  try {
-    const { limit = 10 } = req.query;
-
-    const products = await Product.find({ "tags.isTrending": true })
-      .populate("seller", "name email")
-      .limit(Number(limit))
-      .sort({ createdAt: -1 });
-
-    const userId = req.user?._id;
-    const transformedProducts = products.map((product) => {
-      const productObj = product.toObject();
-      productObj.isLiked = userId ? product.isLikedByUser(userId) : false;
-      productObj.likesCount = product.likes.length;
-      delete productObj.likes;
-      return productObj;
-    });
-
-    res.json({ success: true, products: transformedProducts });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-
-// ============================================
-// Get Popular Products
-// ============================================
-router.get("/tags/popular", async (req, res) => {
-  try {
-    const { limit = 10 } = req.query;
-
-    const products = await Product.find({ "tags.isPopular": true })
-      .populate("seller", "name email")
-      .limit(Number(limit))
-      .sort({ averageRating: -1 });
-
-    const userId = req.user?._id;
-    const transformedProducts = products.map((product) => {
-      const productObj = product.toObject();
-      productObj.isLiked = userId ? product.isLikedByUser(userId) : false;
-      productObj.likesCount = product.likes.length;
-      delete productObj.likes;
-      return productObj;
-    });
-
-    res.json({ success: true, products: transformedProducts });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-
-// ============================================
-// Get On Sale Products
-// ============================================
-router.get("/tags/on-sale", async (req, res) => {
-  try {
-    const { limit = 10 } = req.query;
-
-    const products = await Product.find({ "tags.isOnSale": true })
-      .populate("seller", "name email")
-      .limit(Number(limit))
-      .sort({ salePercentage: -1 });
-
-    const userId = req.user?._id;
-    const transformedProducts = products.map((product) => {
-      const productObj = product.toObject();
-      productObj.isLiked = userId ? product.isLikedByUser(userId) : false;
-      productObj.likesCount = product.likes.length;
-      delete productObj.likes;
-      return productObj;
-    });
-
-    res.json({ success: true, products: transformedProducts });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-
-// ============================================
-// Get New Arrivals
-// ============================================
-router.get("/tags/new-arrivals", async (req, res) => {
-  try {
-    const { limit = 10 } = req.query;
-
-    const products = await Product.find({ "tags.isNewArrival": true })
-      .populate("seller", "name email")
-      .limit(Number(limit))
-      .sort({ createdAt: -1 });
-
-    const userId = req.user?._id;
-    const transformedProducts = products.map((product) => {
-      const productObj = product.toObject();
-      productObj.isLiked = userId ? product.isLikedByUser(userId) : false;
-      productObj.likesCount = product.likes.length;
-      delete productObj.likes;
-      return productObj;
-    });
-
-    res.json({ success: true, products: transformedProducts });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

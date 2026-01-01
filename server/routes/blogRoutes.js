@@ -1,3 +1,4 @@
+// server/routes/blogRoutes.js
 const router = require("express").Router();
 const Blog = require("../models/Blog");
 const { protect } = require("../middleware/auth");

@@ -1,3 +1,4 @@
+// server/models/Order.js
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
@@ -20,7 +21,7 @@ const orderSchema = new mongoose.Schema({
       name: String,
       price: Number,
       quantity: Number,
-      image: String,
+      images: [String],
     },
   ],
   totalAmount: {
@@ -48,10 +49,30 @@ const orderSchema = new mongoose.Schema({
     enum: ["processing", "shipped", "delivered", "cancelled"],
     default: "processing",
   },
+  // NEW: For admin notifications
+  isNewOrder: {
+    type: Boolean,
+    default: true,
+  },
+  readAt: {
+    type: Date,
+    default: null,
+  },
+  readBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    default: null,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
+
+// Indexes for better query performance
+orderSchema.index({ user: 1, createdAt: -1 });
+orderSchema.index({ orderNumber: 1 });
+orderSchema.index({ isNewOrder: 1 });
+orderSchema.index({ orderStatus: 1 });
 
 module.exports = mongoose.model("Order", orderSchema);

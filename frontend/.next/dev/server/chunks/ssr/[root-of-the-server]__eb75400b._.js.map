@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 22, "column": 0}, "map": {"version":3,"sources":["file:///Users/pro/fredrickfashionicon/frontend/app/profile/page.jsx"],"sourcesContent":["import { redirect } from \"next/navigation\";\n\nexport default function Page() {\n  redirect(\"/profile/profile\");\n}\n"],"names":[],"mappings":";;;;AAAA;AAAA;;AAEe,SAAS;IACtB,IAAA,iMAAQ,EAAC;AACX","debugId":null}}]
+}

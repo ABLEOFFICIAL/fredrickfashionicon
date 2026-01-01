@@ -1,10 +1,15 @@
+// server/routes/orderRoutes.js
 const orderRouter = require("express").Router();
 const Order = require("../models/Order");
 const { protect } = require("../middleware/auth");
 const Cart = require("../models/Cart");
 const { createNotification } = require("../utils/notifications");
+const {
+  sendOrderNotificationToAdmin,
+  sendOrderConfirmationToCustomer,
+} = require("../utils/sendEmail");
 
-// Get user's orders
+// Get user's orders - FIXED: Removed populate
 orderRouter.get("/", protect, async (req, res) => {
   try {
     const { page = 1, limit = 10, status } = req.query;
@@ -17,8 +22,8 @@ orderRouter.get("/", protect, async (req, res) => {
     const orders = await Order.find(query)
       .sort({ createdAt: -1 })
       .limit(limit * 1)
-      .skip((page - 1) * limit)
-      .populate("items.product");
+      .skip((page - 1) * limit);
+    // Removed .populate("items.product") since we store all needed data in the order
 
     const count = await Order.countDocuments(query);
 
@@ -29,17 +34,19 @@ orderRouter.get("/", protect, async (req, res) => {
       currentPage: page,
     });
   } catch (error) {
+    console.error("Error fetching orders:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
-// Get single order
+// Get single order - FIXED: Removed populate
 orderRouter.get("/:id", protect, async (req, res) => {
   try {
     const order = await Order.findOne({
       _id: req.params.id,
       user: req.user._id,
-    }).populate("items.product");
+    });
+    // Removed .populate("items.product")
 
     if (!order) {
       return res
@@ -49,15 +56,27 @@ orderRouter.get("/:id", protect, async (req, res) => {
 
     res.json({ success: true, order });
   } catch (error) {
+    console.error("Error fetching order:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
 
-// Create order (called after successful payment)
+// Create order - FIXED: Better data extraction and validation
 orderRouter.post("/create", protect, async (req, res) => {
   try {
     const { cartItems, shippingAddress, paymentReference, totalAmount } =
       req.body;
+
+    // Validate required fields
+    if (!cartItems || cartItems.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Cart items are required",
+      });
+    }
+
+    console.log("=== ORDER CREATION DEBUG ===");
+    console.log("Received cartItems:", JSON.stringify(cartItems, null, 2));
 
     // Generate order number
     const orderNumber = `ORD-${Date.now()}-${Math.random()
@@ -65,14 +84,46 @@ orderRouter.post("/create", protect, async (req, res) => {
       .substr(2, 9)
       .toUpperCase()}`;
 
-    // Format items
-    const items = cartItems.map((item) => ({
-      product: item.product._id,
-      name: item.product.name,
-      price: item.price,
-      quantity: item.quantity,
-      image: item.product.images?.[0],
-    }));
+    // FIXED: Format items with flexible data extraction
+    const items = cartItems.map((item, index) => {
+      // Extract product data - handle both nested and flat structures
+      const productId = item.product?._id || item.product || item._id;
+      const productName = item.product?.name || item.name || "Unknown Product";
+
+      // Extract images - check multiple possible locations
+      let productImages = [];
+      if (item.product?.images && Array.isArray(item.product.images)) {
+        productImages = item.product.images;
+      } else if (item.images && Array.isArray(item.images)) {
+        productImages = item.images;
+      } else if (item.product?.image) {
+        productImages = [item.product.image];
+      } else if (item.image) {
+        productImages = [item.image];
+      }
+
+      console.log(`Item ${index + 1} processing:`, {
+        productId,
+        productName,
+        productImages,
+        originalItem: item,
+      });
+
+      // Validate that we have at least the required data
+      if (!productId) {
+        throw new Error(`Item ${index + 1} is missing product ID`);
+      }
+
+      return {
+        product: productId,
+        name: productName,
+        price: item.price || 0,
+        quantity: item.quantity || 1,
+        images: productImages,
+      };
+    });
+
+    console.log("Formatted items for order:", JSON.stringify(items, null, 2));
 
     const order = await Order.create({
       user: req.user._id,
@@ -83,7 +134,10 @@ orderRouter.post("/create", protect, async (req, res) => {
       paymentReference,
       paymentStatus: "paid",
       orderStatus: "processing",
+      isNewOrder: true, // NEW: Mark as new for admin notification
     });
+
+    console.log("Order created successfully:", order._id);
 
     // Clear cart
     await Cart.findOneAndUpdate(
@@ -100,12 +154,34 @@ orderRouter.post("/create", protect, async (req, res) => {
       link: `/orders/${order._id}`,
     });
 
+    // ===== NEW: SEND EMAIL NOTIFICATIONS =====
+    try {
+      // Send email to admin
+      await sendOrderNotificationToAdmin(order, req.user);
+      console.log("✅ Admin notification email sent");
+    } catch (emailError) {
+      console.error("❌ Failed to send admin email:", emailError);
+      // Don't fail the order creation if email fails
+    }
+
+    try {
+      // Send confirmation email to customer
+      await sendOrderConfirmationToCustomer(order, req.user);
+      console.log("✅ Customer confirmation email sent");
+    } catch (emailError) {
+      console.error("❌ Failed to send customer email:", emailError);
+      // Don't fail the order creation if email fails
+    }
+    // ===== END EMAIL NOTIFICATIONS =====
+
     res.status(201).json({
       success: true,
       order,
       message: "Order created successfully",
     });
   } catch (error) {
+    console.error("Error creating order:", error);
+    console.error("Error stack:", error.stack);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -149,6 +225,7 @@ orderRouter.put("/:id/cancel", protect, async (req, res) => {
       message: "Order cancelled successfully",
     });
   } catch (error) {
+    console.error("Error cancelling order:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
