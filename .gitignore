@@ -17,6 +17,8 @@
 # Next.js build output
 .next/
 frontend/.next/
+frontend/node_modules/
+server/node_modules/
 out/
 
 # production
