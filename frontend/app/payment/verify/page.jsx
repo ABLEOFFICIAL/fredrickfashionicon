@@ -3,7 +3,7 @@ import PaymentVerifyPage from "./PaymentVerifyPage";
 
 export default function VerifyPage() {
   return (
-    <Suspense fallback={<div>Loading verification...</div>}>
+    <Suspense fallback={<div>verifying...</div>}>
       <PaymentVerifyPage />
     </Suspense>
   );
