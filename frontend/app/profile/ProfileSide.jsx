@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Package,
   Mail,
@@ -19,6 +19,8 @@ const ProfileSidebar = () => {
   const pathname = usePathname();
   const currentPath = pathname.split("/").pop();
   const { user } = useSelector((state) => state.auth);
+  // const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isMobileMenuOpen } = useSelector((state) => state.context);
 
   const menuItems = [
     { title: "Profile", icon: User, path: "profile" },
@@ -36,7 +38,7 @@ const ProfileSidebar = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-8 h-max mb-10">
+    <div className="bg-white hidden lg:block rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-8 h-max mb-10">
       {/* User Profile Header */}
       <div className="p-6 border-b border-gray-100 bg-[#4a4741]">
         <div className="flex items-center gap-4">

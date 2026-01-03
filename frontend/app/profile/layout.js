@@ -32,7 +32,7 @@ const page = ({ children }) => {
     <div className="bg-[#FAF9F6]">
       <ProtectedRoute>
         {/* <Header /> */}
-        <div className="max-w-[1150px] mx-auto flex gap-5 pt-7">
+        <div className="max-w-287.5 mx-auto flex gap-5 pt-7">
           <ProfileSide />
           <div className="flex-1">{children}</div>
         </div>

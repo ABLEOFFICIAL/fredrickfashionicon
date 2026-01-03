@@ -32,6 +32,7 @@ const contextSlice = createSlice({
     orders: [],
     // blogs
     blogs: [],
+    isMobileMenuOpen: false,
   },
   reducers: {
     setDropDown(state, action) {
@@ -99,6 +100,9 @@ const contextSlice = createSlice({
     },
     setShowEditModal(state, action) {
       state.showEditModal = action.payload;
+    },
+    setIsMobileMenuOpen(state, action) {
+      state.isMobileMenuOpen = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -259,6 +263,7 @@ export const {
   removeProduct,
   setShowCartModal,
   setShowEditModal,
+  setIsMobileMenuOpen,
 } = contextSlice.actions;
 
 export default contextSlice.reducer;

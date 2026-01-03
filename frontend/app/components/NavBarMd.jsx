@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Bar from "./Bar";
 import SearchIcon from "./SearchIcon";
@@ -11,13 +11,31 @@ import { User } from "lucide-react";
 import DarkLogo from "./DarkLogo";
 import LightLogo from "./LightLogo";
 import { useDispatch, useSelector } from "react-redux";
-import { setDropDown, setShowCartModal } from "../store/contextSlice";
+import {
+  setDropDown,
+  setIsMobileMenuOpen,
+  setShowCartModal,
+} from "../store/contextSlice";
 
 export const UserProfile = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const handleClick = (e) => {
+    if (typeof window !== "undefined") {
+      if (window.innerWidth < 1024) {
+        e.stopPropagation();
+        dispatch(setDropDown(true));
+        dispatch(setIsMobileMenuOpen(true));
+      } else {
+        router.push("/profile"); // For lg and above
+      }
+    }
+  };
+
   return (
-    <Link href="/profile">
+    <div onClick={handleClick} className="cursor-pointer">
       <User className="size-6" />
-    </Link>
+    </div>
   );
 };
 
@@ -32,6 +50,7 @@ export default function NavBarMd() {
   // stop click from bubbling up to window
   const openDropdown = (e) => {
     e.stopPropagation();
+    dispatch(setIsMobileMenuOpen(false));
     dispatch(setDropDown(true));
   };
 
