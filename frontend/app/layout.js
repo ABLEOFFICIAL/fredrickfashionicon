@@ -37,7 +37,7 @@ export const metadata = {
   title: "fredrick fashion icon",
   description: "Where style meets elegance - Fredrick Fashion Icon",
   icons: {
-    icon: "/logoImg.png",
+    icon: "/darklogo.png",
   },
   openGraph: {
     title: "fredrick fashion icon",
@@ -46,7 +46,7 @@ export const metadata = {
     siteName: "fredrick fashion icon",
     images: [
       {
-        url: "/logoImg.png",
+        url: "/darklogo.png",
         width: 800,
         height: 600,
       },
@@ -57,7 +57,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "fredrick fashion icon",
     description: "Where style meets elegance - Fredrick Fashion Icon",
-    images: ["/logoImg.png"],
+    images: ["/darklogo.png"],
   },
 };
 

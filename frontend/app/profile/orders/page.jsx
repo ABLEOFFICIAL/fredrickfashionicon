@@ -824,7 +824,7 @@ const OrdersPage = () => {
                   Shipping Address
                 </h3>
                 <div className="text-xs sm:text-sm text-gray-600 space-y-1">
-                  <p className="break-words">
+                  <p className="wrap-break-word">
                     {selectedOrder.shippingAddress?.street}
                   </p>
                   <p>
