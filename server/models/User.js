@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 const addressSchema = new mongoose.Schema({
   label: {
     type: String,
-    required: true, // e.g., "Home", "Office", "Shipping Address"
+    required: true,
   },
   street: {
     type: String,
@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema({
   avatar: { type: String },
   bio: { type: String },
   phone: { type: String },
-  addresses: [addressSchema], // ✅ Replace single "address" with an array of address objects
+  addresses: [addressSchema],
   wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
   resetPasswordToken: String,
   resetPasswordExpire: Date,
@@ -54,17 +54,30 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// ✅ Hash password before save
+// ✅ Hash password before save - with proper error handling
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-  if (this.password) {
-    this.password = await bcrypt.hash(this.password, 10);
+  try {
+    // Only hash if password is modified
+    if (!this.isModified("password")) {
+      return next();
+    }
+
+    // Only hash if password exists
+    if (this.password) {
+      this.password = await bcrypt.hash(this.password, 10);
+    }
+
+    next();
+  } catch (error) {
+    next(error);
   }
-  next();
 });
 
 // ✅ Password comparison method
 userSchema.methods.comparePassword = async function (password) {
+  if (!this.password) {
+    throw new Error("No password set for this user");
+  }
   return await bcrypt.compare(password, this.password);
 };
 
