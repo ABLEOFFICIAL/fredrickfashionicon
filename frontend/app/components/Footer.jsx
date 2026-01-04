@@ -54,7 +54,7 @@ function Footer() {
   }
 
   return (
-    <div className="bg-[#4a4741] text-[#f7f1e8] px-5 py-10">
+    <div className="bg-[#4a4741] text-[#f7f1e8] px-5 py-10 text-sm md:text-base">
       {/* Top Banner */}
       <div className="flex flex-col gap-5 items-start md:flex-row justify-between md:items-center md:max-w-[80vw] mx-auto">
         <div className="flex gap-4 items-center">
@@ -82,7 +82,7 @@ function Footer() {
       {/* Middle Content */}
       <div className="grid md:grid-cols-3 md:max-w-[80vw] mx-auto gap-8">
         {/* Contact Info */}
-        <div className=" md:border-b-0 border-b md:pr-5 md:pb-0 pb-5">
+        <div className=" md:border-b-0 border-b border-b-[#80776f] md:pr-5 md:pb-0 pb-5">
           <img className="w-28" src="/logo.png" alt="Logo" />
           <div className="flex flex-col gap-1 mt-3">
             <span>info@1403luxury.com</span>
@@ -94,7 +94,7 @@ function Footer() {
         </div>
 
         {/* Navigation Links */}
-        <div className="flex justify-between w-full md:border-b-0 border-b md:pr-5 md:pb-0 pb-5">
+        <div className="flex justify-between w-full md:border-b-0 border-b border-b-[#80776f] md:pr-5 md:pb-0 pb-5">
           <div className="text-start w-full px-5">
             <h4 className="py-4 text-lg font-semibold">About Us</h4>
             <div className="flex flex-col gap-1 font-extralight">

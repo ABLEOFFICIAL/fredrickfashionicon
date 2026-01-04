@@ -36,3 +36,9 @@ body {
     font-size: 5rem;
   }
 }
+
+@media (max-width: 767px) {
+  .slant {
+    font-size: 2rem;
+  }
+}

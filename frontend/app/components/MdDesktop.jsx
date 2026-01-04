@@ -78,7 +78,7 @@ const MdDesktop = () => {
               {/* Section 1 */}
               <div className="grid gap-3 md:gap-5 md:py-5">
                 <h4 className="font-bold text-lg md:text-base">Home</h4>
-                <div className="grid gap-3 md:gap-4">
+                <div className="grid gap-3 md:gap-4 md:text-base text-sm">
                   <Link href="/homepage" className="hover:underline">
                     Home
                   </Link>
@@ -97,7 +97,7 @@ const MdDesktop = () => {
               {/* Section 2 */}
               <div className="grid gap-3 md:gap-5 md:py-5">
                 <h4 className="font-bold text-lg md:text-base">Blogs</h4>
-                <div className="grid gap-3 md:gap-4">
+                <div className="grid gap-3 md:gap-4 md:text-base text-sm">
                   <Link href="/style-with-us" className="hover:underline">
                     Blogs
                   </Link>
@@ -116,7 +116,7 @@ const MdDesktop = () => {
               {/* Section 3 */}
               <div className="grid gap-3 md:gap-5 md:py-5">
                 <h4 className="font-bold text-lg md:text-base">About</h4>
-                <div className="grid gap-3 md:gap-4">
+                <div className="grid gap-3 md:gap-4 md:text-base text-sm">
                   <Link href="/about" className="hover:underline">
                     Why FFI
                   </Link>
@@ -135,7 +135,7 @@ const MdDesktop = () => {
               {/* Section 4 */}
               <div className="grid gap-3 md:gap-5 md:py-5">
                 <h4 className="font-bold text-lg md:text-base">Contact Us</h4>
-                <div className="grid gap-3 md:gap-4">
+                <div className="grid gap-3 md:gap-4 md:text-base text-sm">
                   <Link href="/contact-us" className="hover:underline">
                     Contact Us
                   </Link>
@@ -152,8 +152,8 @@ const MdDesktop = () => {
               </div>
 
               {/* Image Card */}
-              <div className="grid gap-5 content-between w-full h-48 md:h-64 bg-center bg-cover bg-[url(/mood.avif)] rounded-2xl p-3">
-                <h4 className="text-[#f7f1e8] block lg:hidden 2xl:block text-md md:text-2xl xl:text-4xl font-light">
+              <div className="grid gap-5 content-around w-full h-48 md:h-64 bg-center bg-cover bg-[url(/mood.avif)] rounded-2xl p-3">
+                <h4 className="text-[#f7f1e8] block lg:hidden 2xl:block text-md md:text-2xl xl:text-4xl font-bold md:font-light">
                   Fredrick Fashion Icon <span className="slant">is here</span>
                 </h4>
                 <MyBtn

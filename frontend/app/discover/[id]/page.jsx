@@ -138,32 +138,31 @@ const ProductDetail = () => {
     <main className="min-h-screen bg-[#f7f1e8] text-[#4a4741] relative">
       <section className="max-w-287.5 mx-auto py-10 pt-20 md:grid grid-cols-2 gap-10">
         {/* Product Images */}
-        <div>
-          {/* Zoom Modal */}
-          {zoom && (
-            <div
-              className="fixed inset-0 bg-black/40 flex justify-center items-center z-50 p-4"
-              onClick={() => setZoom(false)}
-            >
-              <div className="relative h-screen w-screen backdrop-blur-sm flex justify-center items-center">
-                <img
-                  src={product.images[selectedView]}
-                  alt={product.name}
-                  className="max-w-[70%] max-h-[70%] object-cover rounded-lg shadow-lg z-50"
-                  onClick={(e) => e.stopPropagation()}
-                />
-                <button
-                  onClick={() => setZoom(false)}
-                  className="absolute top-3 right-3 text-white bg-black/50 p-2 rounded-full hover:bg-black/70 transition"
-                >
-                  <ZoomOut />
-                </button>
-              </div>
+        {/* Zoom Modal */}
+        {zoom && (
+          <div
+            className="fixed inset-0 bg-black/40 flex justify-center items-center z-50 p-4"
+            onClick={() => setZoom(false)}
+          >
+            <div className="relative h-screen w-screen backdrop-blur-sm flex justify-center items-center">
+              <img
+                src={product.images[selectedView]}
+                alt={product.name}
+                className="max-w-[70%] max-h-[70%] object-cover rounded-lg shadow-lg z-50"
+                onClick={(e) => e.stopPropagation()}
+              />
+              <button
+                onClick={() => setZoom(false)}
+                className="absolute top-3 right-3 text-white bg-black/50 p-2 rounded-full hover:bg-black/70 transition"
+              >
+                <ZoomOut />
+              </button>
             </div>
-          )}
-
+          </div>
+        )}
+        <div className="px-4">
           {/* Main Image */}
-          <figure className="relative w-full h-100 md:h-150 flex justify-center items-center bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer">
+          <figure className="relative  w-full h-100 md:h-150 flex justify-center items-center bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer">
             <img
               ref={imgRef}
               src={product.images[selectedView]}
