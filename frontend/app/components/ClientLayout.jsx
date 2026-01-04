@@ -98,7 +98,7 @@ import MdDesktop from "./MdDesktop";
 import NavBarMd from "./NavBarMd";
 import NavBar from "./NavBar";
 import Sidebar from "./SideBar";
-import AddToCart from "./AddToCart";
+import AddToCart, { FloatingCartButton } from "./AddToCart";
 import AuthProvider from "./AuthProvider";
 
 import {
@@ -164,6 +164,7 @@ export default function ClientLayout({ children }) {
         />
         {/* <NavBar initialTop="top-14 md:top-8" finaltop="top-2" /> */}
         <AddToCart />
+        <FloatingCartButton />
         <Sidebar />
         {children}
         <Footer />
