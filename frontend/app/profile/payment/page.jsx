@@ -1959,9 +1959,9 @@ const PaymentMethodsPage = () => {
 
         {/* Transactions Tab */}
         {activeTab === "transactions" && (
-          <div className="space-y-3 sm:space-y-4 lg:space-y-6">
+          <div className="space-y-3 sm:space-y-4 lg:space-y-6 overflow-hidden">
             {/* Search and Filter */}
-            <div className="bg-white rounded-lg sm:rounded-xl lg:rounded-2xl shadow-sm border border-gray-100 p-2.5 sm:p-3 lg:p-4">
+            <div className="bg-white rounded-lg sm:rounded-xl lg:rounded-2xl shadow-sm border border-gray-100 p-2.5 sm:p-3 lg:p-4 overflow-hidden">
               <div className="flex flex-col gap-2.5 sm:gap-3 lg:gap-4">
                 <div className="relative">
                   <Search className="absolute left-2.5 sm:left-3 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-gray-400" />
@@ -1974,7 +1974,7 @@ const PaymentMethodsPage = () => {
                   />
                 </div>
                 <div
-                  className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-1 -mx-2.5 px-2.5 sm:mx-0 sm:px-0"
+                  className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-1"
                   style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
                 >
                   {["all", "success", "pending", "failed"].map((status) => (
@@ -1993,7 +1993,7 @@ const PaymentMethodsPage = () => {
                   {filteredTransactions.length > 0 && (
                     <button
                       onClick={downloadAllTransactionsCSV}
-                      className="px-2.5 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-3 rounded-lg sm:rounded-xl font-medium bg-green-100 text-green-700 hover:bg-green-200 transition-colors flex items-center gap-1 sm:gap-1.5 lg:gap-2 text-[10px] sm:text-xs lg:text-sm whitespace-nowrap shrink-0 ml-auto"
+                      className="px-2.5 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-3 rounded-lg sm:rounded-xl font-medium bg-green-100 text-green-700 hover:bg-green-200 transition-colors flex items-center gap-1 sm:gap-1.5 lg:gap-2 text-[10px] sm:text-xs lg:text-sm whitespace-nowrap shrink-0"
                     >
                       <Download className="w-3 h-3 sm:w-3.5 sm:h-3.5 lg:w-4 lg:h-4" />
                       <span className="hidden min-[500px]:inline">
@@ -2031,37 +2031,34 @@ const PaymentMethodsPage = () => {
                       key={txn.id}
                       className="p-3 sm:p-4 lg:p-6 hover:bg-gray-50 transition-colors"
                     >
-                      <div className="flex items-start gap-2.5 sm:gap-3 lg:gap-4">
+                      <div className="flex items-start gap-2 sm:gap-2.5 lg:gap-4 w-full overflow-hidden">
                         <div
-                          className={`w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0 ${
+                          className={`w-8 h-8 sm:w-9 sm:h-9 lg:w-12 lg:h-12 rounded-lg sm:rounded-xl flex items-center justify-center shrink-0 ${
                             txn.type === "refund"
                               ? "bg-blue-100"
                               : "bg-green-100"
                           }`}
                         >
                           {txn.type === "refund" ? (
-                            <ArrowDownRight className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-blue-600" />
+                            <ArrowDownRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-6 lg:h-6 text-blue-600" />
                           ) : (
-                            <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-green-600" />
+                            <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-6 lg:h-6 text-green-600" />
                           )}
                         </div>
 
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between gap-2 sm:gap-3 lg:gap-4 mb-1.5 sm:mb-2">
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-semibold text-gray-900 text-xs sm:text-sm lg:text-base truncate pr-1">
+                        <div className="flex-1 min-w-0 overflow-hidden">
+                          <div className="flex items-start justify-between gap-1.5 sm:gap-2 lg:gap-4 mb-1.5 sm:mb-2">
+                            <div className="flex-1 min-w-0 overflow-hidden">
+                              <h4 className="font-semibold text-gray-900 text-[11px] sm:text-sm lg:text-base truncate">
                                 {txn.description}
                               </h4>
-                              <p className="text-[10px] sm:text-xs lg:text-sm text-gray-600 mt-0.5 sm:mt-1 truncate pr-1">
-                                <span className="hidden min-[380px]:inline">
-                                  {txn.id} •{" "}
-                                </span>
+                              <p className="text-[9px] sm:text-xs lg:text-sm text-gray-600 mt-0.5 sm:mt-1 truncate">
                                 {txn.orderNumber}
                               </p>
                             </div>
-                            <div className="text-right shrink-0 ml-1">
+                            <div className="text-right shrink-0">
                               <p
-                                className={`text-xs min-[380px]:text-sm sm:text-base lg:text-xl font-bold whitespace-nowrap ${
+                                className={`text-[11px] sm:text-sm lg:text-xl font-bold whitespace-nowrap ${
                                   txn.type === "refund"
                                     ? "text-blue-600"
                                     : "text-gray-900"
@@ -2073,34 +2070,28 @@ const PaymentMethodsPage = () => {
                             </div>
                           </div>
 
-                          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 lg:gap-3 text-[10px] sm:text-xs lg:text-sm">
+                          <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 lg:gap-3 text-[9px] sm:text-xs lg:text-sm overflow-hidden">
                             <span
                               className={`inline-flex items-center gap-0.5 sm:gap-1 lg:gap-1.5 px-1.5 sm:px-2 lg:px-3 py-0.5 sm:py-1 rounded-full font-medium border shrink-0 ${getStatusColor(
                                 txn.status
                               )}`}
                             >
                               {getStatusIcon(txn.status)}
-                              <span className="hidden min-[380px]:inline">
+                              <span className="hidden min-[360px]:inline">
                                 {txn.status.charAt(0).toUpperCase() +
                                   txn.status.slice(1)}
                               </span>
                             </span>
-                            <span className="text-gray-600 flex items-center gap-0.5 sm:gap-1 lg:gap-1.5 shrink-0 max-w-[120px] sm:max-w-none">
-                              <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-4 lg:h-4 shrink-0" />
-                              <span className="hidden sm:inline truncate">
+                            <span className="text-gray-600 flex items-center gap-0.5 shrink-0">
+                              <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-4 lg:h-4" />
+                              <span className="hidden sm:inline">
                                 {formatDate(txn.date)}
                               </span>
-                              <span className="sm:hidden truncate text-[9px]">
+                              <span className="sm:hidden">
                                 {new Date(txn.date).toLocaleDateString(
                                   "en-US",
-                                  { month: "short", day: "numeric" }
+                                  { month: "numeric", day: "numeric" }
                                 )}
-                              </span>
-                            </span>
-                            <span className="text-gray-600 flex items-center gap-0.5 sm:gap-1 lg:gap-1.5 shrink-0">
-                              <Wallet className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-4 lg:h-4 shrink-0" />
-                              <span className="truncate max-w-[60px] sm:max-w-none">
-                                {txn.method}
                               </span>
                             </span>
                           </div>
@@ -2118,7 +2109,7 @@ const PaymentMethodsPage = () => {
                               downloadReceipt();
                             }, 100);
                           }}
-                          className="p-1.5 sm:p-2 hover:bg-gray-100 rounded-lg shrink-0"
+                          className="p-1 sm:p-1.5 lg:p-2 hover:bg-gray-100 rounded-lg shrink-0"
                           title="Download receipt"
                         >
                           <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 lg:w-5 lg:h-5 text-gray-600" />
