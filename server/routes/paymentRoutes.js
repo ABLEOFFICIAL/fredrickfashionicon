@@ -278,6 +278,7 @@
 
 // module.exports = router;
 
+// server/routes/paymentRoutes.js
 const router = require("express").Router();
 const axios = require("axios");
 const crypto = require("crypto");
@@ -289,7 +290,7 @@ const { protect } = require("../middleware/auth");
 const { createNotification } = require("../utils/notifications"); // Adjust path as needed
 
 // Initialize Payment
-router.post("/initialize", protect, async (req, res) => {
+router.post("/initialize", protect, async (req, res, next) => {
   try {
     const { amount, email, metadata } = req.body;
 
@@ -338,15 +339,12 @@ router.post("/initialize", protect, async (req, res) => {
       "Paystack Initialize Error:",
       error.response?.data || error.message
     );
-    res.status(500).json({
-      success: false,
-      message: error.response?.data?.message || "Payment initialization failed",
-    });
+    next(error);
   }
 });
 
 // Verify Payment
-router.get("/verify/:reference", protect, async (req, res) => {
+router.get("/verify/:reference", protect, async (req, res, next) => {
   try {
     const { reference } = req.params;
 
@@ -466,16 +464,12 @@ router.get("/verify/:reference", protect, async (req, res) => {
     }
   } catch (error) {
     console.error("Verification Error:", error.response?.data || error.message);
-    res.status(500).json({
-      success: false,
-      message: error.response?.data?.message || "Payment verification failed",
-      error: process.env.NODE_ENV === "development" ? error.message : undefined,
-    });
+    next(error); // ✅ CHANGED: Replace the entire res.status(500).json() with next(error)
   }
 });
 
 // Paystack Webhook
-router.post("/webhook", async (req, res) => {
+router.post("/webhook", async (req, res, next) => {
   try {
     // Validate webhook signature
     const hash = crypto
@@ -518,13 +512,12 @@ router.post("/webhook", async (req, res) => {
 
     res.status(200).send("Webhook received");
   } catch (error) {
-    console.error("Webhook Error:", error);
-    res.status(500).send("Webhook error");
+    next(error);
   }
 });
 
 // Get Payment History
-router.get("/history", protect, async (req, res) => {
+router.get("/history", protect, async (req, res, next) => {
   try {
     const { page = 1, limit = 10 } = req.query;
 
@@ -542,15 +535,12 @@ router.get("/history", protect, async (req, res) => {
       currentPage: page,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch payment history",
-    });
+    next(error);
   }
 });
 
 // Get Single Payment
-router.get("/:reference", protect, async (req, res) => {
+router.get("/:reference", protect, async (req, res, next) => {
   try {
     const payment = await Payment.findOne({
       reference: req.params.reference,
@@ -566,10 +556,7 @@ router.get("/:reference", protect, async (req, res) => {
 
     res.json({ success: true, payment });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch payment",
-    });
+    next(error);
   }
 });
 

@@ -18,7 +18,7 @@ router.use(protect, admin);
 // @desc    Get all users
 // @route   GET /api/admin/users
 // @access  Private/Admin
-router.get("/users", async (req, res) => {
+router.get("/users", async (req, res, next) => {
   try {
     const { page = 1, limit = 100, search, role } = req.query;
 
@@ -54,18 +54,14 @@ router.get("/users", async (req, res) => {
       pages: Math.ceil(total / limit),
     });
   } catch (error) {
-    console.error("Error fetching users:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message || "Failed to fetch users",
-    });
+    next(error);
   }
 });
 
 // @desc    Get single user by ID
 // @route   GET /api/admin/users/:id
 // @access  Private/Admin
-router.get("/users/:id", async (req, res) => {
+router.get("/users/:id", async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id).select("-password");
 
@@ -81,18 +77,14 @@ router.get("/users/:id", async (req, res) => {
       user,
     });
   } catch (error) {
-    console.error("Error fetching user:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message || "Failed to fetch user",
-    });
+    next(error);
   }
 });
 
 // @desc    Update user
 // @route   PUT /api/admin/users/:id
 // @access  Private/Admin
-router.put("/users/:id", async (req, res) => {
+router.put("/users/:id", async (req, res, next) => {
   try {
     const { name, email, phone, role, isActive } = req.body;
 
@@ -127,18 +119,14 @@ router.put("/users/:id", async (req, res) => {
       message: "User updated successfully",
     });
   } catch (error) {
-    console.error("Error updating user:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message || "Failed to update user",
-    });
+    next(error);
   }
 });
 
 // @desc    Delete user
 // @route   DELETE /api/admin/users/:id
 // @access  Private/Admin
-router.delete("/users/:id", async (req, res) => {
+router.delete("/users/:id", async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
 
@@ -164,11 +152,7 @@ router.delete("/users/:id", async (req, res) => {
       message: "User deleted successfully",
     });
   } catch (error) {
-    console.error("Error deleting user:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message || "Failed to delete user",
-    });
+    next(error);
   }
 });
 
@@ -179,7 +163,7 @@ router.delete("/users/:id", async (req, res) => {
 // @desc    Send notification to specific user
 // @route   POST /api/admin/notifications/send/:userId
 // @access  Private/Admin
-router.post("/notifications/send/:userId", async (req, res) => {
+router.post("/notifications/send/:userId", async (req, res, next) => {
   try {
     const { title, message, type = "info" } = req.body;
     const { userId } = req.params;
@@ -216,18 +200,14 @@ router.post("/notifications/send/:userId", async (req, res) => {
       message: "Notification sent successfully",
     });
   } catch (error) {
-    console.error("Error sending notification:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message || "Failed to send notification",
-    });
+    next(error);
   }
 });
 
 // @desc    Broadcast notification to all users
 // @route   POST /api/admin/notifications/broadcast
 // @access  Private/Admin
-router.post("/notifications/broadcast", async (req, res) => {
+router.post("/notifications/broadcast", async (req, res, next) => {
   try {
     const { title, message, type = "info", targetRole = "user" } = req.body;
 
@@ -266,11 +246,7 @@ router.post("/notifications/broadcast", async (req, res) => {
       message: `Notification sent to ${users.length} user(s)`,
     });
   } catch (error) {
-    console.error("Error broadcasting notification:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message || "Failed to broadcast notification",
-    });
+    next(error);
   }
 });
 
@@ -281,7 +257,7 @@ router.post("/notifications/broadcast", async (req, res) => {
 // @desc    Get dashboard statistics
 // @route   GET /api/admin/stats/dashboard
 // @access  Private/Admin
-router.get("/stats/dashboard", async (req, res) => {
+router.get("/stats/dashboard", async (req, res, next) => {
   try {
     // Get counts
     const [
@@ -334,18 +310,14 @@ router.get("/stats/dashboard", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Error fetching dashboard stats:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message || "Failed to fetch dashboard statistics",
-    });
+    next(error);
   }
 });
 
 // @desc    Get revenue statistics
 // @route   GET /api/admin/stats/revenue
 // @access  Private/Admin
-router.get("/stats/revenue", async (req, res) => {
+router.get("/stats/revenue", async (req, res, next) => {
   try {
     const { period = "month" } = req.query;
 
@@ -393,11 +365,7 @@ router.get("/stats/revenue", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Error fetching revenue stats:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message || "Failed to fetch revenue statistics",
-    });
+    next(error);
   }
 });
 
@@ -408,7 +376,7 @@ router.get("/stats/revenue", async (req, res) => {
 // @desc    Update order status
 // @route   PUT /api/admin/orders/:id/status
 // @access  Private/Admin
-router.put("/orders/:id/status", async (req, res) => {
+router.put("/orders/:id/status", async (req, res, next) => {
   try {
     const { status } = req.body;
     const validStatuses = [
@@ -450,11 +418,7 @@ router.put("/orders/:id/status", async (req, res) => {
       message: "Order status updated successfully",
     });
   } catch (error) {
-    console.error("Error updating order status:", error);
-    res.status(500).json({
-      success: false,
-      message: error.message || "Failed to update order status",
-    });
+    next(error);
   }
 });
 
@@ -465,7 +429,7 @@ router.put("/orders/:id/status", async (req, res) => {
 // @desc    Get all orders with new order count
 // @route   GET /api/admin/orders
 // @access  Private/Admin
-router.get("/orders", async (req, res) => {
+router.get("/orders", async (req, res, next) => {
   try {
     const { page = 1, limit = 10, status, showNew } = req.query;
 
@@ -500,19 +464,14 @@ router.get("/orders", async (req, res) => {
       newOrdersCount, // For notification badge
     });
   } catch (error) {
-    console.error("Error fetching orders:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch orders",
-      error: error.message,
-    });
+    next(error);
   }
 });
 
 // @desc    Get single order details
 // @route   GET /api/admin/orders/:id
 // @access  Private/Admin
-router.get("/orders/:id", async (req, res) => {
+router.get("/orders/:id", async (req, res, next) => {
   try {
     const order = await Order.findById(req.params.id).populate(
       "user",
@@ -531,19 +490,14 @@ router.get("/orders/:id", async (req, res) => {
       order,
     });
   } catch (error) {
-    console.error("Error fetching order:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch order",
-      error: error.message,
-    });
+    next(error);
   }
 });
 
 // @desc    Mark order as read
 // @route   PUT /api/admin/orders/:id/mark-read
 // @access  Private/Admin
-router.put("/orders/:id/mark-read", async (req, res) => {
+router.put("/orders/:id/mark-read", async (req, res, next) => {
   try {
     const order = await Order.findByIdAndUpdate(
       req.params.id,
@@ -572,19 +526,14 @@ router.put("/orders/:id/mark-read", async (req, res) => {
       newOrdersCount,
     });
   } catch (error) {
-    console.error("Error marking order as read:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to mark order as read",
-      error: error.message,
-    });
+    next(error);
   }
 });
 
 // @desc    Mark all orders as read
 // @route   PUT /api/admin/orders/mark-all-read
 // @access  Private/Admin
-router.put("/orders/mark-all-read", async (req, res) => {
+router.put("/orders/mark-all-read", async (req, res, next) => {
   try {
     const result = await Order.updateMany(
       { isNewOrder: true },
@@ -602,12 +551,7 @@ router.put("/orders/mark-all-read", async (req, res) => {
       newOrdersCount: 0,
     });
   } catch (error) {
-    console.error("Error marking all orders as read:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to mark orders as read",
-      error: error.message,
-    });
+    next(error);
   }
 });
 

@@ -3,7 +3,7 @@ const Card = require("../models/Card");
 const { protect } = require("../middleware/auth");
 
 // Create a new card
-router.post("/", protect, async (req, res) => {
+router.post("/", protect, async (req, res, next) => {
   try {
     const { type, last4, cardholderName, expiryMonth, expiryYear, isDefault } =
       req.body;
@@ -25,24 +25,24 @@ router.post("/", protect, async (req, res) => {
 
     res.json({ success: true, card });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Get all cards for a user
-router.get("/", protect, async (req, res) => {
+router.get("/", protect, async (req, res, next) => {
   try {
     const cards = await Card.find({ user: req.user._id }).sort({
       createdAt: -1,
     });
     res.json({ success: true, cards });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Update a card (e.g., set default)
-router.put("/:id", protect, async (req, res) => {
+router.put("/:id", protect, async (req, res, next) => {
   try {
     const { isDefault } = req.body;
 
@@ -60,12 +60,12 @@ router.put("/:id", protect, async (req, res) => {
     await card.save();
     res.json({ success: true, card });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Delete a card
-router.delete("/:id", protect, async (req, res) => {
+router.delete("/:id", protect, async (req, res, next) => {
   try {
     const card = await Card.findOneAndDelete({
       _id: req.params.id,
@@ -78,7 +78,7 @@ router.delete("/:id", protect, async (req, res) => {
 
     res.json({ success: true, message: "Card deleted successfully" });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 

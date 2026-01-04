@@ -1,3 +1,4 @@
+// server/routes/userRoutes.js
 const router = require("express").Router();
 const User = require("../models/User");
 const Product = require("../models/Product");
@@ -5,7 +6,7 @@ const Blog = require("../models/Blog");
 const { protect } = require("../middleware/auth");
 
 // Delete Account
-router.delete("/account", protect, async (req, res) => {
+router.delete("/account", protect, async (req, res, next) => {
   try {
     await User.findByIdAndDelete(req.user._id);
     await Product.deleteMany({ seller: req.user._id });
@@ -14,24 +15,24 @@ router.delete("/account", protect, async (req, res) => {
     res.cookie("token", "", { httpOnly: true, expires: new Date(0) });
     res.json({ success: true, message: "Account deleted successfully" });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Get User Profile
-router.get("/profile", protect, async (req, res) => {
+router.get("/profile", protect, async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id)
       .select("-password -resetPasswordToken -resetPasswordExpire")
       .populate("wishlist");
     res.json({ success: true, user });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Update User Profile
-router.put("/profile", protect, async (req, res) => {
+router.put("/profile", protect, async (req, res, next) => {
   try {
     const { name, bio, phone, address, avatar } = req.body;
 
@@ -43,14 +44,12 @@ router.put("/profile", protect, async (req, res) => {
 
     res.json({ success: true, user });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
-module.exports = router;
-
 // Get User Wishlist
-router.get("/wishlist", protect, async (req, res) => {
+router.get("/wishlist", protect, async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id).populate({
       path: "wishlist",
@@ -66,12 +65,12 @@ router.get("/wishlist", protect, async (req, res) => {
       count: user.wishlist.length,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Add address
-router.post("/addresses", protect, async (req, res) => {
+router.post("/addresses", protect, async (req, res, next) => {
   try {
     const { label, street, city, state, country, zipCode, isDefault } =
       req.body;
@@ -100,12 +99,12 @@ router.post("/addresses", protect, async (req, res) => {
       addresses: user.addresses,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Get all addresses
-router.get("/addresses", protect, async (req, res) => {
+router.get("/addresses", protect, async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id).select("addresses");
     res.json({
@@ -113,12 +112,12 @@ router.get("/addresses", protect, async (req, res) => {
       addresses: user.addresses,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Update address
-router.put("/addresses/:addressId", protect, async (req, res) => {
+router.put("/addresses/:addressId", protect, async (req, res, next) => {
   try {
     const { label, street, city, state, country, zipCode, isDefault } =
       req.body;
@@ -152,12 +151,12 @@ router.put("/addresses/:addressId", protect, async (req, res) => {
       addresses: user.addresses,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Delete address
-router.delete("/addresses/:addressId", protect, async (req, res) => {
+router.delete("/addresses/:addressId", protect, async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
     const address = user.addresses.id(req.params.addressId);
@@ -184,7 +183,7 @@ router.delete("/addresses/:addressId", protect, async (req, res) => {
       message: "Address deleted",
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 

@@ -1,9 +1,10 @@
+// server/routes/notificationRoutes.js
 const notificationRouter = require("express").Router();
 const Notification = require("../models/Notification");
 const { protect } = require("../middleware/auth");
 
 // Get user notifications
-notificationRouter.get("/", protect, async (req, res) => {
+notificationRouter.get("/", protect, async (req, res, next) => {
   try {
     const { page = 1, limit = 20, unreadOnly = false } = req.query;
     const query = { user: req.user._id };
@@ -31,12 +32,12 @@ notificationRouter.get("/", protect, async (req, res) => {
       currentPage: page,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Mark notification as read
-notificationRouter.put("/:id/read", protect, async (req, res) => {
+notificationRouter.put("/:id/read", protect, async (req, res, next) => {
   try {
     const notification = await Notification.findOneAndUpdate(
       { _id: req.params.id, user: req.user._id },
@@ -52,12 +53,12 @@ notificationRouter.put("/:id/read", protect, async (req, res) => {
 
     res.json({ success: true, notification });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Mark all as read
-notificationRouter.put("/mark-all-read", protect, async (req, res) => {
+notificationRouter.put("/mark-all-read", protect, async (req, res, next) => {
   try {
     await Notification.updateMany(
       { user: req.user._id, read: false },
@@ -66,12 +67,12 @@ notificationRouter.put("/mark-all-read", protect, async (req, res) => {
 
     res.json({ success: true, message: "All notifications marked as read" });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Delete notification
-notificationRouter.delete("/:id", protect, async (req, res) => {
+notificationRouter.delete("/:id", protect, async (req, res, next) => {
   try {
     const notification = await Notification.findOneAndDelete({
       _id: req.params.id,
@@ -86,7 +87,7 @@ notificationRouter.delete("/:id", protect, async (req, res) => {
 
     res.json({ success: true, message: "Notification deleted" });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 

@@ -4,7 +4,7 @@ const Blog = require("../models/Blog");
 const { protect } = require("../middleware/auth");
 
 // Get all blogs
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const { page = 1, limit = 10 } = req.query;
 
@@ -23,12 +23,12 @@ router.get("/", async (req, res) => {
       currentPage: page,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Create Blog
-router.post("/", protect, async (req, res) => {
+router.post("/", protect, async (req, res, next) => {
   try {
     const blog = await Blog.create({
       ...req.body,
@@ -37,12 +37,12 @@ router.post("/", protect, async (req, res) => {
 
     res.status(201).json({ success: true, blog });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Edit Blog
-router.put("/:id", protect, async (req, res) => {
+router.put("/:id", protect, async (req, res, next) => {
   try {
     const blog = await Blog.findById(req.params.id);
 
@@ -66,12 +66,12 @@ router.put("/:id", protect, async (req, res) => {
 
     res.json({ success: true, blog: updated });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Delete Blog
-router.delete("/:id", protect, async (req, res) => {
+router.delete("/:id", protect, async (req, res, next) => {
   try {
     const blog = await Blog.findById(req.params.id);
 
@@ -90,7 +90,7 @@ router.delete("/:id", protect, async (req, res) => {
     await Blog.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: "Blog deleted" });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 

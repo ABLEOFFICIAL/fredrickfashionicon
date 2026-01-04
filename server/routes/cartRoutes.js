@@ -192,7 +192,7 @@ const { protect } = require("../middleware/auth");
 // const { createNotification } = require("../utils/notifications"); // ⚠️ Commented out for now
 
 // Get user's cart
-router.get("/", protect, async (req, res) => {
+router.get("/", protect, async (req, res, next) => {
   try {
     let cart = await Cart.findOne({ user: req.user._id }).populate(
       "items.product"
@@ -208,13 +208,12 @@ router.get("/", protect, async (req, res) => {
       itemCount: cart.items.length,
     });
   } catch (error) {
-    console.error("Get cart error:", error);
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Add item to cart
-router.post("/add", protect, async (req, res) => {
+router.post("/add", protect, async (req, res, next) => {
   try {
     const { productId, quantity = 1 } = req.body;
 
@@ -285,12 +284,12 @@ router.post("/add", protect, async (req, res) => {
     });
   } catch (error) {
     console.error("Add to cart error:", error);
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Update cart item quantity
-router.put("/update/:itemId", protect, async (req, res) => {
+router.put("/update/:itemId", protect, async (req, res, next) => {
   try {
     const { quantity } = req.body;
 
@@ -334,12 +333,12 @@ router.put("/update/:itemId", protect, async (req, res) => {
     });
   } catch (error) {
     console.error("Update cart error:", error);
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Remove item from cart
-router.delete("/remove/:itemId", protect, async (req, res) => {
+router.delete("/remove/:itemId", protect, async (req, res, next) => {
   try {
     const cart = await Cart.findOne({ user: req.user._id });
     if (!cart) {
@@ -358,13 +357,12 @@ router.delete("/remove/:itemId", protect, async (req, res) => {
       message: "Item removed from cart",
     });
   } catch (error) {
-    console.error("Remove from cart error:", error);
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Clear cart
-router.delete("/clear", protect, async (req, res) => {
+router.delete("/clear", protect, async (req, res, next) => {
   try {
     const cart = await Cart.findOne({ user: req.user._id });
     if (!cart) {
@@ -384,7 +382,7 @@ router.delete("/clear", protect, async (req, res) => {
     });
   } catch (error) {
     console.error("Clear cart error:", error);
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 

@@ -19,13 +19,16 @@ import {
 
 export const UserProfile = () => {
   const router = useRouter();
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const handleClick = (e) => {
     if (typeof window !== "undefined") {
-      if (window.innerWidth < 1024) {
+      if (window.innerWidth < 1024 && user) {
         e.stopPropagation();
         dispatch(setDropDown(true));
         dispatch(setIsMobileMenuOpen(true));
+      } else if (!user) {
+        router.push("/login");
       } else {
         router.push("/profile"); // For lg and above
       }

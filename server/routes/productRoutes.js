@@ -8,7 +8,7 @@ const { createNotification } = require("../utils/notifications");
 // ============================================
 // Get All Products with Enhanced Filtering
 // ============================================
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const {
       page = 1,
@@ -81,14 +81,14 @@ router.get("/", async (req, res) => {
       totalProducts: count,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // ============================================
 // Create Product with Sizes and Colors
 // ============================================
-router.post("/", protect, async (req, res) => {
+router.post("/", protect, async (req, res, next) => {
   try {
     const {
       name,
@@ -139,14 +139,14 @@ router.post("/", protect, async (req, res) => {
 
     res.status(201).json({ success: true, product: productObj });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // ============================================
 // Get Trending Products
 // ============================================
-router.get("/tags/trending", async (req, res) => {
+router.get("/tags/trending", async (req, res, next) => {
   try {
     const { limit = 10 } = req.query;
 
@@ -166,14 +166,14 @@ router.get("/tags/trending", async (req, res) => {
 
     res.json({ success: true, products: transformedProducts });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // ============================================
 // Get Popular Products
 // ============================================
-router.get("/tags/popular", async (req, res) => {
+router.get("/tags/popular", async (req, res, next) => {
   try {
     const { limit = 10 } = req.query;
 
@@ -193,14 +193,14 @@ router.get("/tags/popular", async (req, res) => {
 
     res.json({ success: true, products: transformedProducts });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // ============================================
 // Get On Sale Products
 // ============================================
-router.get("/tags/on-sale", async (req, res) => {
+router.get("/tags/on-sale", async (req, res, next) => {
   try {
     const { limit = 10 } = req.query;
 
@@ -220,14 +220,14 @@ router.get("/tags/on-sale", async (req, res) => {
 
     res.json({ success: true, products: transformedProducts });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // ============================================
 // Get New Arrivals
 // ============================================
-router.get("/tags/new-arrivals", async (req, res) => {
+router.get("/tags/new-arrivals", async (req, res, next) => {
   try {
     const { limit = 10 } = req.query;
 
@@ -247,14 +247,14 @@ router.get("/tags/new-arrivals", async (req, res) => {
 
     res.json({ success: true, products: transformedProducts });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // ============================================
 // Get Single Product
 // ============================================
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id)
       .populate("seller", "name email avatar")
@@ -275,14 +275,14 @@ router.get("/:id", async (req, res) => {
 
     res.json({ success: true, product: productObj });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // ============================================
 // Update Product
 // ============================================
-router.put("/:id", protect, async (req, res) => {
+router.put("/:id", protect, async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id);
 
@@ -356,14 +356,14 @@ router.put("/:id", protect, async (req, res) => {
 
     res.json({ success: true, product: productObj });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // ============================================
 // Delete Product
 // ============================================
-router.delete("/:id", protect, async (req, res) => {
+router.delete("/:id", protect, async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id);
 
@@ -382,14 +382,14 @@ router.delete("/:id", protect, async (req, res) => {
     await Product.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: "Product deleted" });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // ============================================
 // Like/Unlike Product (Returns Boolean)
 // ============================================
-router.post("/:id/like", protect, async (req, res) => {
+router.post("/:id/like", protect, async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.id);
 
@@ -418,7 +418,7 @@ router.post("/:id/like", protect, async (req, res) => {
       likesCount: product.likes.length,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
@@ -441,14 +441,14 @@ router.post("/:id/wishlist", protect, async (req, res) => {
     await user.save();
     res.json({ success: true, wishlist: user.wishlist });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // ============================================
 // Add Review/Rating
 // ============================================
-router.post("/:id/review", protect, async (req, res) => {
+router.post("/:id/review", protect, async (req, res, next) => {
   try {
     const { rating, comment } = req.body;
 
@@ -518,14 +518,14 @@ router.post("/:id/review", protect, async (req, res) => {
       message: "Review added successfully",
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // ============================================
 // Update Review
 // ============================================
-router.put("/:productId/review/:reviewId", protect, async (req, res) => {
+router.put("/:productId/review/:reviewId", protect, async (req, res, next) => {
   try {
     const { rating, comment } = req.body;
 
@@ -579,59 +579,63 @@ router.put("/:productId/review/:reviewId", protect, async (req, res) => {
       message: "Review updated successfully",
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // ============================================
 // Delete Review
 // ============================================
-router.delete("/:productId/review/:reviewId", protect, async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.productId);
+router.delete(
+  "/:productId/review/:reviewId",
+  protect,
+  async (req, res, next) => {
+    try {
+      const product = await Product.findById(req.params.productId);
 
-    if (!product) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Product not found" });
+      if (!product) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Product not found" });
+      }
+
+      const review = product.reviews.id(req.params.reviewId);
+
+      if (!review) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Review not found" });
+      }
+
+      if (review.user.toString() !== req.user._id.toString()) {
+        return res
+          .status(403)
+          .json({ success: false, message: "Not authorized" });
+      }
+
+      product.reviews.pull(req.params.reviewId);
+      await product.save();
+
+      const productObj = product.toObject();
+      productObj.isLiked = product.isLikedByUser(req.user._id);
+      productObj.likesCount = product.likes.length;
+      delete productObj.likes;
+
+      res.json({
+        success: true,
+        product: productObj,
+        message: "Review deleted successfully",
+      });
+    } catch (error) {
+      next(error);
     }
-
-    const review = product.reviews.id(req.params.reviewId);
-
-    if (!review) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Review not found" });
-    }
-
-    if (review.user.toString() !== req.user._id.toString()) {
-      return res
-        .status(403)
-        .json({ success: false, message: "Not authorized" });
-    }
-
-    product.reviews.pull(req.params.reviewId);
-    await product.save();
-
-    const productObj = product.toObject();
-    productObj.isLiked = product.isLikedByUser(req.user._id);
-    productObj.likesCount = product.likes.length;
-    delete productObj.likes;
-
-    res.json({
-      success: true,
-      product: productObj,
-      message: "Review deleted successfully",
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
   }
-});
+);
 
 // ============================================
 // Get Product Reviews
 // ============================================
-router.get("/:id/reviews", async (req, res) => {
+router.get("/:id/reviews", async (req, res, next) => {
   try {
     const { page = 1, limit = 10, rating } = req.query;
 
@@ -665,14 +669,14 @@ router.get("/:id/reviews", async (req, res) => {
       currentPage: Number(page),
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // ============================================
 // Check Stock (Supports Size and Color)
 // ============================================
-router.post("/:id/check-stock", async (req, res) => {
+router.post("/:id/check-stock", async (req, res, next) => {
   try {
     const { size, color, quantity = 1 } = req.body;
 
@@ -716,7 +720,7 @@ router.post("/:id/check-stock", async (req, res) => {
       message: available ? "Product is available" : "Insufficient stock",
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 

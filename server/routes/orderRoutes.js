@@ -10,7 +10,7 @@ const {
 } = require("../utils/sendEmail");
 
 // Get user's orders - FIXED: Removed populate
-orderRouter.get("/", protect, async (req, res) => {
+orderRouter.get("/", protect, async (req, res, next) => {
   try {
     const { page = 1, limit = 10, status } = req.query;
     const query = { user: req.user._id };
@@ -34,13 +34,12 @@ orderRouter.get("/", protect, async (req, res) => {
       currentPage: page,
     });
   } catch (error) {
-    console.error("Error fetching orders:", error);
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Get single order - FIXED: Removed populate
-orderRouter.get("/:id", protect, async (req, res) => {
+orderRouter.get("/:id", protect, async (req, res, next) => {
   try {
     const order = await Order.findOne({
       _id: req.params.id,
@@ -57,12 +56,12 @@ orderRouter.get("/:id", protect, async (req, res) => {
     res.json({ success: true, order });
   } catch (error) {
     console.error("Error fetching order:", error);
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Create order - FIXED: Better data extraction and validation
-orderRouter.post("/create", protect, async (req, res) => {
+orderRouter.post("/create", protect, async (req, res, next) => {
   try {
     const { cartItems, shippingAddress, paymentReference, totalAmount } =
       req.body;
@@ -182,12 +181,12 @@ orderRouter.post("/create", protect, async (req, res) => {
   } catch (error) {
     console.error("Error creating order:", error);
     console.error("Error stack:", error.stack);
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
 // Cancel order
-orderRouter.put("/:id/cancel", protect, async (req, res) => {
+orderRouter.put("/:id/cancel", protect, async (req, res, next) => {
   try {
     const order = await Order.findOne({
       _id: req.params.id,
@@ -226,7 +225,7 @@ orderRouter.put("/:id/cancel", protect, async (req, res) => {
     });
   } catch (error) {
     console.error("Error cancelling order:", error);
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 });
 
