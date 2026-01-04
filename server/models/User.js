@@ -55,21 +55,15 @@ const userSchema = new mongoose.Schema({
 });
 
 // ✅ Hash password before save - with proper error handling
-userSchema.pre("save", async function (next) {
-  try {
-    // Only hash if password is modified
-    if (!this.isModified("password")) {
-      return next();
-    }
+userSchema.pre("save", async function () {
+  // Only hash if password is modified
+  if (!this.isModified("password")) {
+    return;
+  }
 
-    // Only hash if password exists
-    if (this.password) {
-      this.password = await bcrypt.hash(this.password, 10);
-    }
-
-    next();
-  } catch (error) {
-    next(error);
+  // Only hash if password exists
+  if (this.password) {
+    this.password = await bcrypt.hash(this.password, 10);
   }
 });
 
