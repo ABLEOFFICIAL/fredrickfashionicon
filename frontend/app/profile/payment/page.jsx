@@ -787,7 +787,7 @@
 //                       className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
 //                     >
 //                       <div
-//                         className={`h-2 bg-gradient-to-r ${getCardIcon(
+//                         className={`h-2 bg-linear-to-r ${getCardIcon(
 //                           card.type
 //                         )}`}
 //                       ></div>
@@ -795,7 +795,7 @@
 //                         <div className="flex items-start justify-between mb-4">
 //                           <div className="flex items-center gap-3">
 //                             <div
-//                               className={`w-12 h-12 bg-gradient-to-br ${getCardIcon(
+//                               className={`w-12 h-12 bg-linear-to-br ${getCardIcon(
 //                                 card.type
 //                               )} rounded-lg flex items-center justify-center`}
 //                             >
@@ -1842,7 +1842,7 @@ const PaymentMethodsPage = () => {
                       className="bg-white rounded-lg sm:rounded-xl lg:rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
                     >
                       <div
-                        className={`h-1.5 sm:h-2 bg-gradient-to-r ${getCardIcon(
+                        className={`h-1.5 sm:h-2 bg-linear-to-r ${getCardIcon(
                           card.type
                         )}`}
                       ></div>
@@ -1850,7 +1850,7 @@ const PaymentMethodsPage = () => {
                         <div className="flex items-start justify-between mb-2.5 sm:mb-3 lg:mb-4 gap-2">
                           <div className="flex items-center gap-2 sm:gap-2.5 lg:gap-3 min-w-0">
                             <div
-                              className={`w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br ${getCardIcon(
+                              className={`w-9 h-9 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-linear-to-br ${getCardIcon(
                                 card.type
                               )} rounded-lg flex items-center justify-center shrink-0`}
                             >

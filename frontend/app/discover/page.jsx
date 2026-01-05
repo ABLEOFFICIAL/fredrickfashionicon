@@ -17,7 +17,7 @@ const DiscoveryPage = () => {
             <Category />
           </div>
           <div className="md:flex-1">
-            <Sidebar />
+            {/* <Sidebar /> */}
             <AdBlock />
             <FilterBlock />
             <DisplayProducts />

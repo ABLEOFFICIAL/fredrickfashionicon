@@ -1,11 +1,12 @@
-import DarkLogo from "@/app/components/DarkLogo";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setproductCategory,
   filterProducts,
   setProductFilter,
 } from "@/app/store/contextSlice";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { Store, TrendingUp, Sparkles, Tag, Star } from "lucide-react";
+import DarkLogo from "@/app/components/DarkLogo";
 
 const Category = () => {
   const { productCategory, productFilter } = useSelector(
@@ -30,55 +31,131 @@ const Category = () => {
   const categories = ["All", "Clothes", "Shoes", "Jewelry", "Bags"];
   const filters = ["All", "Trending", "Popular", "New Arrivals", "Sales"];
 
-  return (
-    <div className="min-h-screen sticky top-0 w-80 bg-[#4a4741] text-[#f7f1e8] z-30 px-5 hidden md:block">
-      {/* Header */}
-      <div className="flex items-center gap-1 border-b h-28">
-        <DarkLogo className={"w-10"} />
-        <span className="text-base font-semibold border-l pl-2">
-          Fredrick Fashion Icon
-        </span>
-      </div>
+  // Icons mapping for filters
+  const filterIcons = {
+    Trending: TrendingUp,
+    Popular: Star,
+    "New Arrivals": Sparkles,
+    Sales: Tag,
+  };
 
-      <div className="my-5">
+  return (
+    <div className="min-h-screen sticky top-0 w-72 bg-[#4a4741] text-[#f7f1e8] z-30 hidden md:block shadow-2xl">
+      {/* Header */}
+      {/* <div className="flex items-center gap-2 border-b border-[#80776f]/30 h-28 px-6 bg-[#4a4741]/50 backdrop-blur-sm">
+        <DarkLogo className="w-12 h-12" />
+        <div className="border-l border-[#80776f]/50 pl-3">
+          <span className="text-base font-bold block leading-tight">
+            Fredrick
+          </span>
+          <span className="text-xs font-light opacity-90">Fashion Icon</span>
+        </div>
+      </div> */}
+
+      <div className="p-6 space-y-6">
         {/* Category Section */}
-        <div className="text-sm border-b border-[#80776f] pb-4 mb-3">
-          <h3 className="font-bold">Category</h3>
-          <div className="flex flex-col pl-4 gap-2 py-2">
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="h-6 w-1 bg-[#f7f1e8] rounded-full"></div>
+            <h3 className="font-bold text-sm uppercase tracking-wider">
+              Category
+            </h3>
+          </div>
+
+          <div className="space-y-1.5">
             {categories.map((item, idx) => (
-              <span
+              <button
                 key={idx}
                 onClick={() => handleCategoryClick(item)}
-                className={`transition-colors duration-200 ${
+                className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-300 flex items-center gap-3 group ${
                   item === productCategory
-                    ? "bg-[#f7f1e8] p-2 rounded-sm text-[#4a4741] font-semibold"
-                    : "text-[#f7f1e8] cursor-pointer hover:text-[#c9c3b9]"
+                    ? "bg-[#f7f1e8] text-[#4a4741] font-semibold shadow-lg transform scale-[1.02]"
+                    : "text-[#f7f1e8] hover:bg-[#5a5451] hover:pl-5"
                 }`}
               >
-                {item}
-              </span>
+                {item === "All" && (
+                  <Store
+                    className={`w-4 h-4 ${
+                      item === productCategory
+                        ? "text-[#4a4741]"
+                        : "text-[#f7f1e8]/70 group-hover:text-[#f7f1e8]"
+                    }`}
+                  />
+                )}
+                {item === "Jewelry" && (
+                  <Sparkles
+                    className={`w-4 h-4 ${
+                      item === productCategory
+                        ? "text-[#4a4741]"
+                        : "text-[#f7f1e8]/70 group-hover:text-[#f7f1e8]"
+                    }`}
+                  />
+                )}
+                <span className="text-sm">{item}</span>
+                {item === productCategory && (
+                  <div className="ml-auto w-1.5 h-1.5 bg-[#4a4741] rounded-full"></div>
+                )}
+              </button>
             ))}
           </div>
         </div>
 
+        {/* Divider */}
+        <div className="h-px bg-linear-to-r from-transparent via-[#80776f] to-transparent"></div>
+
         {/* Filter Section */}
-        <div className="text-sm border-b border-[#80776f] pb-4 mb-3">
-          <h3 className="font-bold">Filter by</h3>
-          <div className="flex flex-col pl-4 gap-2 py-2">
-            {filters.map((item, idx) => (
-              <span
-                key={idx}
-                onClick={() => handleFilterClick(item)}
-                className={`transition-colors duration-200 ${
-                  item === productFilter
-                    ? "bg-[#f7f1e8] p-2 rounded-sm text-[#4a4741] font-semibold"
-                    : "text-[#f7f1e8] cursor-pointer hover:text-[#c9c3b9]"
-                }`}
-              >
-                {item}
-              </span>
-            ))}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="h-6 w-1 bg-[#f7f1e8] rounded-full"></div>
+            <h3 className="font-bold text-sm uppercase tracking-wider">
+              Filter by
+            </h3>
           </div>
+
+          <div className="space-y-1.5">
+            {filters.map((item, idx) => {
+              const Icon = filterIcons[item];
+              return (
+                <button
+                  key={idx}
+                  onClick={() => handleFilterClick(item)}
+                  className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-300 flex items-center gap-3 group ${
+                    item === productFilter
+                      ? "bg-[#f7f1e8] text-[#4a4741] font-semibold shadow-lg transform scale-[1.02]"
+                      : "text-[#f7f1e8] hover:bg-[#5a5451] hover:pl-5"
+                  }`}
+                >
+                  {Icon && (
+                    <Icon
+                      className={`w-4 h-4 ${
+                        item === productFilter
+                          ? "text-[#4a4741]"
+                          : "text-[#f7f1e8]/70 group-hover:text-[#f7f1e8]"
+                      }`}
+                    />
+                  )}
+                  <span className="text-sm">{item}</span>
+                  {item === productFilter && (
+                    <div className="ml-auto w-1.5 h-1.5 bg-[#4a4741] rounded-full"></div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Promo Banner */}
+        <div className="mt-8 bg-linear-to-br from-[#f7f1e8] to-[#e5dfd6] p-5 rounded-xl text-[#4a4741] shadow-lg">
+          <div className="flex items-center gap-2 mb-2">
+            <Tag className="w-5 h-5" />
+            <h4 className="font-bold text-sm">Special Offer</h4>
+          </div>
+          <p className="text-xs mb-3 opacity-80">
+            Get up to 50% off on selected items this week!
+          </p>
+          <button className="w-full bg-[#4a4741] text-[#f7f1e8] py-2 px-4 rounded-lg text-xs font-semibold hover:bg-[#3a3631] transition-colors">
+            Shop Now
+          </button>
         </div>
       </div>
     </div>

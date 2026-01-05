@@ -1,6 +1,10 @@
 "use client";
 import MyBtn from "@/app/components/MyBtn";
-import { setproductCategory } from "@/app/store/contextSlice";
+import {
+  filterProducts,
+  setproductCategory,
+  setProductFilter,
+} from "@/app/store/contextSlice";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -15,14 +19,14 @@ const Explore = () => {
       header: "FFI Bags",
       text: "From 349",
       category: "Bags",
-      id: 139,
+      id: "692606b924e0b307b67184cb",
     },
     {
       bg: "/shoe-bg.avif",
       header: "FFI Foot-wears",
       text: "From 349",
       category: "Shoes",
-      id: 239,
+      id: "6926064524e0b307b67184b3",
     },
   ];
   const handleExplore = (category) => {
@@ -54,22 +58,27 @@ const Explore = () => {
               <div className="flex gap-5 items-center ">
                 <span
                   onClick={() => {
-                    handleExplore(item.category);
+                    router.push("/discover");
+                    dispatch(setproductCategory(item.category));
+                    dispatch(setProductFilter("All"));
+                    dispatch(filterProducts());
                   }}
                   className={`${
                     screenWidth < 768
                       ? "hidden"
-                      : "block bg-transparent border border-[#f7f1e8] text-[#f7f1e8] px-5 py-3 rounded-3xl"
+                      : "block cursor-pointer bg-transparent border border-[#f7f1e8] text-[#f7f1e8] px-5 py-3 rounded-3xl hover:bg-[#3a3631]"
                   }`}
                 >
                   Explore
                 </span>
-                <MyBtn
-                  to={`/discover/${item.id}`}
-                  classname="bg-[#4a4741] px-5 py-3 rounded-3xl md:text-[#4a4741] md:bg-[#f7f1e8] "
+                <button
+                  onClick={() => {
+                    router.push(`/discover/${item.id}`);
+                  }}
+                  className="bg-[#4a4741] px-5 py-3 rounded-3xl md:text-[#4a4741] md:bg-[#f7f1e8] cursor-pointer hover:bg-[#3a3631] md:hover:bg-[#e0dcca]"
                 >
                   Shop
-                </MyBtn>
+                </button>
               </div>
             </div>
           </div>

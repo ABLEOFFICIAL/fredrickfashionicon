@@ -22,7 +22,7 @@ const HomePage = () => {
         <FFIDisplay />
         <StyleMoments />
         <Featured />
-        <StyleGuide />
+        {/* <StyleGuide /> */}
         <Testimonial />
         {/* -------------------- */}
         {/* <Newsletter /> */}

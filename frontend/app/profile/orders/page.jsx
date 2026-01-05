@@ -543,7 +543,7 @@ const OrdersPage = () => {
               <button
                 key={tab.key}
                 onClick={() => setFilter(tab.key)}
-                className={`flex-1 min-w-[90px] sm:min-w-0 px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 text-xs sm:text-sm md:text-base font-medium transition-all duration-200 whitespace-nowrap ${
+                className={`flex-1 min-w-22.5 sm:min-w-0 px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 text-xs sm:text-sm md:text-base font-medium transition-all duration-200 whitespace-nowrap ${
                   filter === tab.key
                     ? "bg-[#4a4741] text-white shadow-inner"
                     : "text-gray-600 hover:bg-gray-50 active:bg-gray-100"
@@ -560,7 +560,7 @@ const OrdersPage = () => {
           <div className="bg-white rounded-lg sm:rounded-xl lg:rounded-2xl shadow-sm border border-gray-100 p-8 sm:p-12 md:p-16 lg:p-20 text-center">
             <div className="max-w-md mx-auto">
               {/* Empty State Icon */}
-              <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 bg-gradient-to-br from-gray-100 to-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-inner">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 bg-linear-to-br from-gray-100 to-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-inner">
                 <ShoppingBag
                   className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-gray-400"
                   strokeWidth={1.5}

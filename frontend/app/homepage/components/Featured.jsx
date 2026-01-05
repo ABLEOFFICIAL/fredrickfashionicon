@@ -108,7 +108,7 @@ const Featured = () => {
             {featured.map((item, index) => {
               return (
                 <Products
-                  classname="w-[200px] h-[250px] shrink-0"
+                  classname="w-50 h-62.5 shrink-0"
                   key={item.id}
                   image={item.image}
                   name={item.name}

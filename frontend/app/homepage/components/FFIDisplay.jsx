@@ -95,7 +95,7 @@ const FFIDisplay = () => {
           <em className="slant font-serif italic">voice</em>
         </h1>
         <MyBtn
-          to={"/about-us"}
+          to={"/about"}
           classname="bg-[rgb(74,71,65)] w-32 text-center mx-auto px-5 py-3 rounded-4xl"
         >
           Why FFI
@@ -114,7 +114,7 @@ const FFIDisplay = () => {
               return (
                 <div key={index}>
                   {box.showText ? (
-                    <div className="fixed inset-0 z-30 overflow-y-auto">
+                    <div className="fixed inset-0 overflow-y-auto z-99999999">
                       {/* Top half - Image section */}
                       <div
                         style={{
@@ -163,12 +163,12 @@ const FFIDisplay = () => {
 
                         {/* Bottom actions */}
                         <div className="grid grid-cols-2 items-center gap-4 py-5 md:flex md:justify-between">
-                          <MyBtn
+                          {/* <MyBtn
                             to={"/learn-more"}
                             classname="bg-[#f7f1e8] text-[#4a4741] px-4 py-2.5 md:p-3 rounded-3xl text-sm md:text-base text-center"
                           >
                             Learn More
-                          </MyBtn>
+                          </MyBtn> */}
                           <div className="flex gap-3 md:gap-5 justify-end">
                             <ArrowLeft
                               onclick={handleArrowLeft}
@@ -226,14 +226,14 @@ const FFIDisplay = () => {
                                     >
                                       {box.Paragraph}
                                     </p>
-                                    <MyBtn
+                                    {/* <MyBtn
                                       to={"/learn-more"}
                                       classname={
                                         "bg-[#f7f1e8] text-[#4a4741] px-7 py-3 rounded-3xl w-48 text-center"
                                       }
                                     >
                                       Learn More
-                                    </MyBtn>
+                                    </MyBtn> */}
                                   </div>
                                   <div className="backdrop-blur-md h-min bg-neutral-100/30 rounded-xl px-6 py-5 flex flex-col gap-3">
                                     <h3 className="font-semibold">

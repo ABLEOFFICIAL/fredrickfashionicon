@@ -28,23 +28,6 @@ const Sidebar = () => {
     dispatch(setShowSideideBar(false)); // close it on every route change
   }, [pathName]);
 
-  // useEffect(() => {
-  //   const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-  //     setUser(currentUser);
-  //   });
-  //   return () => unsubscribe();
-  // }, [navigate]);
-  //   useEffect(() => {
-  //     const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //       if (user) {
-  //         const uid = user.uid;
-  //         console.log(uid);
-  //         setUser(user);
-  //       }
-  //       return () => unsubscribe();
-  //     });
-  //   }, []);
-
   return (
     <div
       className={`${
