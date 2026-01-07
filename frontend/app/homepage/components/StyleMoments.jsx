@@ -50,7 +50,7 @@ const StyleMoments = () => {
     setBorder(index);
   };
   return (
-    <div className="text-[#4a4741] md:px-28">
+    <div id="style" className="text-[#4a4741] md:px-28">
       <div className="flex flex-col gap-5 items-start  px-5">
         <p className="font-semibold text-2xl md:text-3xl md:font-normal">
           Form meets Fashion

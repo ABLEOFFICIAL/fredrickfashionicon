@@ -85,11 +85,16 @@ function Footer() {
         <div className=" md:border-b-0 border-b border-b-[#80776f] md:pr-5 md:pb-0 pb-5">
           <img className="w-28" src="/logo.png" alt="Logo" />
           <div className="flex flex-col gap-1 mt-3">
-            <span>info@1403luxury.com</span>
+            <a
+              href="mailto:fredrickfashionicon@gmail.com"
+              className="hover:underline"
+            >
+              fredrickfashionicon@gmail.com
+            </a>{" "}
             <span>Call or Send Us a WhatsApp Message</span>
             <span>Mon-Sat | 8am-7pm GMT</span>
             <span>Sun | 2pm-6pm GMT</span>
-            <span>+234 809 900 1403</span>
+            <span>+234 704 933 8317</span>
           </div>
         </div>
 
@@ -151,7 +156,7 @@ function Footer() {
       {/* Footer Bottom */}
       <div className="flex flex-col items-center gap-2">
         <span className="text-xs text-center block py-2">
-          &copy; 2025 Fredrick Fashion Icon. All rights reserved.
+          &copy; 2026 Fredrick Fashion Icon. All rights reserved.
         </span>
       </div>
     </div>

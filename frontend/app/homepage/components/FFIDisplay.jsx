@@ -88,7 +88,7 @@ const FFIDisplay = () => {
   };
 
   return (
-    <div className="px-5 py-16">
+    <div id="why-ffi" className="px-5 py-16">
       <div className="flex flex-col item-center  gap-8 md:justify-center  md:py-20 ">
         <h1 className="text-[rgb(74,71,65)] text-4xl font-extralight text-center md:text-7xl md:w-[50%] md:font-light md:leading-24 md:mx-auto">
           FFI Membership gives your body a{" "}

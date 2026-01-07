@@ -60,36 +60,47 @@ const Contact = () => {
 
   return (
     <div className="relative">
-      <div className="max-w-[1150px] mx-auto">
+      <div className="max-w-287.5 mx-auto">
         <div className="bg-[url('/contact-hero.jpeg')] bg-cover bg-center h-[40vh] md:h-[600px] flex justify-center items-center">
           <h1 className=" text-[#f7f1e8] slant">Let's Get In Touch</h1>
         </div>
         <div className="md:grid md:grid-cols-2 md:my-20 ">
-          <section className="text-sm mt-10 md:mt-0 text-[#4a4741] flex flex-col gap-8 border-b md:border-0  md:text-xl">
+          <section
+            id="contact-info"
+            className="text-sm mt-10 md:mt-0 text-[#4a4741] flex flex-col gap-8 border-b md:border-0  md:text-xl"
+          >
             <div className="flex flex-col gap-5 pb-4 md:gap-14  px-5">
               <div className="flex flex-col gap-3">
                 <PiPhoneCall className="size-10 p-2 border border-neutral-500 rounded md:size-20" />
                 <div className="flex flex-col gap-1">
-                  <span>+123 45 789 000</span>
-                  <span>+123 45 789 000</span>
+                  <span>+234 704 933 8317</span>
+                  <span>+234 912 413 1299</span>
                 </div>
               </div>
               <div className="flex flex-col gap-3">
                 <MdOutlineMail className="size-10 p-2 border border-neutral-500 rounded md:size-20" />
                 <div>
-                  <span>help@gmail.com</span>
+                  <a
+                    href="mailto:fredrickfashionicon@gmail.com"
+                    className="hover:underline"
+                  >
+                    fredrickfashionicon@gmail.com
+                  </a>{" "}
                 </div>
               </div>
               <div className="flex flex-col gap-3">
                 <MdOutlineLocationOn className="size-10 p-2 border border-neutral-500 rounded md:size-20" />
                 <div className="flex flex-col gap-1">
-                  <span>221b Elementary Street</span>
-                  <span>lekki, Nigeria</span>
+                  {/* <span>221b Elementary Street</span> */}
+                  <span>Lagos, Nigeria</span>
                 </div>
               </div>
             </div>
           </section>
-          <section className="text-sm text-[#4a4741] flex flex-col gap-8 pt-5">
+          <section
+            id="contact-form"
+            className="text-sm text-[#4a4741] flex flex-col gap-8 pt-5"
+          >
             <h1 className="text-2xl font-light pt-5 md:pt-0  px-5">
               Lets Walk Together
             </h1>

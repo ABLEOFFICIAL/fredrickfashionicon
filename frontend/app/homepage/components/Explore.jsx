@@ -34,7 +34,10 @@ const Explore = () => {
     dispatch(setproductCategory(category));
   };
   return (
-    <div className="grid grid-cols-1 gap-5 my-5 px-5 md:grid-cols-2 md:w-[85%] md:m-auto  md:py-10 md:h-[70vh]">
+    <div
+      id="explore-section"
+      className="grid grid-cols-1 gap-5 my-5 px-5 md:grid-cols-2 md:w-[85%] md:m-auto  md:py-10 md:h-[70vh]"
+    >
       {explores.map((item, index) => {
         return (
           <div

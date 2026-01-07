@@ -78,18 +78,21 @@ const MdDesktop = () => {
               {/* Section 1 */}
               <div className="grid gap-3 md:gap-5 md:py-5">
                 <h4 className="font-bold text-lg md:text-base">Home</h4>
-                <div className="grid gap-3 md:gap-4 md:text-base text-sm">
+                <div className="flex flex-col gap-3 md:gap-4 justify-start md:text-base text-sm">
                   <Link href="/homepage" className="hover:underline">
                     Home
                   </Link>
-                  <Link href="/" className="hover:underline">
-                    Oura Ring Gen3
+                  <Link
+                    href="/homepage#explore-section"
+                    className="hover:underline"
+                  >
+                    Explore
                   </Link>
-                  <Link href="/" className="hover:underline">
-                    On Sale Extra Charger
+                  <Link href="/homepage#why-ffi" className="hover:underline">
+                    Why FFI
                   </Link>
-                  <Link href="/" className="hover:underline">
-                    Oura Ring Gen3
+                  <Link href="/homepage#style" className="hover:underline">
+                    Style Moments
                   </Link>
                 </div>
               </div>
@@ -97,37 +100,40 @@ const MdDesktop = () => {
               {/* Section 2 */}
               <div className="grid gap-3 md:gap-5 md:py-5">
                 <h4 className="font-bold text-lg md:text-base">Blogs</h4>
-                <div className="grid gap-3 md:gap-4 md:text-base text-sm">
+                <div className="flex flex-col gap-3 md:gap-4 justify-start md:text-base text-sm">
                   <Link href="/style-with-us" className="hover:underline">
                     Blogs
                   </Link>
-                  <Link href="/" className="hover:underline">
-                    Oura Ring Gen3
+                  <Link href="/style-with-us" className="hover:underline">
+                    Recent Trends
                   </Link>
-                  <Link href="/" className="hover:underline">
-                    On Sale Extra Charger
+                  <Link href="/style-with-us" className="hover:underline">
+                    Style Tips
                   </Link>
-                  <Link href="/" className="hover:underline">
-                    Oura Ring Gen3
+                  <Link href="/style-with-us" className="hover:underline">
+                    Fashion News
                   </Link>
                 </div>
               </div>
 
               {/* Section 3 */}
               <div className="grid gap-3 md:gap-5 md:py-5">
-                <h4 className="font-bold text-lg md:text-base">About</h4>
-                <div className="grid gap-3 md:gap-4 md:text-base text-sm">
+                <h4 className="font-bold text-lg md:text-base h-1/5">About</h4>
+                <div className="flex flex-col gap-3 md:gap-4 justify-start md:text-base text-sm h-4/5">
                   <Link href="/about" className="hover:underline">
                     Why FFI
                   </Link>
-                  <Link href="/" className="hover:underline">
-                    Oura Ring Gen3
+                  <Link href="/about#who-we-are" className="hover:underline">
+                    Who are we
                   </Link>
-                  <Link href="/" className="hover:underline">
-                    On Sale Extra Charger
+                  <Link href="/about#stylish" className="hover:underline">
+                    Stylish
                   </Link>
-                  <Link href="/" className="hover:underline">
-                    Oura Ring Gen3
+                  {/* <Link href="/about#difference" className="hover:underline">
+                    Difference
+                  </Link> */}
+                  <Link href="/about#our-values" className="hover:underline">
+                    Our Values
                   </Link>
                 </div>
               </div>
@@ -135,18 +141,27 @@ const MdDesktop = () => {
               {/* Section 4 */}
               <div className="grid gap-3 md:gap-5 md:py-5">
                 <h4 className="font-bold text-lg md:text-base">Contact Us</h4>
-                <div className="grid gap-3 md:gap-4 md:text-base text-sm">
+                <div className="flex flex-col gap-3 md:gap-4 justify-start md:text-base text-sm">
                   <Link href="/contact-us" className="hover:underline">
                     Contact Us
                   </Link>
-                  <Link href="/" className="hover:underline">
-                    Oura Ring Gen3
+                  <Link
+                    href="/contact-us#contact-info"
+                    className="hover:underline"
+                  >
+                    contact info
                   </Link>
-                  <Link href="/" className="hover:underline">
-                    On Sale Extra Charger
-                  </Link>
-                  <Link href="/" className="hover:underline">
-                    Oura Ring Gen3
+                  {/* <Link
+                    href="/homepage#contact-info"
+                    className="hover:underline"
+                  >
+                    contact email
+                  </Link> */}
+                  <Link
+                    href="/contact-us#contact-form"
+                    className="hover:underline"
+                  >
+                    Contact Form
                   </Link>
                 </div>
               </div>

@@ -35,7 +35,7 @@ export const FloatingCartButton = () => {
   return (
     <button
       onClick={() => dispatch(setShowCartModal(true))}
-      className="fixed block md:hidden bottom-6 right-6 z-40 bg-white text-[#4a4741] rounded-full p-4 shadow-lg hover:bg-gray-800 transition-all duration-300 hover:scale-110 group"
+      className="fixed min-h-screen block md:hidden bottom-6 right-6 z-40 bg-white text-[#4a4741] rounded-full p-4 shadow-lg hover:bg-gray-800 transition-all duration-300 hover:scale-110 group"
       aria-label="Open cart"
     >
       <div className="relative">

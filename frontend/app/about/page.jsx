@@ -14,8 +14,8 @@ const About = () => {
   return (
     <>
       <div>
-        <div className="max-w-[1150px] mx-auto">
-          <section className="">
+        <div className="max-w-287.5 mx-auto">
+          <section id="who-we-are" className="">
             <div className="bg-[url('/feel.avif')] h-[35vh] md:h-[60vh] bg-center bg-cover bg-no-repeat text-[#f7f1e8] flex justify-center items-center text-2xl">
               Our <span className="slant">Mission</span>
             </div>
@@ -35,7 +35,7 @@ const About = () => {
             </div>
           </section>
 
-          <section className="py-20">
+          <section id="stylish" className="py-20">
             <div className="bg-[url('/hero1.jpg')] h-[25vh] md:h-[40vh] bg-center bg-cover bg-no-repeat text-[#f7f1e8] flex justify-center items-center text-2xl">
               <span className="slant">Stylish</span>
             </div>
@@ -49,7 +49,7 @@ const About = () => {
             </p>
           </section>
 
-          <div className="px-5">
+          <div id="difference" className="px-5">
             <h1 className="text-2xl w-[60%] md:w-[30%]">
               The Iconic{" "}
               <span className="slant block text-right">Difference</span>
@@ -98,7 +98,7 @@ const About = () => {
             <h3 className="font-light text-2xl pt-10 md:text-3xl md:text-center">
               Stylish icons
             </h3>
-            <p className="text-sm leading-6 py-4 md:w-[600px] md:mx-auto md:text-center">
+            <p className="text-sm leading-6 py-4 md:w-150 md:mx-auto md:text-center">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate
               molestiae totam nihil voluptatem aliquid, fugiat nobis laborum
               assumenda quo molestias provident in nam omnis illum, perspiciatis
@@ -106,7 +106,10 @@ const About = () => {
             </p>
           </section>
 
-          <section className="px-5 bg-white py-16 md:grid md:grid-cols-3 md:gap-16">
+          <section
+            id="our-values"
+            className="px-5 bg-white py-16 md:grid md:grid-cols-3 md:gap-16"
+          >
             <h2 className="text-2xl font-light pb-6 md:text-5xl">Our values</h2>
             <div className="flex flex-col gap-10">
               <div className="flex flex-col gap-5">
