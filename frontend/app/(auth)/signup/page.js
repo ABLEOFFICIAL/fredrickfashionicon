@@ -62,7 +62,7 @@ const Signup = () => {
           <div className="bg-[#4a4741]/20 absolute top-0 right-0 z-0 w-64 h-64 rotate-45 rounded-2xl translate-x-1/2 -translate-y-1/2"></div>
 
           <div className="py-10 md:py-0 sm:w-[70%] w-full max-w-md mx-auto flex flex-col gap-6">
-            <header>
+            <header className="flex justify-center mb-6">
               <DarkLogo className={"w-10"} />
             </header>
 
