@@ -31,7 +31,7 @@ const login = () => {
 
       if (res.data?.token) {
         localStorage.setItem("token", res.data.token);
-        router.push("/homepage");
+        window.location.href = "/homepage";
       } else {
         setError("Invalid response from server");
       }

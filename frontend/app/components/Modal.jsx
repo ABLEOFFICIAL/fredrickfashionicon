@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+// frontend/app/components/Modal.jsx
 import { X, AlertCircle, CheckCircle, Info, AlertTriangle } from "lucide-react";
 
-const Modal = ({
+export default function Modal({
   isOpen,
   onClose,
   title,
@@ -9,9 +9,9 @@ const Modal = ({
   type = "info",
   onConfirm,
   confirmText = "OK",
-  cancelText = "Cancel",
   showCancel = false,
-}) => {
+  cancelText = "Cancel",
+}) {
   if (!isOpen) return null;
 
   const icons = {
@@ -28,165 +28,52 @@ const Modal = ({
     info: "border-blue-500",
   };
 
+  const buttonColors = {
+    success: "bg-green-600 hover:bg-green-700",
+    error: "bg-red-600 hover:bg-red-700",
+    warning: "bg-yellow-600 hover:bg-yellow-700",
+    info: "bg-blue-600 hover:bg-blue-700",
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div
-        className={`bg-white rounded-lg shadow-2xl max-w-md w-full border-t-4 ${borderColors[type]} transform transition-all`}
+        className={`bg-white rounded-lg w-full max-w-md border-t-4 ${borderColors[type]}`}
       >
-        <div className="flex items-start justify-between p-6 pb-4">
-          <div className="flex items-center gap-3">
+        <div className="flex justify-between items-center p-5">
+          <div className="flex items-center gap-2">
             {icons[type]}
-            <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
+            <h3 className="font-semibold text-lg">{title}</h3>
           </div>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
-          >
-            <X className="w-5 h-5" />
+
+          <button onClick={onClose}>
+            <X className="w-5 h-5 text-gray-500 hover:text-gray-700" />
           </button>
         </div>
 
-        <div className="px-6 pb-6">
-          <p className="text-gray-600 leading-relaxed">{message}</p>
-        </div>
+        <div className="px-5 pb-4 text-gray-600">{message}</div>
 
-        <div className="flex gap-3 px-6 pb-6 justify-end">
+        <div className="flex justify-end gap-3 px-5 pb-5">
           {showCancel && (
             <button
               onClick={onClose}
-              className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+              className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded transition-colors"
             >
               {cancelText}
             </button>
           )}
+
           <button
             onClick={() => {
-              if (onConfirm) onConfirm();
+              onConfirm?.();
               onClose();
             }}
-            className="px-4 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className={`px-4 py-2 text-white rounded transition-colors ${buttonColors[type]}`}
           >
             {confirmText}
           </button>
         </div>
       </div>
-    </div>
-  );
-};
-
-// Demo Component
-export default function ModalDemo() {
-  const [modalConfig, setModalConfig] = useState({
-    isOpen: false,
-    type: "info",
-    title: "",
-    message: "",
-    showCancel: false,
-  });
-
-  const showModal = (type, showCancel = false) => {
-    const configs = {
-      success: {
-        title: "Success!",
-        message: "Your changes have been saved successfully.",
-      },
-      error: {
-        title: "Error",
-        message: "Something went wrong. Please try again.",
-      },
-      warning: {
-        title: "Warning",
-        message:
-          "Are you sure you want to proceed? This action cannot be undone.",
-      },
-      info: {
-        title: "Information",
-        message: "Here is some important information you should know about.",
-      },
-    };
-
-    setModalConfig({
-      isOpen: true,
-      type,
-      showCancel,
-      ...configs[type],
-    });
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">
-          Custom Modal Component
-        </h1>
-        <p className="text-gray-600 mb-8">
-          A beautiful replacement for standard alerts
-        </p>
-
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-            Try Different Modal Types
-          </h2>
-
-          <div className="grid grid-cols-2 gap-4 mb-8">
-            <button
-              onClick={() => showModal("success")}
-              className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors font-medium"
-            >
-              Success Modal
-            </button>
-
-            <button
-              onClick={() => showModal("error")}
-              className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium"
-            >
-              Error Modal
-            </button>
-
-            <button
-              onClick={() => showModal("warning", true)}
-              className="px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors font-medium"
-            >
-              Warning Modal
-            </button>
-
-            <button
-              onClick={() => showModal("info")}
-              className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-medium"
-            >
-              Info Modal
-            </button>
-          </div>
-
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="text-lg font-semibold mb-3 text-gray-800">
-              Usage Example:
-            </h3>
-            <pre className="text-sm bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
-              {`<Modal
-  isOpen={isOpen}
-  onClose={() => setIsOpen(false)}
-  title="Success!"
-  message="Your action completed successfully."
-  type="success"
-  confirmText="OK"
-  showCancel={false}
-  onConfirm={() => console.log('Confirmed')}
-/>`}
-            </pre>
-          </div>
-        </div>
-      </div>
-
-      <Modal
-        isOpen={modalConfig.isOpen}
-        onClose={() => setModalConfig({ ...modalConfig, isOpen: false })}
-        title={modalConfig.title}
-        message={modalConfig.message}
-        type={modalConfig.type}
-        showCancel={modalConfig.showCancel}
-        onConfirm={() => console.log("Modal confirmed")}
-      />
     </div>
   );
 }

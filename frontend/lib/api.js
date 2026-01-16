@@ -144,6 +144,8 @@
 // export default api;
 
 // frontend/lib/api.js
+import { setModal } from "@/app/store/contextSlice";
+// import { Store } from "@/app/store/store";
 import axios from "axios";
 
 const api = axios.create({
@@ -162,6 +164,45 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+// api.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     if (error.response?.status === 401) {
+//       Store.dispatch(setModal(true));
+//     }
+
+//     return Promise.reject(error);
+//   }
+// );
+// ✅ FIXED: Response interceptor with lazy store access to avoid circular dependency
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error.response?.status;
+    const url = error.config?.url;
+
+    // ⛔ Ignore 401 from auth bootstrap check - user is simply not logged in
+    if (status === 401 && url?.includes("/auth/me")) {
+      return Promise.reject(error);
+    }
+
+    // ⛔ Ignore 401 from wishlist check - user might not be logged in
+    if (status === 401 && url?.includes("/users/wishlist")) {
+      return Promise.reject(error);
+    }
+
+    // ✅ Show modal for protected actions when user is not authenticated
+    if (status === 401) {
+      // Lazy import store to avoid circular dependency
+      import("@/app/store/store").then(({ Store }) => {
+        Store.dispatch(setModal(true));
+      });
+    }
+
+    return Promise.reject(error);
+  }
+);
 
 // ============================================
 // AUTH ENDPOINTS

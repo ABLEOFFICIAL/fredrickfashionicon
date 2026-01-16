@@ -120,7 +120,7 @@ const DisplayProducts = () => {
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300">
                       <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
                         {/* <button className="p-1.5 sm:p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors"> */}
-                        <button
+                        {/* <button
                           className="p-1.5 sm:p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors"
                           onClick={toggleWishlist}
                         >
@@ -129,11 +129,11 @@ const DisplayProducts = () => {
                           ) : (
                             <FaRegHeart className="text-gray-500 size-6 hover:text-red-400" />
                           )}
-                        </button>
+                        </button> */}
                         {/* <CiHeart className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" /> */}
                         {/* </button> */}
                         <button className="p-1.5 sm:p-2 bg-white rounded-full shadow-lg hover:bg-gray-100 transition-colors">
-                          <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" />
+                          <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700 cursor-pointer" />
                         </button>
                       </div>
                     </div>

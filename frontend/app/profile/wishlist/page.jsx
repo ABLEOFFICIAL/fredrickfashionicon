@@ -278,10 +278,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { Heart, Trash2, ShoppingCart, Plus, X } from "lucide-react";
 import { fetchCart, fetchWishlist } from "@/app/utils/helper";
 import { cartAPI, productAPI } from "@/lib/api";
+import Loading from "@/app/components/Loadiing";
 
 const WishlistPage = () => {
   const dispatch = useDispatch();
   const { user, wishList } = useSelector((state) => state.auth);
+  const [isLoading, setIsLoading] = useState(false);
   const [removingItem, setRemovingItem] = useState(null);
 
   const handleRemoveFromWishlist = (itemId) => {
@@ -291,6 +293,7 @@ const WishlistPage = () => {
 
   const handleAddToCart = async (item) => {
     try {
+      setIsLoading(true);
       await cartAPI.addItem(item._id, 1);
       await productAPI.wishlist(item._id);
       alert(`${item.name} added to cart!`);
@@ -300,10 +303,13 @@ const WishlistPage = () => {
     } catch (error) {
       console.log("ADD TO CART ERROR →", error);
       alert(error.response?.data?.message || "Failed to add to cart");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleMoveAllToCart = async () => {
+    setIsLoading(true);
     try {
       for (const item of wishList) {
         await cartAPI.addItem(item._id, 1);
@@ -316,6 +322,8 @@ const WishlistPage = () => {
     } catch (error) {
       console.log("MOVE ALL ERROR →", error);
       alert("Failed to move all items");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -457,8 +465,14 @@ const WishlistPage = () => {
                           disabled={item.inStock === false}
                           className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#4a4741] text-white rounded-xl text-sm font-medium hover:bg-gray-800 transition-colors disabled:bg-gray-300"
                         >
-                          <ShoppingCart className="w-4 h-4" />
-                          Add to Cart
+                          {isLoading ? (
+                            <Loading />
+                          ) : (
+                            <>
+                              <ShoppingCart className="w-4 h-4" />
+                              Add to Cart
+                            </>
+                          )}
                         </button>
                         <button
                           onClick={() => handleRemoveFromWishlist(item._id)}
@@ -520,8 +534,14 @@ const WishlistPage = () => {
             onClick={handleMoveAllToCart}
             className="md:hidden fixed bottom-6 right-6 flex items-center gap-2 px-5 py-3 bg-[#4a4741] text-white rounded-full font-semibold shadow-lg hover:bg-gray-800 transition-all z-10 text-sm"
           >
-            <ShoppingCart className="w-5 h-5" />
-            Move All to Cart
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <>
+                <ShoppingCart className="w-5 h-5" />
+                Move All to Cart
+              </>
+            )}
           </button>
         )}
       </div>

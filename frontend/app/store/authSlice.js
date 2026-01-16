@@ -176,12 +176,27 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.initialized = true;
       })
+      // .addCase(fetchCurrentUser.rejected, (state, action) => {
+      //   state.authLoading = false;
+      //   state.error = action.payload;
+      //   state.user = null;
+      //   state.isAuthenticated = false;
+      //   state.initialized = true;
+      // })
       .addCase(fetchCurrentUser.rejected, (state, action) => {
         state.authLoading = false;
-        state.error = action.payload;
         state.user = null;
         state.isAuthenticated = false;
         state.initialized = true;
+
+        // ✅ Logged out user (expected)
+        if (action.payload === "NOT_AUTHENTICATED") {
+          state.error = null;
+          return;
+        }
+
+        // ❌ Real error
+        state.error = action.payload || "Something went wrong";
       })
 
       // ✅ Fetch User Profile - DON'T update user object

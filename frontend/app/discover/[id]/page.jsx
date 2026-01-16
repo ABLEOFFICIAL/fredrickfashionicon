@@ -7,6 +7,8 @@ import { MdOutlineZoomOutMap, MdOutlineZoomInMap } from "react-icons/md";
 import { FaHeart, FaRegHeart, FaStar } from "react-icons/fa";
 import { productAPI, cartAPI, userAPI } from "@/lib/api";
 import { fetchCart } from "@/app/utils/helper";
+import { setModal, setModalContext } from "@/app/store/contextSlice";
+import Modal from "@/app/components/Modal";
 
 export const ZoomIn = ({ onClick }) => (
   <MdOutlineZoomOutMap
@@ -24,10 +26,13 @@ export const ZoomOut = ({ onClick }) => (
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const { products } = useSelector((state) => state.context);
+  const { products, modal, modalContext } = useSelector(
+    (state) => state.context
+  );
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
   const [zoom, setZoom] = useState(false);
   const [selectedView, setSelectedView] = useState(0);
-  const [wishlist, setWishlist] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -39,10 +44,12 @@ const ProductDetail = () => {
 
   const product = products?.find((p) => String(p._id) === String(id));
 
-  // ✅ Check if in wishlist
+  // Check if in wishlist (only for authenticated users)
   useEffect(() => {
-    if (product?._id) checkIfInWishlist();
-  }, [product?._id]);
+    if (product?._id && isAuthenticated) {
+      checkIfInWishlist();
+    }
+  }, [product?._id, isAuthenticated]);
 
   const checkIfInWishlist = async () => {
     try {
@@ -54,39 +61,49 @@ const ProductDetail = () => {
     }
   };
 
-  // ✅ Toggle Wishlist
+  // Toggle Wishlist
   const toggleWishlist = async () => {
+    if (!isAuthenticated) {
+      dispatch(setModalContext("wishlist"));
+      dispatch(setModal(true));
+      return;
+    }
+
     try {
       setLoading(true);
       await productAPI.wishlist(product._id);
       setIsInWishlist(!isInWishlist);
     } catch (error) {
-      alert(error.response?.data?.message || "Failed to update wishlist");
+      console.error("Error toggling wishlist:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ Add to Cart Function
+  // Add to Cart Function
   const addToCart = async () => {
     if (!selectedSize) {
-      alert("Please select a size before adding to cart.");
+      dispatch(setModalContext("size"));
+      dispatch(setModal(true));
       return;
     }
     if (!selectedColor) {
-      alert("Please select a color before adding to cart.");
+      dispatch(setModalContext("colour"));
+      dispatch(setModal(true));
       return;
     }
 
     setLoading(true);
+    dispatch(setModalContext("cart"));
     try {
       await cartAPI.addItem(product._id, quantity);
-      alert("✅ Added to cart!");
       dispatch(fetchCart());
-      // Trigger global cart update event
       window.dispatchEvent(new Event("cartUpdated"));
+      // Show success modal
+      dispatch(setModalContext("addedToCart"));
+      dispatch(setModal(true));
     } catch (error) {
-      alert(error.response?.data?.message || "Failed to add to cart");
+      console.error("Error adding to cart:", error);
     } finally {
       setLoading(false);
     }
@@ -103,41 +120,115 @@ const ProductDetail = () => {
     );
   }
 
-  const similarProducts = products
-    .filter((p) => p.category === product.category && p._id !== product._id)
-    .slice(0, 4);
-
   const buyNow = async () => {
     if (!selectedSize) {
-      alert("Please select a size before proceeding to buy.");
+      dispatch(setModalContext("size"));
+      dispatch(setModal(true));
       return;
     }
 
     if (!selectedColor) {
-      alert("Please select a color before proceeding to buy.");
+      dispatch(setModalContext("colour"));
+      dispatch(setModal(true));
       return;
     }
 
     setLoading(true);
+    dispatch(setModalContext("buyNow"));
 
     try {
       await cartAPI.addItem(product._id, quantity);
-
       dispatch(fetchCart());
       window.dispatchEvent(new Event("cartUpdated"));
-
-      router.push("/check-out"); // ✅ move inside try
+      router.push("/check-out");
     } catch (error) {
-      alert(error.response?.data?.message || "Failed to proceed to checkout");
+      console.error("Error during buy now:", error);
     } finally {
       setLoading(false);
     }
   };
 
+  // Helper function to get modal config
+  const getModalConfig = () => {
+    switch (modalContext) {
+      case "addedToCart":
+        return {
+          type: "success",
+          title: "Added to Cart!",
+          message: `${product.name} has been added to your cart successfully.`,
+          confirmText: "Continue Shopping",
+          showCancel: false,
+        };
+      case "cart":
+        return {
+          type: "error",
+          title: "Login Required",
+          message: "You must be logged in to add items to your cart.",
+          confirmText: "Go to Login",
+          showCancel: true,
+          onConfirm: () => router.push("/login"),
+        };
+      case "buyNow":
+        return {
+          type: "error",
+          title: "Login Required",
+          message: "You must be logged in to complete your purchase.",
+          confirmText: "Go to Login",
+          showCancel: true,
+          onConfirm: () => router.push("/login"),
+        };
+      case "wishlist":
+        return {
+          type: "error",
+          title: "Login Required",
+          message: "You must be logged in to add items to your wishlist.",
+          confirmText: "Go to Login",
+          showCancel: true,
+          onConfirm: () => router.push("/login"),
+        };
+      case "size":
+        return {
+          type: "warning",
+          title: "Size Required",
+          message: "Please select a size before proceeding.",
+          confirmText: "OK",
+          showCancel: false,
+        };
+      case "colour":
+        return {
+          type: "warning",
+          title: "Color Required",
+          message: "Please select a color before proceeding.",
+          confirmText: "OK",
+          showCancel: false,
+        };
+      default:
+        return {
+          type: "info",
+          title: "Notice",
+          message: "Please complete the required selections.",
+          confirmText: "OK",
+          showCancel: false,
+        };
+    }
+  };
+
+  const modalConfig = getModalConfig();
+
   return (
     <main className="min-h-screen bg-[#f7f1e8] text-[#4a4741] relative">
+      <Modal
+        isOpen={modal}
+        onClose={() => dispatch(setModal(false))}
+        type={modalConfig.type}
+        title={modalConfig.title}
+        message={modalConfig.message}
+        confirmText={modalConfig.confirmText}
+        showCancel={modalConfig.showCancel}
+        onConfirm={modalConfig.onConfirm || (() => dispatch(setModal(false)))}
+      />
+
       <section className="max-w-287.5 mx-auto py-10 pt-20 md:grid grid-cols-2 gap-10">
-        {/* Product Images */}
         {/* Zoom Modal */}
         {zoom && (
           <div
@@ -160,9 +251,10 @@ const ProductDetail = () => {
             </div>
           </div>
         )}
+
         <div className="px-4">
           {/* Main Image */}
-          <figure className="relative  w-full h-100 md:h-150 flex justify-center items-center bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer">
+          <figure className="relative w-full h-100 md:h-150 flex justify-center items-center bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer">
             <img
               ref={imgRef}
               src={product.images[selectedView]}
@@ -319,9 +411,10 @@ const ProductDetail = () => {
 
             <button
               onClick={buyNow}
-              className="border border-[#4a4741] text-[#4a4741] py-3 rounded-lg w-1/2 hover:bg-[#4a4741] hover:text-white transition-all"
+              disabled={loading}
+              className="border border-[#4a4741] text-[#4a4741] py-3 rounded-lg w-1/2 hover:bg-[#4a4741] hover:text-white transition-all disabled:opacity-70"
             >
-              Buy Now
+              {loading ? "Processing..." : "Buy Now"}
             </button>
           </div>
 

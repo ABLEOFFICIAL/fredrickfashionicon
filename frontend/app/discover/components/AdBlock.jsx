@@ -81,7 +81,7 @@ const AdBlock = () => {
                       {ad.description}
                     </p>
                     <MyBtn
-                      to={"/flash-sales"}
+                      to={"/ComingSoon"}
                       classname="bg-white text-[#4a4741] px-5 sm:px-6 py-2.5 sm:py-3 rounded-full w-fit font-medium hover:bg-gray-100 transition-colors text-sm sm:text-base shadow-lg"
                     >
                       Shop Now
@@ -135,7 +135,7 @@ const AdBlock = () => {
                       {ad.description}
                     </p>
                     <MyBtn
-                      to={"/flash-sales"}
+                      to={"/ComingSoon"}
                       classname="bg-white text-[#4a4741] px-8 py-3.5 rounded-full w-fit font-semibold hover:bg-gray-100 hover:shadow-2xl transition-all transform hover:scale-105 text-base shadow-xl"
                     >
                       Shop Now

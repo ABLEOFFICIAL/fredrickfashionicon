@@ -65,9 +65,12 @@ export const fetchCurrentUser = createAsyncThunk(
       console.error("Error fetching user:", error);
 
       // Axios errors have a predictable structure
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch current user"
-      );
+      // return rejectWithValue(
+      //   error.response?.data?.message || "Failed to fetch current user"
+      // );
+      if (error.response?.status === 401) {
+        return rejectWithValue("NOT_AUTHENTICATED");
+      }
     }
   }
 );

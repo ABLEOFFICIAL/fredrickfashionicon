@@ -510,6 +510,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { userAPI } from "@/lib/api";
 import { fetchUserAddresses, fetchUserProfile } from "@/app/utils/helper";
 import { Pen, Trash2, Plus, MapPin, User, Mail, Phone } from "lucide-react";
+import { set } from "mongoose";
+import Loading from "@/app/components/Loadiing";
 
 export const DeleteModal = ({ onConfirm, onCancel }) => (
   <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -551,6 +553,7 @@ export default function Page() {
   const [showEditAddressModal, setShowEditAddressModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [currentAddressId, setCurrentAddressId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [editName, setEditName] = useState(user?.name || "");
   const [editEmail, setEditEmail] = useState(user?.email || "");
@@ -594,6 +597,7 @@ export default function Page() {
       });
       await dispatch(fetchUserProfile());
       setShowEditProfileModal(false);
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }
@@ -718,10 +722,13 @@ export default function Page() {
                   Cancel
                 </button>
                 <button
-                  onClick={(e) => handleProfileSubmit(e)}
-                  className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-900 text-white rounded-xl text-sm sm:text-base font-medium hover:bg-gray-800 transition-colors"
+                  onClick={(e) => {
+                    setIsLoading(true);
+                    handleProfileSubmit(e);
+                  }}
+                  className="flex-1 flex justify-center items-center px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-900 text-white rounded-xl text-sm sm:text-base font-medium hover:bg-gray-800 transition-colors"
                 >
-                  Save
+                  {isLoading ? <Loading /> : "Save"}
                 </button>
               </div>
             </ModalWrapper>
@@ -768,10 +775,13 @@ export default function Page() {
                   Cancel
                 </button>
                 <button
-                  onClick={(e) => handleAddAddress(e)}
-                  className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-900 text-white rounded-xl text-sm sm:text-base font-medium hover:bg-gray-800 transition-colors"
+                  onClick={(e) => {
+                    setIsLoading(true);
+                    handleAddAddress(e);
+                  }}
+                  className="flex-1 flex justify-center items-center px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-900 text-white rounded-xl text-sm sm:text-base font-medium hover:bg-gray-800 transition-colors"
                 >
-                  Save
+                  {isLoading ? <Loading /> : "Save"}
                 </button>
               </div>
             </ModalWrapper>
@@ -818,10 +828,13 @@ export default function Page() {
                   Cancel
                 </button>
                 <button
-                  onClick={(e) => handleUpdateAddress(e)}
-                  className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-900 text-white rounded-xl text-sm sm:text-base font-medium hover:bg-gray-800 transition-colors"
+                  onClick={(e) => {
+                    setIsLoading(true);
+                    handleUpdateAddress(e);
+                  }}
+                  className="flex-1 flex justify-center items-center px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-900 text-white rounded-xl text-sm sm:text-base font-medium hover:bg-gray-800 transition-colors"
                 >
-                  Update
+                  {isLoading ? <Loading /> : "Update"}
                 </button>
               </div>
             </ModalWrapper>

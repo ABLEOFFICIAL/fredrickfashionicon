@@ -26,6 +26,8 @@ const contextSlice = createSlice({
     itemCount: 0,
     loading: false,
     error: null,
+    modal: false,
+    modalContext: null,
     showCartModal: false,
     showEditModal: true,
     // order
@@ -103,6 +105,12 @@ const contextSlice = createSlice({
     },
     setIsMobileMenuOpen(state, action) {
       state.isMobileMenuOpen = action.payload;
+    },
+    setModal(state, action) {
+      state.modal = action.payload;
+    },
+    setModalContext(state, action) {
+      state.modalContext = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -264,6 +272,8 @@ export const {
   setShowCartModal,
   setShowEditModal,
   setIsMobileMenuOpen,
+  setModal,
+  setModalContext,
 } = contextSlice.actions;
 
 export default contextSlice.reducer;
