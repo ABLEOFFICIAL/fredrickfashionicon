@@ -1,11 +1,14 @@
 "use client";
+import Loading from "@/app/components/Loadiing";
 import MyBtn from "@/app/components/MyBtn";
 import {
   filterProducts,
   setproductCategory,
   setProductFilter,
 } from "@/app/store/contextSlice";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const Explore = () => {
@@ -13,6 +16,7 @@ const Explore = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { screenWidth } = useSelector((state) => state.width);
+  const [isLoading, setIsLoading] = useState(false);
   const explores = [
     {
       bg: "/bag-bg.avif",
@@ -61,6 +65,7 @@ const Explore = () => {
               <div className="flex gap-5 items-center ">
                 <span
                   onClick={() => {
+                    setIsLoading(true);
                     router.push("/discover");
                     dispatch(setproductCategory(item.category));
                     dispatch(setProductFilter("All"));
@@ -72,16 +77,14 @@ const Explore = () => {
                       : "block cursor-pointer bg-transparent border border-[#f7f1e8] text-[#f7f1e8] px-5 py-3 rounded-3xl hover:bg-[#3a3631]"
                   }`}
                 >
-                  Explore
+                  {isLoading ? <Loading /> : "Explore"}
                 </span>
-                <button
-                  onClick={() => {
-                    router.push(`/discover/${item.id}`);
-                  }}
+                <Link
+                  href={`/discover/${item.id}`}
                   className="bg-[#4a4741] px-5 py-3 rounded-3xl md:text-[#4a4741] md:bg-[#f7f1e8] cursor-pointer hover:bg-[#3a3631] md:hover:bg-[#e0dcca]"
                 >
                   Shop
-                </button>
+                </Link>
               </div>
             </div>
           </div>

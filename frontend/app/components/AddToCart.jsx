@@ -9,6 +9,7 @@ import MyBtn from "./MyBtn";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowCartModal } from "../store/contextSlice";
 import { fetchCart, removeFromCart, updateCartQuantity } from "../utils/helper";
+import Link from "next/link";
 
 export const PageHeaders = ({ title }) => {
   const router = useRouter();
@@ -148,9 +149,9 @@ const AddToCart = () => {
                 <p className="text-base sm:text-lg font-medium mb-2">
                   Please log in
                 </p>
-                <p className="text-sm text-gray-600">
-                  Log in to view your cart items
-                </p>
+                <Link href="/login" className="text-sm text-blue-600 underline">
+                  <p className="text-sm ">Log in to view your cart items</p>
+                </Link>
               </div>
             ) : loading ? (
               <div className="flex items-center justify-center h-full">
