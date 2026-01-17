@@ -24,7 +24,7 @@ const contextSlice = createSlice({
     showNavDrop: false,
     cart: [],
     itemCount: 0,
-    loading: false,
+    loading: true,
     error: null,
     modal: false,
     modalContext: null,

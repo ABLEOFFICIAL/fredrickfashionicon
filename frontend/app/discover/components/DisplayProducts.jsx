@@ -5,11 +5,11 @@ import { CiHeart } from "react-icons/ci";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { ShoppingCart, Eye } from "lucide-react";
 import { useSelector } from "react-redux";
+import Loading from "@/app/components/Loadiing";
 
 const DisplayProducts = () => {
-  const { filteredProducts } = useSelector((state) => state.context);
+  const { filteredProducts, loading } = useSelector((state) => state.context);
   const [isInWishlist, setIsInWishlist] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   // ✅ Check if in wishlist
   // useEffect(() => {
@@ -89,7 +89,11 @@ const DisplayProducts = () => {
         </div>
 
         {/* Products Grid */}
-        {filteredProducts.length === 0 ? (
+        {loading ? (
+          <div className="col-span-full flex items-center justify-center py-20">
+            <Loading size={40} color="#4a4741" />
+          </div>
+        ) : filteredProducts.length === 0 ? (
           <div className="col-span-full flex flex-col items-center justify-center py-16 sm:py-20">
             <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
               <ShoppingCart className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />

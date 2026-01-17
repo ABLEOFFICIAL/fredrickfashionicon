@@ -24,7 +24,8 @@ const Hero = () => {
           </p>
           <button
             onClick={() => {
-              router.push("/discover");
+              // router.push("/discover");
+              window.location.href = "/discover";
               dispatch(setproductCategory("All"));
               dispatch(setProductFilter("All"));
               dispatch(filterProducts());

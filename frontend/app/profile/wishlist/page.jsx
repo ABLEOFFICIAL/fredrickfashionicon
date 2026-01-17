@@ -278,6 +278,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { Heart, Trash2, ShoppingCart, Plus, X } from "lucide-react";
 import { fetchCart, fetchWishlist } from "@/app/utils/helper";
 import { cartAPI, productAPI } from "@/lib/api";
+import { setModal, setModalContext } from "@/app/store/contextSlice";
+import Modal from "@/app/components/Modal";
+import { useRouter } from "next/navigation";
 import Loading from "@/app/components/Loadiing";
 
 const WishlistPage = () => {
@@ -285,6 +288,8 @@ const WishlistPage = () => {
   const { user, wishList } = useSelector((state) => state.auth);
   const [isLoading, setIsLoading] = useState(false);
   const [removingItem, setRemovingItem] = useState(null);
+  const { modal, modalContext } = useSelector((state) => state.context);
+  const router = useRouter();
 
   const handleRemoveFromWishlist = (itemId) => {
     setRemovingItem(itemId);
@@ -292,43 +297,109 @@ const WishlistPage = () => {
   };
 
   const handleAddToCart = async (item) => {
+    if (!user) {
+      dispatch(setModalContext("loginRequired"));
+      dispatch(setModal(true));
+      return;
+    }
+
     try {
       setIsLoading(true);
       await cartAPI.addItem(item._id, 1);
       await productAPI.wishlist(item._id);
-      alert(`${item.name} added to cart!`);
+
+      // Show success modal
+      dispatch(setModalContext("addedToCartWishlist"));
+      dispatch(setModal(true));
+
       dispatch(fetchCart());
       dispatch(fetchWishlist());
       window.dispatchEvent(new Event("cartUpdated"));
     } catch (error) {
       console.log("ADD TO CART ERROR →", error);
-      alert(error.response?.data?.message || "Failed to add to cart");
+      dispatch(setModalContext("error"));
+      dispatch(setModal(true));
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleMoveAllToCart = async () => {
-    setIsLoading(true);
+    if (!user) {
+      dispatch(setModalContext("loginRequired"));
+      dispatch(setModal(true));
+      return;
+    }
+
     try {
+      setIsLoading(true);
+
       for (const item of wishList) {
         await cartAPI.addItem(item._id, 1);
         await productAPI.wishlist(item._id);
       }
-      alert("All items moved to cart!");
+
+      dispatch(setModalContext("addedToCartWishlist"));
+      dispatch(setModal(true));
+
       dispatch(fetchCart());
       dispatch(fetchWishlist());
       window.dispatchEvent(new Event("cartUpdated"));
     } catch (error) {
       console.log("MOVE ALL ERROR →", error);
-      alert("Failed to move all items");
+      dispatch(setModalContext("error"));
+      dispatch(setModal(true));
     } finally {
       setIsLoading(false);
     }
   };
 
+  const getModalConfig = (modalContext, itemName) => {
+    switch (modalContext) {
+      case "addedToCartWishlist":
+        return {
+          type: "success",
+          title: "Added to Cart",
+          message: `${itemName} has been added to your cart.`,
+          confirmText: "Continue Shopping",
+          showCancel: false,
+        };
+      case "loginRequired":
+        return {
+          type: "error",
+          title: "Login Required",
+          message: "Please log in to perform this action.",
+          confirmText: "Go to Login",
+          showCancel: true,
+          onConfirm: () => router.push("/login"),
+        };
+      case "error":
+        return {
+          type: "error",
+          title: "Error",
+          message: "Something went wrong. Please try again.",
+          confirmText: "OK",
+          showCancel: false,
+        };
+      default:
+        return { type: "info", title: "", message: "", confirmText: "OK" };
+    }
+  };
+
+  const modalConfig = getModalConfig(modalContext);
+
   return (
     <div className="min-h-screen bg-gray-50 py-4 sm:py-6 lg:py-8">
+      <Modal
+        isOpen={modal}
+        onClose={() => dispatch(setModal(false))}
+        type={modalConfig.type}
+        title={modalConfig.title}
+        message={modalConfig.message}
+        confirmText={modalConfig.confirmText}
+        showCancel={modalConfig.showCancel}
+        onConfirm={modalConfig.onConfirm || (() => dispatch(setModal(false)))}
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
