@@ -279,6 +279,7 @@
 // module.exports = router;
 
 // server/routes/paymentRoutes.js
+// server/routes/paymentRoutes.js
 const router = require("express").Router();
 const axios = require("axios");
 const crypto = require("crypto");
@@ -287,14 +288,13 @@ const Cart = require("../models/Cart");
 const User = require("../models/User");
 const Order = require("../models/Order");
 const { protect } = require("../middleware/auth");
-const { createNotification } = require("../utils/notifications"); // Adjust path as needed
+const { createNotification } = require("../utils/notifications");
 
 // Initialize Payment
 router.post("/initialize", protect, async (req, res, next) => {
   try {
     const { amount, email, metadata } = req.body;
 
-    // Amount should be in kobo (1 Naira = 100 kobo)
     const amountInKobo = Math.round(amount * 100);
 
     const response = await axios.post(
@@ -302,7 +302,7 @@ router.post("/initialize", protect, async (req, res, next) => {
       {
         email: email || req.user.email,
         amount: amountInKobo,
-        currency: "NGN", // Nigerian Naira
+        currency: "NGN",
         callback_url:
           process.env.PAYSTACK_CALLBACK_URL ||
           `http://localhost:3000/payment/verify`,
@@ -320,7 +320,6 @@ router.post("/initialize", protect, async (req, res, next) => {
       }
     );
 
-    // Save payment record
     await Payment.create({
       user: req.user._id,
       reference: response.data.data.reference,
@@ -360,7 +359,6 @@ router.get("/verify/:reference", protect, async (req, res, next) => {
     const paymentData = response.data.data;
 
     if (paymentData.status === "success") {
-      // Update payment record
       await Payment.findOneAndUpdate(
         { reference },
         {
@@ -370,13 +368,12 @@ router.get("/verify/:reference", protect, async (req, res, next) => {
         }
       );
 
-      // Get cart and create order
+      // ✅ FIXED: Get cart with proper population
       const cart = await Cart.findOne({ user: req.user._id }).populate(
         "items.product"
       );
 
       if (cart && cart.items.length > 0) {
-        // Get shipping address (default or from metadata)
         const user = await User.findById(req.user._id);
         const defaultAddress =
           user.addresses?.find((addr) => addr.isDefault) || user.addresses?.[0];
@@ -386,6 +383,7 @@ router.get("/verify/:reference", protect, async (req, res, next) => {
           .substr(2, 9)
           .toUpperCase()}`;
 
+        // ✅ FIXED: Include selectedSize in order items
         const order = await Order.create({
           user: req.user._id,
           orderNumber,
@@ -395,6 +393,7 @@ router.get("/verify/:reference", protect, async (req, res, next) => {
             price: item.price,
             quantity: item.quantity,
             images: item.product.images || [],
+            selectedSize: item.selectedSize || "N/A", // ✅ ADDED: Include selectedSize
           })),
           totalAmount: cart.totalAmount,
           shippingAddress: defaultAddress,
@@ -408,7 +407,6 @@ router.get("/verify/:reference", protect, async (req, res, next) => {
         cart.totalAmount = 0;
         await cart.save();
 
-        // Create notification (only if function exists)
         if (typeof createNotification === "function") {
           try {
             await createNotification({
@@ -420,7 +418,6 @@ router.get("/verify/:reference", protect, async (req, res, next) => {
             });
           } catch (notifError) {
             console.error("Notification error:", notifError);
-            // Don't fail the request if notification fails
           }
         }
 
@@ -464,14 +461,13 @@ router.get("/verify/:reference", protect, async (req, res, next) => {
     }
   } catch (error) {
     console.error("Verification Error:", error.response?.data || error.message);
-    next(error); // ✅ CHANGED: Replace the entire res.status(500).json() with next(error)
+    next(error);
   }
 });
 
 // Paystack Webhook
 router.post("/webhook", async (req, res, next) => {
   try {
-    // Validate webhook signature
     const hash = crypto
       .createHmac("sha512", process.env.PAYSTACK_SECRET_KEY)
       .update(JSON.stringify(req.body))
@@ -483,7 +479,6 @@ router.post("/webhook", async (req, res, next) => {
 
     const event = req.body;
 
-    // Handle different event types
     switch (event.event) {
       case "charge.success":
         await Payment.findOneAndUpdate(
@@ -495,7 +490,6 @@ router.post("/webhook", async (req, res, next) => {
           }
         );
         console.log("Payment successful:", event.data.reference);
-        // Add your business logic here (update order, send email, etc.)
         break;
 
       case "charge.failed":
