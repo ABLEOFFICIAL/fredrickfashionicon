@@ -60,28 +60,29 @@ const PaymentPage = () => {
 
   // FIXED: Helper function to safely extract product data
   const extractProductData = (item) => {
-    // Try to get data from nested product object first, then fall back to item itself
     const productId = item.product?._id || item._id;
     const productName = item.product?.name || item.name;
 
-    // CRITICAL FIX: Check multiple possible locations for images
     let productImages = [];
     if (item.product?.images && Array.isArray(item.product.images)) {
       productImages = item.product.images;
     } else if (item.images && Array.isArray(item.images)) {
       productImages = item.images;
     } else if (item.product?.image) {
-      // Fallback for single image
       productImages = [item.product.image];
     } else if (item.image) {
-      // Fallback for single image at root level
       productImages = [item.image];
     }
+
+    // ✅ ADDED: Extract selectedSize
+    const selectedSize =
+      item.selectedSize || item.product?.selectedSize || "N/A";
 
     return {
       productId,
       productName,
       productImages,
+      selectedSize, // ✅ Include in return
     };
   };
 
@@ -92,16 +93,15 @@ const PaymentPage = () => {
         throw new Error("Cart is empty");
       }
 
-      // Prepare payload for API with consistent data extraction
+      // ✅ FIXED: Include selectedSize in cart items mapping
       const payload = {
         cartItems: cart.map((item) => {
-          const { productId, productName, productImages } =
+          const { productId, productName, productImages, selectedSize } =
             extractProductData(item);
 
-          // Log for debugging
           console.log("Processing cart item:", {
             original: item,
-            extracted: { productId, productName, productImages },
+            extracted: { productId, productName, productImages, selectedSize },
           });
 
           return {
@@ -112,6 +112,7 @@ const PaymentPage = () => {
             },
             price: item.price,
             quantity: item.quantity,
+            selectedSize, // ✅ ADDED: Include selectedSize
           };
         }),
         shippingAddress: deliveryAddress,
@@ -119,7 +120,7 @@ const PaymentPage = () => {
         totalAmount: orderTotal,
       };
 
-      console.log("Order payload:", payload);
+      console.log("Order payload with sizes:", payload);
 
       const response = await fetch("/api/orders/create", {
         method: "POST",

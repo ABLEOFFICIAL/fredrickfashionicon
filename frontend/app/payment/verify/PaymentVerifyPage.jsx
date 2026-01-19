@@ -1,4 +1,4 @@
-// app/payment/verify/page.jsx
+// app/payment/verify/PaymentVerifyPage.jsx
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -25,7 +25,6 @@ const PaymentVerifyPage = () => {
     const productId = item.product?._id || item._id;
     const productName = item.product?.name || item.name;
 
-    // Check multiple possible locations for images
     let productImages = [];
     if (item.product?.images && Array.isArray(item.product.images)) {
       productImages = item.product.images;
@@ -37,10 +36,15 @@ const PaymentVerifyPage = () => {
       productImages = [item.image];
     }
 
+    // ✅ ADDED: Extract selectedSize
+    const selectedSize =
+      item.selectedSize || item.product?.selectedSize || "N/A";
+
     return {
       productId,
       productName,
       productImages,
+      selectedSize, // ✅ Include in return
     };
   };
 
@@ -120,14 +124,15 @@ const PaymentVerifyPage = () => {
         return;
       }
 
+      // ✅ FIXED: Include selectedSize in payload
       const payload = {
         cartItems: cart.map((item) => {
-          const { productId, productName, productImages } =
+          const { productId, productName, productImages, selectedSize } =
             extractProductData(item);
 
           console.log("Processing cart item for order:", {
             original: item,
-            extracted: { productId, productName, productImages },
+            extracted: { productId, productName, productImages, selectedSize },
           });
 
           return {
@@ -138,6 +143,7 @@ const PaymentVerifyPage = () => {
             },
             price: item.price,
             quantity: item.quantity,
+            selectedSize, // ✅ ADDED: Include selectedSize
           };
         }),
         shippingAddress: deliveryAddress,
@@ -145,7 +151,7 @@ const PaymentVerifyPage = () => {
         totalAmount: orderTotal,
       };
 
-      console.log("Creating order with payload:", payload);
+      console.log("Creating order with payload (including sizes):", payload);
 
       const response = await fetch("/api/orders/create", {
         method: "POST",

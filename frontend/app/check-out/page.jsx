@@ -1,3 +1,4 @@
+//app/check-out/page.jsx
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -102,9 +103,24 @@ const CheckoutPage = () => {
       return;
     }
 
+    // ✅ ADDED: Log cart items to verify selectedSize exists
+    console.log("=== CART ITEMS BEFORE PAYMENT ===");
+    console.log("Raw cart:", cart);
+    cart.forEach((item, index) => {
+      console.log(`Item ${index + 1}:`, {
+        name: item.product?.name || item.name,
+        selectedSize: item.selectedSize,
+        price: item.price,
+        quantity: item.quantity,
+      });
+    });
+
     localStorage.setItem("selectedPaymentMethod", paymentMethod);
     localStorage.setItem("orderTotal", total.toString());
     localStorage.setItem("deliveryAddress", JSON.stringify(deliveryAddress));
+
+    // ✅ IMPORTANT: Store cart items with selectedSize
+    localStorage.setItem("cartItems", JSON.stringify(cart));
 
     window.location.href = "/payment";
   };
