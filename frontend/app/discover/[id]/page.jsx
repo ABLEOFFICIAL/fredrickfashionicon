@@ -82,28 +82,48 @@ const ProductDetail = () => {
 
   // Add to Cart Function
   const addToCart = async () => {
+    // ✅ Validate size is selected
     if (!selectedSize) {
       dispatch(setModalContext("size"));
       dispatch(setModal(true));
       return;
     }
-    // if (!selectedColor) {
-    //   dispatch(setModalContext("colour"));
-    //   dispatch(setModal(true));
-    //   return;
-    // }
 
     setLoading(true);
     dispatch(setModalContext("cart"));
+
     try {
-      await cartAPI.addItem(product._id, quantity, selectedSize);
+      // ✅ Extract size string from object (if it's an object)
+      const sizeValue =
+        typeof selectedSize === "object" ? selectedSize.size : selectedSize;
+
+      console.log("🛒 Adding to cart:", {
+        productId: product._id,
+        quantity,
+        size: sizeValue,
+      });
+
+      // ✅ Call API
+      await cartAPI.addItem(product._id, quantity, sizeValue);
+
+      // ✅ Update cart in Redux
       dispatch(fetchCart());
+
+      // ✅ Trigger cart update event
       window.dispatchEvent(new Event("cartUpdated"));
-      // Show success modal
+
+      // ✅ Show success modal
       dispatch(setModalContext("addedToCart"));
       dispatch(setModal(true));
+
+      console.log("✅ Item added to cart successfully");
     } catch (error) {
-      console.error("Error adding to cart:", error);
+      console.error("❌ Error adding to cart:", error);
+
+      // ✅ Show error message to user
+      const errorMessage =
+        error.response?.data?.message || "Failed to add item to cart";
+      alert(errorMessage); // Or use a toast notification
     } finally {
       setLoading(false);
     }

@@ -108,40 +108,55 @@ router.post("/add", protect, async (req, res, next) => {
   try {
     const { productId, quantity = 1, selectedSize } = req.body;
 
-    console.log("Adding to cart:", {
+    console.log("📦 Adding to cart:", {
       productId,
       quantity,
-      userId: req.user._id,
       selectedSize,
+      userId: req.user._id,
     });
 
-    // ✅ Validate selectedSize is provided
-    if (!selectedSize) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Size selection is required" });
+    // ✅ Validate required fields
+    if (!productId) {
+      return res.status(400).json({
+        success: false,
+        message: "Product ID is required",
+      });
     }
 
+    if (!selectedSize) {
+      return res.status(400).json({
+        success: false,
+        message: "Size selection is required",
+      });
+    }
+
+    // ✅ Validate product exists and has stock
     const product = await Product.findById(productId);
     if (!product) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Product not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
     }
 
     if (product.stock < quantity) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Insufficient stock" });
+      return res.status(400).json({
+        success: false,
+        message: `Only ${product.stock} items available in stock`,
+      });
     }
 
+    // ✅ Get or create cart
     let cart = await Cart.findOne({ user: req.user._id });
 
     if (!cart) {
-      cart = await Cart.create({ user: req.user._id, items: [] });
+      cart = await Cart.create({
+        user: req.user._id,
+        items: [],
+      });
     }
 
-    // ✅ Check if same product AND same size already in cart
+    // ✅ Check if same product + same size exists
     const existingItemIndex = cart.items.findIndex(
       (item) =>
         item.product.toString() === productId &&
@@ -149,8 +164,19 @@ router.post("/add", protect, async (req, res, next) => {
     );
 
     if (existingItemIndex > -1) {
-      // ✅ Update quantity for same product + same size
-      cart.items[existingItemIndex].quantity += quantity;
+      // ✅ Update quantity for existing item
+      const newQuantity = cart.items[existingItemIndex].quantity + quantity;
+
+      // Check if new quantity exceeds stock
+      if (newQuantity > product.stock) {
+        return res.status(400).json({
+          success: false,
+          message: `Cannot add ${quantity} more. Only ${product.stock} items available in stock`,
+        });
+      }
+
+      cart.items[existingItemIndex].quantity = newQuantity;
+      console.log(`✅ Updated existing item - New quantity: ${newQuantity}`);
     } else {
       // ✅ Add new item (different product OR different size)
       cart.items.push({
@@ -159,12 +185,14 @@ router.post("/add", protect, async (req, res, next) => {
         price: product.price,
         selectedSize,
       });
+      console.log(`✅ Added new item - Size: ${selectedSize}`);
     }
 
+    // ✅ Save and populate
     await cart.save();
     await cart.populate("items.product");
 
-    // ✅ Create notification (wrapped in try-catch to prevent errors)
+    // ✅ Create notification (optional - won't fail request if errors)
     try {
       const { createNotification } = require("../utils/notifications");
       await createNotification({
@@ -175,17 +203,16 @@ router.post("/add", protect, async (req, res, next) => {
         link: `/cart`,
       });
     } catch (notifError) {
-      console.log("Notification error (non-critical):", notifError.message);
-      // Don't fail the request if notification fails
+      console.log("⚠️ Notification error (non-critical):", notifError.message);
     }
 
     res.json({
       success: true,
       cart,
-      message: "Item added to cart",
+      message: "Item added to cart successfully",
     });
   } catch (error) {
-    console.error("Add to cart error:", error);
+    console.error("❌ Add to cart error:", error);
     next(error);
   }
 });
@@ -195,28 +222,38 @@ router.put("/update/:itemId", protect, async (req, res, next) => {
   try {
     const { quantity } = req.body;
 
-    if (quantity < 1) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Quantity must be at least 1" });
+    if (!quantity || quantity < 1) {
+      return res.status(400).json({
+        success: false,
+        message: "Quantity must be at least 1",
+      });
     }
 
     const cart = await Cart.findOne({ user: req.user._id });
     if (!cart) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Cart not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Cart not found",
+      });
     }
 
     const item = cart.items.id(req.params.itemId);
     if (!item) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Item not found in cart" });
+      return res.status(404).json({
+        success: false,
+        message: "Item not found in cart",
+      });
     }
 
-    // Check stock
+    // ✅ Check stock availability
     const product = await Product.findById(item.product);
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product no longer available",
+      });
+    }
+
     if (product.stock < quantity) {
       return res.status(400).json({
         success: false,
@@ -231,10 +268,10 @@ router.put("/update/:itemId", protect, async (req, res, next) => {
     res.json({
       success: true,
       cart,
-      message: "Cart updated",
+      message: "Cart updated successfully",
     });
   } catch (error) {
-    console.error("Update cart error:", error);
+    console.error("❌ Update cart error:", error);
     next(error);
   }
 });

@@ -259,13 +259,30 @@ export const productAPI = {
 // ============================================
 // CART ENDPOINTS
 // ============================================
+// export const cartAPI = {
+//   getCart: () => api.get("/cart"),
+//   addItem: (productId, quantity = 1, selectedSize) =>
+//     api.post("/cart/add", { productId, quantity, selectedSize }),
+//   updateItem: (itemId, quantity, selectedSize) =>
+//     api.put(`/cart/update/${itemId}`, { quantity, selectedSize }),
+//   removeItem: (itemId) => api.delete(`/cart/remove/${itemId}`),
+//   clearCart: () => api.delete("/cart/clear"),
+// };
 export const cartAPI = {
   getCart: () => api.get("/cart"),
+
   addItem: (productId, quantity = 1, selectedSize) =>
-    api.post("/cart/add", { productId, quantity, selectedSize }),
-  updateItem: (itemId, quantity, selectedSize) =>
-    api.put(`/cart/update/${itemId}`, { quantity, selectedSize }),
+    api.post("/cart/add", {
+      productId,
+      quantity,
+      selectedSize,
+    }),
+
+  updateItem: (itemId, quantity) =>
+    api.put(`/cart/update/${itemId}`, { quantity }),
+
   removeItem: (itemId) => api.delete(`/cart/remove/${itemId}`),
+
   clearCart: () => api.delete("/cart/clear"),
 };
 

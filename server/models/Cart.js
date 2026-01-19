@@ -17,7 +17,6 @@ const cartItemSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  // size
   selectedSize: {
     type: String,
     required: true,
@@ -42,13 +41,12 @@ const cartSchema = new mongoose.Schema({
   },
 });
 
-// ✅ Calculate total amount before saving - FIXED
+// Calculate total amount before saving
 cartSchema.pre("save", function () {
   this.totalAmount = this.items.reduce((total, item) => {
     return total + item.price * item.quantity;
   }, 0);
   this.updatedAt = Date.now();
-  // ✅ Don't call next() - let Mongoose handle it automatically
 });
 
 module.exports = mongoose.model("Cart", cartSchema);
