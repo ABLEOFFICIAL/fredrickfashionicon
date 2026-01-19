@@ -60,7 +60,7 @@ orderRouter.get("/:id", protect, async (req, res, next) => {
   }
 });
 
-// Create order - FIXED: Better data extraction and validation
+// Create order
 orderRouter.post("/create", protect, async (req, res, next) => {
   try {
     const { cartItems, shippingAddress, paymentReference, totalAmount } =
@@ -83,7 +83,7 @@ orderRouter.post("/create", protect, async (req, res, next) => {
       .substr(2, 9)
       .toUpperCase()}`;
 
-    // FIXED: Format items with flexible data extraction
+    // ✅ FIXED: Format items with selectedSize extraction
     const items = cartItems.map((item, index) => {
       // Extract product data - handle both nested and flat structures
       const productId = item.product?._id || item.product || item._id;
@@ -101,10 +101,15 @@ orderRouter.post("/create", protect, async (req, res, next) => {
         productImages = [item.image];
       }
 
+      // ✅ ADDED: Extract selectedSize
+      const selectedSize =
+        item.selectedSize || item.product?.selectedSize || "N/A";
+
       console.log(`Item ${index + 1} processing:`, {
         productId,
         productName,
         productImages,
+        selectedSize, // ✅ Log the size
         originalItem: item,
       });
 
@@ -119,6 +124,7 @@ orderRouter.post("/create", protect, async (req, res, next) => {
         price: item.price || 0,
         quantity: item.quantity || 1,
         images: productImages,
+        selectedSize, // ✅ ADDED: Include size in order item
       };
     });
 
@@ -133,7 +139,7 @@ orderRouter.post("/create", protect, async (req, res, next) => {
       paymentReference,
       paymentStatus: "paid",
       orderStatus: "processing",
-      isNewOrder: true, // NEW: Mark as new for admin notification
+      isNewOrder: true,
     });
 
     console.log("Order created successfully:", order._id);
@@ -153,25 +159,20 @@ orderRouter.post("/create", protect, async (req, res, next) => {
       link: `/orders/${order._id}`,
     });
 
-    // ===== NEW: SEND EMAIL NOTIFICATIONS =====
+    // Send email notifications
     try {
-      // Send email to admin
       await sendOrderNotificationToAdmin(order, req.user);
       console.log("✅ Admin notification email sent");
     } catch (emailError) {
       console.error("❌ Failed to send admin email:", emailError);
-      // Don't fail the order creation if email fails
     }
 
     try {
-      // Send confirmation email to customer
       await sendOrderConfirmationToCustomer(order, req.user);
       console.log("✅ Customer confirmation email sent");
     } catch (emailError) {
       console.error("❌ Failed to send customer email:", emailError);
-      // Don't fail the order creation if email fails
     }
-    // ===== END EMAIL NOTIFICATIONS =====
 
     res.status(201).json({
       success: true,

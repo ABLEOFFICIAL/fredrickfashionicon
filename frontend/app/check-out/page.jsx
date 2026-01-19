@@ -176,6 +176,9 @@ const CheckoutPage = () => {
                           <p className="text-lg font-semibold text-gray-900 mt-1">
                             ₦{item.price.toLocaleString()}
                           </p>
+                          <p className="text-sm text-gray-600">
+                            Size: {item.selectedSize}
+                          </p>
                         </div>
 
                         <div className="flex items-center gap-3 bg-white rounded-lg px-3 py-2 border border-gray-200">
@@ -217,9 +220,16 @@ const CheckoutPage = () => {
                   </div>
                 )}
               </div>
-
+              <div className="p-6 bg-gray-50 border-t border-gray-100">
+                <button
+                  onClick={handleClearCart}
+                  className="mt-3 text-sm text-gray-600 hover:text-red-600 transition-colors cursor-pointer"
+                >
+                  Clear all items
+                </button>
+              </div>
               {/* Coupon Section */}
-              {cart.length > 0 && (
+              {/* {cart.length > 0 && (
                 <div className="p-6 bg-gray-50 border-t border-gray-100">
                   <div className="flex flex-col sm:flex-row gap-3">
                     <input
@@ -243,7 +253,7 @@ const CheckoutPage = () => {
                     Clear all items
                   </button>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
 

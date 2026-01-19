@@ -1211,6 +1211,30 @@ const Receipt = React.forwardRef(({ txn }, ref) => {
 
       <hr />
 
+      {/* ✅ ADDED: Display order items with sizes */}
+      {txn.items && txn.items.length > 0 && (
+        <div style={{ marginTop: "15px", marginBottom: "15px" }}>
+          <p style={{ fontWeight: "bold", marginBottom: "8px" }}>Items:</p>
+          {txn.items.map((item, index) => (
+            <div
+              key={index}
+              style={{ marginBottom: "8px", paddingLeft: "10px" }}
+            >
+              <p style={{ margin: "2px 0" }}>
+                {item.name || "Product"}
+                {item.selectedSize && ` (Size: ${item.selectedSize})`}
+              </p>
+              <p style={{ margin: "2px 0", fontSize: "12px", color: "#666" }}>
+                Qty: {item.quantity} × ₦{item.price.toLocaleString()} = ₦
+                {(item.quantity * item.price).toLocaleString()}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <hr />
+
       <p style={{ fontSize: "16px", fontWeight: "bold" }}>
         Total: ₦{txn.totalAmount.toLocaleString()}
       </p>

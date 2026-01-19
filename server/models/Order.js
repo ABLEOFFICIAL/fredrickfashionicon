@@ -22,6 +22,7 @@ const orderSchema = new mongoose.Schema({
       price: Number,
       quantity: Number,
       images: [String],
+      selectedSize: String, // ✅ ADDED: Store the selected size
     },
   ],
   totalAmount: {
@@ -49,7 +50,6 @@ const orderSchema = new mongoose.Schema({
     enum: ["processing", "shipped", "delivered", "cancelled"],
     default: "processing",
   },
-  // NEW: For admin notifications
   isNewOrder: {
     type: Boolean,
     default: true,
