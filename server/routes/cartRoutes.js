@@ -104,6 +104,118 @@ router.get("/", protect, async (req, res, next) => {
 //   }
 // });
 // Add item to cart
+// router.post("/add", protect, async (req, res, next) => {
+//   try {
+//     const { productId, quantity = 1, selectedSize } = req.body;
+
+//     console.log("📦 Adding to cart:", {
+//       productId,
+//       quantity,
+//       selectedSize,
+//       userId: req.user._id,
+//     });
+
+//     // ✅ Validate required fields
+//     if (!productId) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Product ID is required",
+//       });
+//     }
+
+//     if (!selectedSize) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Size selection is required",
+//       });
+//     }
+
+//     // ✅ Validate product exists and has stock
+//     const product = await Product.findById(productId);
+//     if (!product) {
+//       return res.status(404).json({
+//         success: false,
+//         message: "Product not found",
+//       });
+//     }
+
+//     if (product.stock < quantity) {
+//       return res.status(400).json({
+//         success: false,
+//         message: `Only ${product.stock} items available in stock`,
+//       });
+//     }
+
+//     // ✅ Get or create cart
+//     let cart = await Cart.findOne({ user: req.user._id });
+
+//     if (!cart) {
+//       cart = await Cart.create({
+//         user: req.user._id,
+//         items: [],
+//       });
+//     }
+
+//     // ✅ Check if same product + same size exists
+//     const existingItemIndex = cart.items.findIndex(
+//       (item) =>
+//         item.product.toString() === productId &&
+//         item.selectedSize === selectedSize
+//     );
+
+//     if (existingItemIndex > -1) {
+//       // ✅ Update quantity for existing item
+//       const newQuantity = cart.items[existingItemIndex].quantity + quantity;
+
+//       // Check if new quantity exceeds stock
+//       if (newQuantity > product.stock) {
+//         return res.status(400).json({
+//           success: false,
+//           message: `Cannot add ${quantity} more. Only ${product.stock} items available in stock`,
+//         });
+//       }
+
+//       cart.items[existingItemIndex].quantity = newQuantity;
+//       console.log(`✅ Updated existing item - New quantity: ${newQuantity}`);
+//     } else {
+//       // ✅ Add new item (different product OR different size)
+//       cart.items.push({
+//         product: productId,
+//         quantity,
+//         price: product.price,
+//         selectedSize,
+//       });
+//       console.log(`✅ Added new item - Size: ${selectedSize}`);
+//     }
+
+//     // ✅ Save and populate
+//     await cart.save();
+//     await cart.populate("items.product");
+
+//     // ✅ Create notification (optional - won't fail request if errors)
+//     try {
+//       const { createNotification } = require("../utils/notifications");
+//       await createNotification({
+//         user: req.user._id,
+//         type: "product",
+//         title: "Added to Cart",
+//         message: `${product.name} (Size: ${selectedSize}) has been added to your cart`,
+//         link: `/cart`,
+//       });
+//     } catch (notifError) {
+//       console.log("⚠️ Notification error (non-critical):", notifError.message);
+//     }
+
+//     res.json({
+//       success: true,
+//       cart,
+//       message: "Item added to cart successfully",
+//     });
+//   } catch (error) {
+//     console.error("❌ Add to cart error:", error);
+//     next(error);
+//   }
+// });
 router.post("/add", protect, async (req, res, next) => {
   try {
     const { productId, quantity = 1, selectedSize } = req.body;
@@ -115,7 +227,7 @@ router.post("/add", protect, async (req, res, next) => {
       userId: req.user._id,
     });
 
-    // ✅ Validate required fields
+    // Validate required fields
     if (!productId) {
       return res.status(400).json({
         success: false,
@@ -130,7 +242,7 @@ router.post("/add", protect, async (req, res, next) => {
       });
     }
 
-    // ✅ Validate product exists and has stock
+    // Validate product exists and has stock
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({
@@ -146,7 +258,7 @@ router.post("/add", protect, async (req, res, next) => {
       });
     }
 
-    // ✅ Get or create cart
+    // Get or create cart
     let cart = await Cart.findOne({ user: req.user._id });
 
     if (!cart) {
@@ -156,7 +268,7 @@ router.post("/add", protect, async (req, res, next) => {
       });
     }
 
-    // ✅ Check if same product + same size exists
+    // Check if same product + same size exists
     const existingItemIndex = cart.items.findIndex(
       (item) =>
         item.product.toString() === productId &&
@@ -164,7 +276,7 @@ router.post("/add", protect, async (req, res, next) => {
     );
 
     if (existingItemIndex > -1) {
-      // ✅ Update quantity for existing item
+      // Update quantity for existing item
       const newQuantity = cart.items[existingItemIndex].quantity + quantity;
 
       // Check if new quantity exceeds stock
@@ -178,7 +290,7 @@ router.post("/add", protect, async (req, res, next) => {
       cart.items[existingItemIndex].quantity = newQuantity;
       console.log(`✅ Updated existing item - New quantity: ${newQuantity}`);
     } else {
-      // ✅ Add new item (different product OR different size)
+      // Add new item (different product OR different size)
       cart.items.push({
         product: productId,
         quantity,
@@ -188,22 +300,30 @@ router.post("/add", protect, async (req, res, next) => {
       console.log(`✅ Added new item - Size: ${selectedSize}`);
     }
 
-    // ✅ Save and populate
+    // Save and populate
     await cart.save();
     await cart.populate("items.product");
 
-    // ✅ Create notification (optional - won't fail request if errors)
+    // ✅ FIXED: Create notification with proper error handling
     try {
       const { createNotification } = require("../utils/notifications");
       await createNotification({
         user: req.user._id,
-        type: "product",
+        type: "product", // Make sure this matches your Notification model enum
         title: "Added to Cart",
         message: `${product.name} (Size: ${selectedSize}) has been added to your cart`,
         link: `/cart`,
       });
+      console.log("✅ Notification created successfully");
     } catch (notifError) {
-      console.log("⚠️ Notification error (non-critical):", notifError.message);
+      // ✅ IMPROVED: More detailed error logging
+      console.error("⚠️ Notification error (non-critical):", {
+        error: notifError.message,
+        name: notifError.name,
+        // Check if it's a validation error
+        errors: notifError.errors,
+      });
+      // Don't fail the request if notification fails
     }
 
     res.json({
