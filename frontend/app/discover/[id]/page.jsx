@@ -87,16 +87,16 @@ const ProductDetail = () => {
       dispatch(setModal(true));
       return;
     }
-    if (!selectedColor) {
-      dispatch(setModalContext("colour"));
-      dispatch(setModal(true));
-      return;
-    }
+    // if (!selectedColor) {
+    //   dispatch(setModalContext("colour"));
+    //   dispatch(setModal(true));
+    //   return;
+    // }
 
     setLoading(true);
     dispatch(setModalContext("cart"));
     try {
-      await cartAPI.addItem(product._id, quantity);
+      await cartAPI.addItem(product._id, quantity, selectedSize);
       dispatch(fetchCart());
       window.dispatchEvent(new Event("cartUpdated"));
       // Show success modal
@@ -127,11 +127,11 @@ const ProductDetail = () => {
       return;
     }
 
-    if (!selectedColor) {
-      dispatch(setModalContext("colour"));
-      dispatch(setModal(true));
-      return;
-    }
+    // if (!selectedColor) {
+    //   dispatch(setModalContext("colour"));
+    //   dispatch(setModal(true));
+    //   return;
+    // }
 
     setLoading(true);
     dispatch(setModalContext("buyNow"));
@@ -335,7 +335,7 @@ const ProductDetail = () => {
           <p className="text-gray-700 leading-relaxed">{product.description}</p>
 
           {/* Color Selection */}
-          {product.colors?.length > 0 && (
+          {/* {product.colors?.length > 0 && (
             <div>
               <p className="font-semibold mb-2">Select Color:</p>
               <div className="flex gap-2">
@@ -354,7 +354,7 @@ const ProductDetail = () => {
                 ))}
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Size Selection */}
           {product.sizes?.length > 0 && (

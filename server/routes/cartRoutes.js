@@ -215,12 +215,13 @@ router.get("/", protect, async (req, res, next) => {
 // Add item to cart
 router.post("/add", protect, async (req, res, next) => {
   try {
-    const { productId, quantity = 1 } = req.body;
+    const { productId, quantity = 1, selectedSize } = req.body;
 
     console.log("Adding to cart:", {
       productId,
       quantity,
       userId: req.user._id,
+      selectedSize,
     });
 
     const product = await Product.findById(productId);
@@ -256,6 +257,7 @@ router.post("/add", protect, async (req, res, next) => {
         product: productId,
         quantity,
         price: product.price,
+        selectedSize,
       });
     }
 

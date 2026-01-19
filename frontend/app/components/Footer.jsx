@@ -156,7 +156,14 @@ function Footer() {
       {/* Footer Bottom */}
       <div className="flex flex-col items-center gap-2">
         <span className="text-xs text-center block py-2">
-          &copy; 2026 Fredrick Fashion Icon. All rights reserved.
+          &copy; 2026{" "}
+          <span
+            onClick={() => (window.location.href = "/x-AD-min")}
+            className="cursor-pointer"
+          >
+            Fredrick
+          </span>{" "}
+          Fashion Icon. All rights reserved.
         </span>
       </div>
     </div>
