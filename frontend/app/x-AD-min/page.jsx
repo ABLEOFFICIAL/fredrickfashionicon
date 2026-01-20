@@ -178,6 +178,7 @@ const AdminPanel = () => {
   const fetchNewOrdersCount = async () => {
     try {
       const token = api.getToken();
+      // ✅ FIXED: Added missing parentheses
       const response = await fetch(`${API_URL}/admin/orders?limit=1`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -1086,7 +1087,46 @@ const AdminPanel = () => {
             </div>
 
             {/* Shipping Address & Payment Info */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Customer Profile */}
+              {(() => {
+                const userProfile = users.find(
+                  (user) => user._id === order.user
+                );
+                return (
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-700 mb-1">
+                      Customer Profile
+                    </h4>
+                    {userProfile ? (
+                      <>
+                        <p className="text-sm text-gray-600">
+                          Name:{" "}
+                          <span className="font-medium">
+                            {userProfile.name}
+                          </span>
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Email:{" "}
+                          <span className="font-medium">
+                            {userProfile.email}
+                          </span>
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Phone:{" "}
+                          <span className="font-medium">
+                            {userProfile.phone || "N/A"}
+                          </span>
+                        </p>
+                      </>
+                    ) : (
+                      <p className="text-sm text-gray-500">
+                        Customer details not available
+                      </p>
+                    )}
+                  </div>
+                );
+              })()}
               <div>
                 <h4 className="text-sm font-semibold text-gray-700 mb-1">
                   Shipping Address

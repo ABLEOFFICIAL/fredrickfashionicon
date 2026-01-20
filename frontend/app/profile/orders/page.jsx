@@ -699,6 +699,9 @@ const OrdersPage = () => {
                             Qty: {item.quantity} × ₦
                             {item.price?.toLocaleString()}
                           </p>
+                          <p className="text-xs sm:text-sm text-gray-600 mt-0.5">
+                            size: {item.selectedSize}
+                          </p>
                         </div>
                         <div className="text-right shrink-0">
                           <p className="font-semibold text-gray-900 text-xs sm:text-sm md:text-base">
@@ -833,6 +836,9 @@ const OrdersPage = () => {
                         </p>
                         <p className="text-xs sm:text-sm text-gray-600">
                           Price: ₦{item.price?.toLocaleString()}
+                        </p>
+                        <p className="text-xs sm:text-sm text-gray-600">
+                          Size: {item.selectedSize}
                         </p>
                       </div>
                       <div className="text-right shrink-0">

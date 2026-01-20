@@ -1,22 +1,4 @@
-// const mongoose = require("mongoose");
-
-// const productSchema = new mongoose.Schema({
-//   name: { type: String, required: true },
-//   description: { type: String, required: true },
-//   price: { type: Number, required: true },
-//   category: { type: String, required: true },
-//   images: [{ type: String }],
-//   stock: { type: Number, default: 0 },
-//   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-//   seller: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-//   createdAt: { type: Date, default: Date.now },
-// });
-
-// module.exports = mongoose.model("Product", productSchema);
-
-// ============================================
-// UPDATED models/Product.js
-// ============================================
+//server/models/Product.js
 const mongoose = require("mongoose");
 
 const reviewSchema = new mongoose.Schema({
@@ -169,8 +151,19 @@ const productSchema = new mongoose.Schema({
 });
 
 // Calculate average rating before saving
-productSchema.pre("save", function (next) {
-  if (this.reviews.length > 0) {
+// productSchema.pre("save", function (next) {
+//   if (this.reviews.length > 0) {
+//     const total = this.reviews.reduce((sum, review) => sum + review.rating, 0);
+//     this.averageRating = total / this.reviews.length;
+//     this.totalReviews = this.reviews.length;
+//   } else {
+//     this.averageRating = 0;
+//     this.totalReviews = 0;
+//   }
+//   next();
+// });
+productSchema.pre("save", async function () {
+  if (this.reviews && this.reviews.length > 0) {
     const total = this.reviews.reduce((sum, review) => sum + review.rating, 0);
     this.averageRating = total / this.reviews.length;
     this.totalReviews = this.reviews.length;
@@ -178,7 +171,6 @@ productSchema.pre("save", function (next) {
     this.averageRating = 0;
     this.totalReviews = 0;
   }
-  next();
 });
 
 // Method to check if user liked the product
