@@ -27,6 +27,7 @@ import {
   CheckCheck,
 } from "lucide-react";
 import { useSelector } from "react-redux";
+import { fetchProduct } from "../utils/helper";
 
 // API Helper Functions
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5002/api";
@@ -335,7 +336,7 @@ const AdminPanel = () => {
 
       if (result.success) {
         alert(`Product ${currentItem ? "updated" : "created"} successfully!`);
-        await fetchProducts();
+        await fetchProduct();
         closeModal();
       } else {
         throw new Error(result.message || "Failed to save product");
@@ -434,7 +435,7 @@ const AdminPanel = () => {
       const result = await api.deleteProduct(id);
       if (result.success) {
         alert("Product deleted successfully!");
-        await fetchProducts();
+        await fetchProduct();
       } else {
         throw new Error(result.message || "Failed to delete product");
       }
