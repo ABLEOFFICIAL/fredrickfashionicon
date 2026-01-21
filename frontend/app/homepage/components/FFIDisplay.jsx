@@ -109,7 +109,7 @@ const FFIDisplay = () => {
         className="w-96 mx-auto overflow-auto pt-16 pb-5 md:w-[85%] md:m-auto md:h-[90vh] md:py-28"
       >
         {ffiCategory && (
-          <div className="flex w-max gap-8 md:h-full">
+          <div className="flex w-max gap-8 md:h-full mr-28">
             {ffiCategory.map((box, index) => {
               return (
                 <div key={index}>
@@ -251,7 +251,7 @@ const FFIDisplay = () => {
                         </>
                       ) : (
                         <>
-                          <div className="md:h-full">
+                          <div className="md:h-full ">
                             <div
                               style={{
                                 background: `url('${box.image}')`,
