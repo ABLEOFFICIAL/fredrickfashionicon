@@ -13,15 +13,15 @@
   },
   {
     "id": 2,
-    "category": "shoe",
+    "category": "cloth",
     "image": "/display-2.png",
-    "Tag": "Step Boldly",
-    "Heading": "Walk in Style, Walk in Comfort",
-    "Paragraph": "From stilettos to sneakers, discover footwear that supports every step of your journey while keeping your style game strong.",
+    "Tag": "Bold Fit",
+    "Heading": "Confidence Looks Better When You Wear It",
+    "Paragraph": "Featuring the signature FFI shirt, this look captures bold movement and fearless confidence. Designed for men who walk with purpose, style, and undeniable presence.",
     "Button": "Learn More",
     "ProfileName": "Chioma E.",
-    "SpotlightTitle": "Member Spotlight",
-    "Quote": "These shoes made me fall in love with walking again!"
+    "SpotlightTitle": "Style Spotlight",
+    "Quote": "That shirt makes you feel powerful the moment you put it on."
   },
   {
     "id": 3,
@@ -37,14 +37,14 @@
   },
   {
     "id": 6,
-    "category": "jewellries",
-    "image": "/elegant-jewellry.avif",
-    "Tag": "Glow Up",
-    "Heading": "Let Your Accessories Speak",
-    "Paragraph": "Whether subtle or bold, our jewelry line adds that final sparkle to your outfit. Shine from the inside out with every detail that matters.",
+    "category": "shoe",
+    "image": "/shoot-x.png",
+    "Tag": "Step Forward",
+    "Heading": "Shoes Built for Style and Motion",
+    "Paragraph": "Designed to move with confidence, our shoes combine comfort, durability, and bold design — perfect for making strong impressions with every step you take.",
     "Button": "Learn More",
     "ProfileName": "Zainab K.",
-    "SpotlightTitle": "Member Spotlight",
-    "Quote": "These pieces made my simple dress look like royalty."
+    "SpotlightTitle": "Customer Highlight",
+    "Quote": "These shoes changed the way I walk — confident and unstoppable."
   }
 ]

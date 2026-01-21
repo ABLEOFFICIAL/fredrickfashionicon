@@ -40,7 +40,7 @@ const Header = () => {
   return (
     <header className="w-full border-b border-b-neutral-400/50">
       {/* ====== Desktop Header ====== */}
-      <div className="hidden md:flex justify-between items-center px-6 py-6 max-w-[1150px] mx-auto">
+      <div className="hidden md:flex justify-between items-center px-6 py-6 max-w-287.5 mx-auto">
         <div className="flex items-center gap-3">
           <DarkLogo className="w-16 cursor-pointer" />
           <div className="relative">

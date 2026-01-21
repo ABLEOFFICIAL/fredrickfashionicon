@@ -29,19 +29,19 @@ const Testimonial = () => {
       name: "Ugochi F, p",
       img: "/user2.jpeg",
       testimony:
-        "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Incidunt, natus.",
+        "I absolutely love it! The fabric is soft, classy, and it gives that effortless luxury look.",
     },
     {
-      name: "Francis Pop",
+      name: "Josh",
       img: "/user1.jpeg",
       testimony:
-        "    Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus, ea aut placeat deleniti repellendus corrupti!",
+        "The quality is top-tier. The fit is clean, the fabric feels premium, and it looks even better in person.",
     },
     {
-      name: "Elesh Cairo",
-      img: "/sit.jpg",
+      name: "Favour P",
+      img: "/user-x.jpg",
       testimony:
-        "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Incidunt, natus.",
+        "So elegant and well made. I got compliments the first time I wore it — definitely worth it.",
     },
   ];
 

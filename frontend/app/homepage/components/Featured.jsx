@@ -64,12 +64,12 @@ const Featured = () => {
   const positions = ["center", "left1", "left", "right", "right1"];
   const images = [
     // "/dress1.jpg",
-    "/heel1.jpg",
+    "/product-1.PNG",
     "/bag1.jpg",
-    "/wig1.jpg",
-    "/jewel1.jpg",
+    "/product-5.PNG",
+    "/product-3.PNG",
     // "/fan1.jpg",
-    "/dress2.jpg",
+    "/product-4.PNG",
   ];
   const imageVariants = {
     center: { x: "0%", scale: 1, zIndex: 5 },

@@ -1,4 +1,6 @@
+import LightLogo from "@/app/components/LightLogo";
 import MyBtn from "@/app/components/MyBtn";
+import Image from "next/image";
 import { useState } from "react";
 
 const StyleMoments = () => {
@@ -12,8 +14,8 @@ const StyleMoments = () => {
         "Every outfit from ELEGANCE+ gives me that 'I’m ready to win' energy.",
       author: "Chiamaka B.",
       role: "ELEGANCE+ Woman",
-      img: "/sit.jpg",
-      overlay: "/stat3.avif",
+      img: "/start-ur-day.png",
+      overlay: "/20260121_223014.png",
     },
     {
       id: 2,
@@ -21,8 +23,8 @@ const StyleMoments = () => {
       quote: "Wearing this, I don’t just feel dressed—I feel defined",
       author: "Ugochi M.",
       role: "ELEGANCE+ Muse",
-      img: "/step.jpg",
-      overlay: "/stat4.avif",
+      img: "/shoot-2.png",
+      overlay: "/20260121_222103.png",
     },
     {
       id: 3,
@@ -31,8 +33,8 @@ const StyleMoments = () => {
         "The comfort, the fit, the compliments—I never knew clothing could feel like this.",
       author: "Ada O.",
       role: "ELEGANCE+ Loyalist",
-      img: "/feel.avif",
-      overlay: "/stat5.avif",
+      img: "/mood.jpg",
+      overlay: "/20260121_223255.png",
     },
     {
       id: 4,
@@ -41,8 +43,8 @@ const StyleMoments = () => {
         "It's not just fashion. It's how I reset, recharge, and remind myself who I am..",
       author: "Lena M.",
       role: " ELEGANCE+ Muse",
-      img: "/mood.avif",
-      overlay: "/stat6.avif",
+      img: "/shoot-3.png",
+      overlay: "/20260121_223909.png",
     },
   ]);
   const handleclick = (index) => {
@@ -122,12 +124,25 @@ const StyleMoments = () => {
                 />
                 <img
                   src={item.overlay}
-                  className="absolute bg-black/30 backdrop-blur-md top-40 left-[40%] rounded-lg h-72 w-72 object-center object-cover"
+                  className="absolute top-40 left-[40%] h-80 object-center object-cover"
                 />
-                <img
+                {/* <img
                   src="/stretch-legs.avif"
                   className="absolute bg-black/30 backdrop-blur-md top-10 left-[45%] rounded-lg h-24"
-                />
+                /> */}
+                <div className="absolute bg-neutral-400 backdrop-blur-md top-10 left-[45%] rounded-lg h-24 flex justify-center items-center gap-1 px-3">
+                  <Image
+                    src="/lightlogo-logo.png"
+                    alt="ffi_logo"
+                    height={100}
+                    width={100}
+                    className="invert brightness-0 saturate-0 sepia-[1] hue-rotate-320 w-14"
+                  />
+                  <div>
+                    <span className="text-sm font-medium">FFI</span>
+                    <p className="text-xs font-light">Fashion Forward Inc.</p>
+                  </div>
+                </div>
                 <div className="absolute bg-transparent border border-[#4a4741] top-[30%] right-[21%] rounded-lg h-72 w-60 text-[#4a4741] px-5 py-7">
                   <h2 className="quote text-2xl font-light pb-5">
                     {item.quote}

@@ -263,17 +263,17 @@ const FFIDisplay = () => {
                             >
                               <div className="bg-linear-to-b from-black/0 to-black/70 w-80 h-96 rounded-lg p-7 flex flex-col justify-between md:h-full md:w-full">
                                 <div className="flex justify-between items-center">
-                                  <span className="bg-white/40 backdrop-blur-3xl px-5 py-2 rounded-3xl">
+                                  <span className="bg-white/40 backdrop-blur-3xl px-5 py-2 rounded-3xl text-sm md:text-base">
                                     {box.Tag}
                                   </span>
                                   <Plus
                                     onclick={() => handlePlus(box)}
-                                    classname="p-2 size-10 bg-white  text-[#4a4741] rounded-full cursor-pointer"
+                                    classname="p-2 size-8 md:size-10 bg-white  text-[#4a4741] rounded-full cursor-pointer"
                                   />
                                 </div>
                                 <div>
                                   <div>
-                                    <h1 className="text-3xl md:text-4xl md:font-extralight md:w-[70%]">
+                                    <h1 className="text-2xl md:text-4xl md:font-extralight md:w-[70%]">
                                       {box.Heading}
                                     </h1>
                                     <p
