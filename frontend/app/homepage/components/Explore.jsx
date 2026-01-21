@@ -19,14 +19,14 @@ const Explore = () => {
   const [isLoading, setIsLoading] = useState(false);
   const explores = [
     {
-      bg: "/bag-bg.avif",
+      bg: "/explore-1.png",
       header: "FFI Bags",
       text: "From 349",
       category: "Bags",
       id: "692606b924e0b307b67184cb",
     },
     {
-      bg: "/shoe-bg.avif",
+      bg: "/explore-4.PNG",
       header: "FFI Foot-wears",
       text: "From 349",
       category: "Shoes",

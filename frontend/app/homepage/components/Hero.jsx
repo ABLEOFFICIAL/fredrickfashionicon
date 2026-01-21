@@ -12,7 +12,7 @@ const Hero = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   return (
-    <div className="bg-[url('/herotry1.jpg')] pb-10 h-screen bg-no-repeat bg-center bg-cover flex flex-col  items-center justify-end gap-10 md:items-start ">
+    <div className="bg-[url('/fave-4.png')] pb-10 h-screen bg-no-repeat bg-center bg-cover flex flex-col  items-center justify-end gap-10 md:items-start ">
       <div className="relative md:left-24 gap-5 flex flex-col md:h-[60%] md:justify-center md:w-[40%]  text-center md:text-left">
         <h1 className="text-4xl w-72 mx-auto md:m-0 md:text-7xl md:w-full md:">
           Where Elegance <span className="slant">Becomes you</span>.

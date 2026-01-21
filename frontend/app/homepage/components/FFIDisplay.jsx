@@ -255,8 +255,9 @@ const FFIDisplay = () => {
                             <div
                               style={{
                                 background: `url('${box.image}')`,
-                                backgroundSize: "cover",
+                                backgroundSize: "contain",
                                 backgroundPosition: "center",
+                                // backgroundRepeat: "no-repeat",
                               }}
                               className="rounded-lg h-96 md:h-full w-[320px] md:w-175"
                             >
