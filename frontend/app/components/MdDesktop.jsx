@@ -65,7 +65,7 @@ const MdDesktop = () => {
               className="flex items-center gap-2 md:gap-3 font-semibold cursor-pointer text-sm md:text-base"
               onClick={handleDropDown}
             >
-              Close{" "}
+              <span className="hidden md:block">Close</span>{" "}
               <XBar classname="size-7 md:size-9 border border-[#4a4741] rounded-full p-1.5 md:p-2" />
             </span>
             <DarkLogo className="w-10 md:w-14 justify-self-center" />
