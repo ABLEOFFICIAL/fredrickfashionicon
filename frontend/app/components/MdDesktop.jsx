@@ -2,12 +2,12 @@
 import DarkLogo from "@/app/components/DarkLogo";
 import MyBtn from "@/app/components/MyBtn";
 import XBar from "@/app/components/XBar";
-import { setDropDown } from "@/app/store/contextSlice";
+import { setDropDown, setShowSearchModal } from "@/app/store/contextSlice";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation"; // ✅ added
-import { LogOut, User } from "lucide-react";
+import { LogOut, Search, User } from "lucide-react";
 import { logoutUser } from "../utils/helper";
 
 const MdDesktop = () => {
@@ -69,7 +69,16 @@ const MdDesktop = () => {
               <XBar classname="size-7 md:size-9 border border-[#4a4741] rounded-full p-1.5 md:p-2" />
             </span>
             <DarkLogo className="w-10 md:w-14 justify-self-center" />
-            <div></div>
+            <div className=" flex items-center justify-center p-2 cursor-pointer text-[#4a4741] hover:bg-[#4a4741]/10 transition-colors justify-self-end">
+              <Search
+                size={18}
+                className="md:hidden"
+                onClick={() => {
+                  dispatch(setShowSearchModal(true));
+                  dispatch(setDropDown(false));
+                }}
+              />
+            </div>
           </div>
 
           {/* Content */}

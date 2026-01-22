@@ -43,11 +43,11 @@ const Cart = ({ classname, onClick }) => {
   return (
     <div className="relative">
       <BsCart3 className={classname} onClick={onClick} />
-      {itemCount > 0 && (
+      {/* {itemCount > 0 && (
         <span className="absolute -top-3 -right-2 bg-[#4a4741] text-[#f7f1e8] px-2 py-0.5 rounded-full text-xs">
           {itemCount}
         </span>
-      )}
+      )} */}
     </div>
   );
 };

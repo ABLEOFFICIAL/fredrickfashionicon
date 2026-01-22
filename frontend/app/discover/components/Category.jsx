@@ -6,7 +6,6 @@ import {
   setProductFilter,
 } from "@/app/store/contextSlice";
 import { Store, TrendingUp, Sparkles, Tag, Star } from "lucide-react";
-import DarkLogo from "@/app/components/DarkLogo";
 
 const Category = () => {
   const { productCategory, productFilter } = useSelector(
@@ -28,7 +27,7 @@ const Category = () => {
   };
 
   // Lists
-  const categories = ["All", "Clothes", "Shoes", "Jewelry", "Bags"];
+  const categories = ["All", "Clothes", "Shoes", "Bags"];
   const filters = ["All", "Trending", "Popular", "New Arrivals", "Sales"];
 
   // Icons mapping for filters

@@ -35,6 +35,7 @@ const contextSlice = createSlice({
     // blogs
     blogs: [],
     isMobileMenuOpen: false,
+    showSearchModal: false,
   },
   reducers: {
     setDropDown(state, action) {
@@ -55,10 +56,39 @@ const contextSlice = createSlice({
       state.products = action.payload;
       state.filteredProducts = action.payload;
     },
+    // filterProducts: (state) => {
+    //   let filtered = state.products;
+
+    //   // CATEGORY FILTER
+    //   if (state.productCategory !== "All") {
+    //     filtered = filtered.filter(
+    //       (p) =>
+    //         p.category &&
+    //         p.category.toLowerCase() === state.productCategory.toLowerCase()
+    //     );
+    //   }
+
+    //   // TAG FILTER (Trending, Popular, Sales, New Arrivals)
+    //   // ⚠️ FIXED: Access nested tags object
+    //   const filterMap = {
+    //     Trending: "isTrending",
+    //     Popular: "isPopular",
+    //     "New Arrivals": "isNewArrival",
+    //     Sales: "isOnSale",
+    //   };
+
+    //   if (state.productFilter !== "All") {
+    //     const key = filterMap[state.productFilter];
+    //     // Access tags object properly: p.tags[key]
+    //     filtered = filtered.filter((p) => p.tags && p.tags[key] === true);
+    //   }
+
+    //   state.filteredProducts = filtered;
+    // },
     filterProducts: (state) => {
       let filtered = state.products;
 
-      // CATEGORY FILTER
+      // 🔹 CATEGORY FILTER
       if (state.productCategory !== "All") {
         filtered = filtered.filter(
           (p) =>
@@ -67,8 +97,7 @@ const contextSlice = createSlice({
         );
       }
 
-      // TAG FILTER (Trending, Popular, Sales, New Arrivals)
-      // ⚠️ FIXED: Access nested tags object
+      // 🔹 TAG FILTER
       const filterMap = {
         Trending: "isTrending",
         Popular: "isPopular",
@@ -78,8 +107,18 @@ const contextSlice = createSlice({
 
       if (state.productFilter !== "All") {
         const key = filterMap[state.productFilter];
-        // Access tags object properly: p.tags[key]
         filtered = filtered.filter((p) => p.tags && p.tags[key] === true);
+      }
+
+      // 🔹 SEARCH FILTER (NAME + CATEGORY)
+      if (state.searchProduct.trim() !== "") {
+        const query = state.searchProduct.toLowerCase();
+
+        filtered = filtered.filter(
+          (p) =>
+            p.name?.toLowerCase().includes(query) ||
+            p.category?.toLowerCase().includes(query)
+        );
       }
 
       state.filteredProducts = filtered;
@@ -111,6 +150,9 @@ const contextSlice = createSlice({
     },
     setModalContext(state, action) {
       state.modalContext = action.payload;
+    },
+    setShowSearchModal(state, action) {
+      state.showSearchModal = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -274,6 +316,7 @@ export const {
   setIsMobileMenuOpen,
   setModal,
   setModalContext,
+  setShowSearchModal,
 } = contextSlice.actions;
 
 export default contextSlice.reducer;

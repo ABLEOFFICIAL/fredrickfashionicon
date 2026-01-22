@@ -15,6 +15,7 @@ import {
   setDropDown,
   setIsMobileMenuOpen,
   setShowCartModal,
+  setShowSearchModal,
 } from "../store/contextSlice";
 
 export const UserProfile = () => {
@@ -101,7 +102,10 @@ export default function NavBarMd() {
         {/* Left section (desktop) */}
         <div className="hidden md:flex gap-6 items-center">
           <Bar classname={" rounded-full size-10 p-2 cursor-pointer"} />
-          <button className="flex items-center gap-2 cursor-pointer hover:text-neutral-700 transition">
+          <button
+            onClick={() => dispatch(setShowSearchModal(true))}
+            className="flex items-center gap-2 cursor-pointer hover:text-neutral-700 transition"
+          >
             <SearchIcon />
             <span>Search</span>
           </button>

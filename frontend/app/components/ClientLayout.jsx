@@ -111,6 +111,7 @@ import {
   fetchUserProfile,
   fetchWishlist,
 } from "../utils/helper";
+import SearchModal from "./SearchModal";
 
 export default function ClientLayout({ children }) {
   const dispatch = useDispatch();
@@ -162,6 +163,7 @@ export default function ClientLayout({ children }) {
           finaltop="top-2"
           position="fixed"
         />
+        <SearchModal />
         {/* <NavBar initialTop="top-14 md:top-8" finaltop="top-2" /> */}
         <AddToCart />
         <FloatingCartButton />
