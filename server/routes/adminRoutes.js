@@ -468,14 +468,24 @@ router.get("/orders", async (req, res, next) => {
   }
 });
 
-// @desc    Get single order details
-// @route   GET /api/admin/orders/:id
+// @desc    Update order status (Delivered/Cancelled)
+// @route   PUT /api/admin/orders/:id/update-status
 // @access  Private/Admin
-router.get("/orders/:id", async (req, res, next) => {
+router.put("/orders/:id/update-status", async (req, res, next) => {
   try {
+    const { orderStatus } = req.body;
+
+    // Validate status
+    if (!["delivered", "cancelled"].includes(orderStatus)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status. Must be 'delivered' or 'cancelled'",
+      });
+    }
+
     const order = await Order.findById(req.params.id).populate(
       "user",
-      "name email phone"
+      "name email"
     );
 
     if (!order) {
@@ -485,9 +495,27 @@ router.get("/orders/:id", async (req, res, next) => {
       });
     }
 
+    // Update order status
+    order.orderStatus = orderStatus;
+    if (orderStatus === "delivered") {
+      order.deliveredAt = new Date();
+    }
+    await order.save();
+
+    // Create notification for user
+    await Notification.create({
+      user: order.user._id,
+      type: "order",
+      title:
+        orderStatus === "delivered" ? "Order Delivered" : "Order Cancelled",
+      message: `Your order ${order.orderNumber} has been ${orderStatus}`,
+      link: `/orders/${order._id}`,
+    });
+
     res.json({
       success: true,
       order,
+      message: `Order ${orderStatus} successfully`,
     });
   } catch (error) {
     next(error);
@@ -524,6 +552,32 @@ router.put("/orders/:id/mark-read", async (req, res, next) => {
       message: "Order marked as read",
       order,
       newOrdersCount,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// @desc    Get single order details
+// @route   GET /api/admin/orders/:id
+// @access  Private/Admin
+router.get("/orders/:id", async (req, res, next) => {
+  try {
+    const order = await Order.findById(req.params.id).populate(
+      "user",
+      "name email phone"
+    );
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      order,
     });
   } catch (error) {
     next(error);
