@@ -5,6 +5,7 @@ import { IoDiamondOutline } from "react-icons/io5";
 import MyInput from "./MyInput";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import LightLogo from "./LightLogo";
 
 function Footer() {
   const [email, setEmail] = useState("");
@@ -83,7 +84,7 @@ function Footer() {
       <div className="grid md:grid-cols-3 md:max-w-[80vw] mx-auto gap-8">
         {/* Contact Info */}
         <div className=" md:border-b-0 border-b border-b-[#80776f] md:pr-5 md:pb-0 pb-5">
-          <img className="w-28" src="/logo.png" alt="Logo" />
+          <LightLogo />
           <div className="flex flex-col gap-1 mt-3">
             <a
               href="mailto:fredrickfashionicon@gmail.com"

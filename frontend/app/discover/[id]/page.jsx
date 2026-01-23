@@ -38,6 +38,8 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [wishListLoading, setWishlistLoading] = useState(false);
+  const [buyNowLoading, setBuyNowLoading] = useState(false);
   const imgRef = useRef(null);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -70,13 +72,13 @@ const ProductDetail = () => {
     }
 
     try {
-      setLoading(true);
+      setWishlistLoading(true);
       await productAPI.wishlist(product._id);
       setIsInWishlist(!isInWishlist);
     } catch (error) {
       console.error("Error toggling wishlist:", error);
     } finally {
-      setLoading(false);
+      setWishlistLoading(false);
     }
   };
 
@@ -153,18 +155,18 @@ const ProductDetail = () => {
     //   return;
     // }
 
-    setLoading(true);
+    setBuyNowLoading(true);
     dispatch(setModalContext("buyNow"));
 
     try {
-      await cartAPI.addItem(product._id, quantity);
+      await cartAPI.addItem(product._id, quantity, selectedSize.size);
       dispatch(fetchCart());
       window.dispatchEvent(new Event("cartUpdated"));
       router.push("/check-out");
     } catch (error) {
       console.error("Error during buy now:", error);
     } finally {
-      setLoading(false);
+      setBuyNowLoading(false);
     }
   };
 
@@ -332,7 +334,7 @@ const ProductDetail = () => {
         <div className="flex flex-col gap-5 px-4">
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-semibold">{product.name}</h1>
-            <button onClick={toggleWishlist} disabled={loading}>
+            <button onClick={toggleWishlist} disabled={wishListLoading}>
               {isInWishlist ? (
                 <FaHeart className="text-red-500 size-6" />
               ) : (
@@ -431,10 +433,10 @@ const ProductDetail = () => {
 
             <button
               onClick={buyNow}
-              disabled={loading}
+              disabled={buyNowLoading}
               className="border border-[#4a4741] text-[#4a4741] py-3 rounded-lg w-1/2 hover:bg-[#4a4741] hover:text-white transition-all disabled:opacity-70"
             >
-              {loading ? "Processing..." : "Buy Now"}
+              {buyNowLoading ? "Processing..." : "Buy Now"}
             </button>
           </div>
 

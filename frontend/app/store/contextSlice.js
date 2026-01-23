@@ -180,17 +180,16 @@ const contextSlice = createSlice({
       .addCase(fetchCart.fulfilled, (state, action) => {
         state.loading = false;
 
-        // Transform backend response so component can map easily
+        // Transform backend response
         state.cart = action.payload.cart.map((item) => ({
           _id: item._id,
           quantity: item.quantity,
           price: item.product.price,
           name: item.product.name,
-          selectedSize: item.selectedSize || "", // if you have sizes
+          selectedSize: item.selectedSize || "",
           imageUrl: item.product.images ? item.product.images[0] : "",
         }));
 
-        // Optional: itemCount
         state.itemCount = state.cart.reduce(
           (sum, item) => sum + item.quantity,
           0
@@ -224,11 +223,25 @@ const contextSlice = createSlice({
       // 🔁 Update Quantity
       .addCase(updateCartQuantity.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(updateCartQuantity.fulfilled, (state, action) => {
         state.loading = false;
-        state.cart = action.payload.cart || state.cart;
-        state.itemCount = state.cart.length;
+
+        // Transform the response the same way as fetchCart
+        state.cart = action.payload.cart.map((item) => ({
+          _id: item._id,
+          quantity: item.quantity,
+          price: item.product.price,
+          name: item.product.name,
+          selectedSize: item.selectedSize || "",
+          imageUrl: item.product.images ? item.product.images[0] : "",
+        }));
+
+        state.itemCount = state.cart.reduce(
+          (sum, item) => sum + item.quantity,
+          0
+        );
       })
       .addCase(updateCartQuantity.rejected, (state, action) => {
         state.loading = false;
@@ -238,11 +251,25 @@ const contextSlice = createSlice({
       // ❌ Remove Item
       .addCase(removeFromCart.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(removeFromCart.fulfilled, (state, action) => {
         state.loading = false;
-        state.cart = action.payload.cart || [];
-        state.itemCount = state.cart.length;
+
+        // Transform the response the same way as fetchCart
+        state.cart = action.payload.cart.map((item) => ({
+          _id: item._id,
+          quantity: item.quantity,
+          price: item.product.price,
+          name: item.product.name,
+          selectedSize: item.selectedSize || "",
+          imageUrl: item.product.images ? item.product.images[0] : "",
+        }));
+
+        state.itemCount = state.cart.reduce(
+          (sum, item) => sum + item.quantity,
+          0
+        );
       })
       .addCase(removeFromCart.rejected, (state, action) => {
         state.loading = false;
@@ -250,9 +277,18 @@ const contextSlice = createSlice({
       })
 
       // 🧹 Clear Cart
+      .addCase(clearCart.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(clearCart.fulfilled, (state) => {
+        state.loading = false;
         state.cart = [];
         state.itemCount = 0;
+      })
+      .addCase(clearCart.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       })
 
       // order

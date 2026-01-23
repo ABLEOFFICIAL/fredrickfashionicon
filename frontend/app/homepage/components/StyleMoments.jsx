@@ -91,7 +91,7 @@ const StyleMoments = () => {
                 <img src={item.img} className="h-[60vh] object-cover w-full" />
                 <img
                   src={item.overlay}
-                  className="absolute top-72 left-10 backdrop-blur-3xl bg-black/20 w-[80%] rounded-2xl"
+                  className="absolute top-72 left-10 w-[80%] sm:w-1/2 sm:left-1/4 rounded-2xl"
                 />
               </div>
             </div>
@@ -130,7 +130,7 @@ const StyleMoments = () => {
                   src="/stretch-legs.avif"
                   className="absolute bg-black/30 backdrop-blur-md top-10 left-[45%] rounded-lg h-24"
                 /> */}
-                <div className="absolute bg-neutral-400 backdrop-blur-md top-10 left-[45%] rounded-lg h-24 flex justify-center items-center gap-1 px-3">
+                <div className="absolute bg-neutral-400 backdrop-blur-md top-0 2xl:top-10 left-[45%] rounded-lg h-24 flex justify-center items-center gap-1 px-3">
                   <Image
                     src="/lightlogo-logo.png"
                     alt="ffi_logo"
@@ -143,7 +143,7 @@ const StyleMoments = () => {
                     <p className="text-xs font-light">Fashion Forward Inc.</p>
                   </div>
                 </div>
-                <div className="absolute bg-transparent border border-[#4a4741] top-[30%] right-[21%] rounded-lg h-72 w-60 text-[#4a4741] px-5 py-7">
+                <div className="absolute bg-transparent border border-[#4a4741] top-[30%] -right-10 2xl:right-[21%] rounded-lg h-72 w-60 text-[#4a4741] px-5 py-7">
                   <h2 className="quote text-2xl font-light pb-5">
                     {item.quote}
                   </h2>

@@ -177,60 +177,71 @@ const CheckoutPage = () => {
                     {cart.map((item) => (
                       <div
                         key={item._id}
-                        className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                        className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
                       >
-                        <img
-                          src={item.imageUrl || "/placeholder.png"}
-                          alt={item.name}
-                          className="w-20 h-20 object-cover rounded-lg"
-                        />
+                        <div className="flex items-center gap-3 sm:gap-4">
+                          <img
+                            src={item.imageUrl || "/placeholder.png"}
+                            alt={item.name}
+                            className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg shrink-0"
+                          />
 
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-medium text-gray-900 truncate">
-                            {item.name}
-                          </h3>
-                          <p className="text-lg font-semibold text-gray-900 mt-1">
-                            ₦{item.price.toLocaleString()}
-                          </p>
-                          <p className="text-sm text-gray-600">
-                            Size: {item.selectedSize}
-                          </p>
-                        </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-medium text-gray-900 truncate">
+                              {item.name}
+                            </h3>
+                            <p className="text-lg font-semibold text-gray-900 mt-1">
+                              ₦{item.price.toLocaleString()}
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              Size: {item.selectedSize}
+                            </p>
+                          </div>
 
-                        <div className="flex items-center gap-3 bg-white rounded-lg px-3 py-2 border border-gray-200">
                           <button
-                            onClick={() =>
-                              handleQuantity(item._id, item.quantity - 1)
-                            }
-                            className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100 transition-colors"
+                            onClick={() => handleRemove(item._id)}
+                            className="p-2 hover:bg-red-50 rounded-lg transition-colors sm:hidden shrink-0"
                           >
-                            <span className="text-xl font-medium">−</span>
-                          </button>
-                          <span className="w-8 text-center font-medium">
-                            {item.quantity}
-                          </span>
-                          <button
-                            onClick={() =>
-                              handleQuantity(item._id, item.quantity + 1)
-                            }
-                            className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100 transition-colors"
-                          >
-                            <span className="text-xl font-medium">+</span>
+                            <RiDeleteBinLine className="text-red-600 w-5 h-5" />
                           </button>
                         </div>
 
-                        <div className="text-right min-w-25">
-                          <p className="text-lg font-bold text-gray-900">
-                            ₦{(item.price * item.quantity).toLocaleString()}
-                          </p>
-                        </div>
+                        <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
+                          <div className="flex items-center gap-3 bg-white rounded-lg px-3 py-2 border border-gray-200">
+                            <button
+                              onClick={() =>
+                                handleQuantity(item._id, item.quantity - 1)
+                              }
+                              className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100 transition-colors"
+                            >
+                              <span className="text-xl font-medium">−</span>
+                            </button>
+                            <span className="w-8 text-center font-medium">
+                              {item.quantity}
+                            </span>
+                            <button
+                              onClick={() =>
+                                handleQuantity(item._id, item.quantity + 1)
+                              }
+                              className="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100 transition-colors"
+                            >
+                              <span className="text-xl font-medium">+</span>
+                            </button>
+                          </div>
 
-                        <button
-                          onClick={() => handleRemove(item._id)}
-                          className="p-2 hover:bg-red-50 rounded-lg transition-colors"
-                        >
-                          <RiDeleteBinLine className="text-red-600 w-5 h-5" />
-                        </button>
+                          <div className="text-right min-w-25">
+                            <p className="text-lg font-bold text-gray-900">
+                              ₦{(item.price * item.quantity).toLocaleString()}
+                            </p>
+                          </div>
+
+                          <button
+                            onClick={() => handleRemove(item._id)}
+                            className="p-2 hover:bg-red-50 rounded-lg transition-colors hidden sm:block shrink-0"
+                          >
+                            <RiDeleteBinLine className="text-red-600 w-5 h-5" />
+                          </button>
+                        </div>
                       </div>
                     ))}
                   </div>

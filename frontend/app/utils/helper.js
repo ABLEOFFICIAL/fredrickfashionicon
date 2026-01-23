@@ -208,13 +208,20 @@ export const addToCart = createAsyncThunk(
   }
 );
 
-// ✅ Update item quantity
+// ✅ Update item quantity - FIXED
 export const updateCartQuantity = createAsyncThunk(
   "cart/updateCartQuantity",
   async ({ itemId, quantity }, { rejectWithValue }) => {
     try {
       const { data } = await cartAPI.updateItem(itemId, quantity);
-      return data.cart; // updated cart array
+      console.log("✅ updateCartQuantity response:", data);
+
+      // Return the same structure as fetchCart
+      return {
+        cart: data.cart?.items || data.items || [],
+        itemCount: data.itemCount || 0,
+        totalAmount: data.cart?.totalAmount || data.totalAmount || 0,
+      };
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to update quantity"
@@ -223,13 +230,20 @@ export const updateCartQuantity = createAsyncThunk(
   }
 );
 
-// ✅ Remove item
+// ✅ Remove item - FIXED
 export const removeFromCart = createAsyncThunk(
   "cart/removeFromCart",
   async (itemId, { rejectWithValue }) => {
     try {
       const { data } = await cartAPI.removeItem(itemId);
-      return data.cart; // updated cart array
+      console.log("✅ removeFromCart response:", data);
+
+      // Return the same structure as fetchCart
+      return {
+        cart: data.cart?.items || data.items || [],
+        itemCount: data.itemCount || 0,
+        totalAmount: data.cart?.totalAmount || data.totalAmount || 0,
+      };
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to remove item"
@@ -238,13 +252,20 @@ export const removeFromCart = createAsyncThunk(
   }
 );
 
-// ✅ Clear entire cart
+// ✅ Clear entire cart - FIXED
 export const clearCart = createAsyncThunk(
   "cart/clearCart",
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await cartAPI.clearCart();
-      return data.cart || [];
+      console.log("✅ clearCart response:", data);
+
+      // Return empty cart structure
+      return {
+        cart: [],
+        itemCount: 0,
+        totalAmount: 0,
+      };
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "Failed to clear cart"

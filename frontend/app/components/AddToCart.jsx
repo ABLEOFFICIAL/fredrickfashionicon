@@ -41,17 +41,17 @@ export const FloatingCartButton = () => {
     >
       <div className="relative">
         <ShoppingCart className="w-6 h-6" />
-        {itemCount > 0 && (
+        {cart.length > 0 && (
           <span className="absolute -top-2 -right-2 bg-[#4a4741] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
-            {itemCount > 99 ? "99+" : itemCount}
+            {cart.length > 99 ? "99+" : cart.length}
           </span>
         )}
       </div>
 
       {/* Tooltip */}
-      <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-sm px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+      {/* <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-sm px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
         View Cart ({itemCount} {itemCount === 1 ? "item" : "items"})
-      </span>
+      </span> */}
     </button>
   );
 };
@@ -128,7 +128,7 @@ const AddToCart = () => {
                   Shopping Cart
                 </h2>
                 <p className="text-sm text-gray-600">
-                  {itemCount} {itemCount === 1 ? "item" : "items"}
+                  {cart.length} {cart.length === 1 ? "item" : "items"}
                 </p>
               </div>
             </div>
