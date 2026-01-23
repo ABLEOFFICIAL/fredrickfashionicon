@@ -1546,7 +1546,7 @@ const AdminPanel = () => {
                   >
                     <p className="text-sm font-medium">
                       {order.orderStatus === "delivered"
-                        ? "✓ This order has been marked as delivered"
+                        ? "✓ This order has been delivered"
                         : "✗ This order has been cancelled"}
                     </p>
                   </div>
