@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchAllUsers } from "../utils/helper";
+import { fetchAdminOrders, fetchAllUsers } from "../utils/helper";
 
 const initialState = {
   modalType: "",
@@ -14,6 +14,9 @@ const initialState = {
   pages: 1,
   loading: false,
   error: null,
+  adminOrders: [],
+  adminPagination: null,
+  newOrdersCount: 0,
 };
 
 const adminSlice = createSlice({
@@ -58,6 +61,20 @@ const adminSlice = createSlice({
       .addCase(fetchAllUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Failed to load users";
+      })
+      // fetch Admin Orders
+      .addCase(fetchAdminOrders.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchAdminOrders.fulfilled, (state, action) => {
+        state.loading = false;
+        state.adminOrders = action.payload.orders;
+        state.adminPagination = action.payload.pagination;
+        state.newOrdersCount = action.payload.newOrdersCount;
+      })
+      .addCase(fetchAdminOrders.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllUsers } from "../utils/helper";
+import { fetchAdminOrders, fetchAllUsers } from "../utils/helper";
 import { useRouter } from "next/navigation";
 
 export default function AdminLayout({ children }) {
@@ -44,6 +44,7 @@ export default function AdminLayout({ children }) {
     // Fetch admin data
     console.log("User is admin, fetching admin data...");
     dispatch(fetchAllUsers());
+    dispatch(fetchAdminOrders());
   }, [user, authLoading, dispatch, router]);
 
   // Show loading while checking auth

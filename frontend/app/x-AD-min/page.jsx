@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { fetchProduct } from "../utils/helper";
+import DarkLogo from "../components/DarkLogo";
 
 // API Helper Functions
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5002/api";
@@ -158,7 +159,12 @@ const AdminPanel = () => {
   const [tempSizes, setTempSizes] = useState([]);
   const [tempColors, setTempColors] = useState([]);
   const [newOrdersCount, setNewOrdersCount] = useState(0);
-  const { blogs, orders, products } = useSelector((state) => state.context);
+  // const { blogs, orders, products } = useSelector((state) => state.context);
+  const { blogs, products } = useSelector((state) => state.context);
+  const { adminOrders, newOrdersCount: reduxNewOrdersCount } = useSelector(
+    (state) => state.admin
+  );
+
   // const [stats, setStats] = useState({
   //   totalRevenue: 0,
   //   totalOrders: 0,
@@ -173,7 +179,7 @@ const AdminPanel = () => {
   const [loading, setLoading] = useState(false);
   const [dataLoading, setDataLoading] = useState(false);
   const { users } = useSelector((state) => state.admin);
-  const totalRevenue = orders.reduce(
+  const totalRevenue = adminOrders.reduce(
     (sum, order) => sum + order.totalAmount,
     0
   );
@@ -518,7 +524,9 @@ const AdminPanel = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {users.map((user, idx) => {
-          const userOrders = orders.filter((order) => order.user === user._id);
+          const userOrders = adminOrders.filter(
+            (order) => order.user === user._id
+          );
 
           return (
             <div
@@ -663,7 +671,7 @@ const AdminPanel = () => {
         <StatCard
           icon={<ShoppingCart className="w-6 h-6" />}
           title="Total Orders"
-          value={orders.length}
+          value={adminOrders.length}
           trend="+8%"
           trendUp={true}
           color="from-green-500 to-green-600"
@@ -700,7 +708,7 @@ const AdminPanel = () => {
             </button>
           </div>
           <div className="space-y-3">
-            {orders.slice(0, 5).map((order) => (
+            {adminOrders.slice(0, 5).map((order) => (
               <div
                 key={order._id}
                 className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
@@ -734,7 +742,7 @@ const AdminPanel = () => {
                 </div>
               </div>
             ))}
-            {orders.length === 0 && (
+            {adminOrders.length === 0 && (
               <p className="text-center text-gray-500 py-4">No orders yet</p>
             )}
           </div>
@@ -1167,11 +1175,15 @@ const AdminPanel = () => {
   // );
 
   const AdminOrdersView = () => {
-    // Get real data from Redux - same as your existing code
-    const { orders } = useSelector((state) => state.context);
+    // ✅ Get admin orders from Redux instead of context orders
+    const { adminOrders, newOrdersCount: reduxNewOrdersCount } = useSelector(
+      (state) => state.admin
+    );
     const { users } = useSelector((state) => state.admin);
 
-    const [newOrdersCount, setNewOrdersCount] = useState(0);
+    const [newOrdersCount, setNewOrdersCount] = useState(
+      reduxNewOrdersCount || 0
+    );
     const [updatingOrderId, setUpdatingOrderId] = useState(null);
 
     const API_URL =
@@ -1183,6 +1195,11 @@ const AdminPanel = () => {
       }
       return null;
     };
+
+    // Sync Redux newOrdersCount with local state
+    React.useEffect(() => {
+      setNewOrdersCount(reduxNewOrdersCount || 0);
+    }, [reduxNewOrdersCount]);
 
     // Fetch new orders count on component mount
     React.useEffect(() => {
@@ -1227,7 +1244,6 @@ const AdminPanel = () => {
 
         if (data.success) {
           alert(`Order ${newStatus} successfully!`);
-          // Reload page to refresh data from database
           window.location.reload();
         } else {
           throw new Error(data.message || "Failed to update order status");
@@ -1315,15 +1331,14 @@ const AdminPanel = () => {
           )}
         </div>
 
-        {/* Orders List - Using real data from Redux */}
-        {orders.length === 0 ? (
+        {/* ✅ Use adminOrders instead of orders */}
+        {adminOrders.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-lg shadow-sm">
             <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <p className="text-gray-500 text-lg">No orders yet</p>
           </div>
         ) : (
-          orders.map((order) => {
-            // Find user profile from users array
+          adminOrders.map((order) => {
             const userProfile = users.find((user) => user._id === order.user);
 
             return (
@@ -1494,7 +1509,7 @@ const AdminPanel = () => {
                   </div>
                 </div>
 
-                {/* Action Buttons - Only show if order is processing */}
+                {/* Action Buttons */}
                 {order.orderStatus === "processing" && (
                   <div className="flex gap-3 pt-4 border-t border-gray-200">
                     <button
@@ -1535,7 +1550,7 @@ const AdminPanel = () => {
                   </div>
                 )}
 
-                {/* Status Message for Delivered/Cancelled Orders */}
+                {/* Status Message */}
                 {order.orderStatus !== "processing" && (
                   <div
                     className={`px-4 py-3 rounded-lg ${
@@ -1694,10 +1709,10 @@ const AdminPanel = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="flex">
         <div className="w-64 bg-white shadow-sm min-h-screen border-r border-gray-200">
-          <div className="p-6">
-            <div className="flex items-center gap-2 mb-8">
-              <div className="w-8 h-8 bg-linear-to-br from-blue-600 to-purple-600 rounded-lg"></div>
-              <h1 className="text-xl font-bold text-gray-800">FFI</h1>
+          <div className="p-6 ">
+            <div className="flex items-center justify-center gap-2 mb-8">
+              <DarkLogo />
+              {/* <h1 className="text-xl font-bold text-gray-800">FFI</h1> */}
             </div>
 
             <p className="text-xs text-gray-500 uppercase tracking-wider mb-4">
@@ -1748,9 +1763,9 @@ const AdminPanel = () => {
                     className="pl-9 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50"
                   />
                 </div>
-                <div className="w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold cursor-pointer">
+                {/* <div className="w-10 h-10 bg-linear-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold cursor-pointer">
                   A
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

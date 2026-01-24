@@ -184,10 +184,10 @@ const contextSlice = createSlice({
         state.cart = action.payload.cart.map((item) => ({
           _id: item._id,
           quantity: item.quantity,
-          price: item.product.price,
-          name: item.product.name,
+          price: item.product?.price,
+          name: item.product?.name,
           selectedSize: item.selectedSize || "",
-          imageUrl: item.product.images ? item.product.images[0] : "",
+          imageUrl: item.product?.images ? item.product.images[0] : "",
         }));
 
         state.itemCount = state.cart.reduce(

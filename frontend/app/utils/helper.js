@@ -384,3 +384,20 @@ export const setDefaultCard = createAsyncThunk(
     }
   }
 );
+
+// ============================================
+// ADMIN: FETCH ALL ORDERS
+// ============================================
+export const fetchAdminOrders = createAsyncThunk(
+  "context/fetchAdminOrders",
+  async (params, { rejectWithValue }) => {
+    try {
+      const { data } = await adminAPI.getAll(params);
+      return data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to load admin orders"
+      );
+    }
+  }
+);
