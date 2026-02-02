@@ -350,7 +350,7 @@ const Blog = () => {
   };
   return (
     <div className="">
-      <div className="max-w-[1150px] mx-auto">
+      <div className="max-w-287.5 mx-auto">
         {/* features */}
         {features && (
           <>
@@ -362,7 +362,7 @@ const Blog = () => {
                       href={`/style-with-us/featured-blog/${ft.id}`}
                       key={ft.id}
                       style={{ backgroundImage: `url('${ft.img1}')` }}
-                      className="h-[49vh] w-screen md:w-[1150px] md:rounded-lg  bg-center bg-cover text-[#f7f1e8] relative"
+                      className="h-[49vh] w-screen md:w-287.5 md:rounded-lg  bg-center bg-cover text-[#f7f1e8] relative"
                     >
                       <div className="bg-linear-to-b from-neutral-900/0 via-neutral-900/50  to-neutral-900/50 absolute left-0 top-0 w-full h-full flex justify-between items-end  px-4 py-3 md:rounded-lg ">
                         <div className="w-[80%] flex flex-col gap-4">

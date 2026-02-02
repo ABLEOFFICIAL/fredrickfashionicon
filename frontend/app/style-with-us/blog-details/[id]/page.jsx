@@ -23,7 +23,7 @@ const BlogDetails = () => {
   return (
     <div>
       {clickedPost && (
-        <div className="max-w-[1140px] mx-auto px-5 md:px-0">
+        <div className="max-w-285 mx-auto px-5 md:px-0">
           <div className="h-20 w-full"></div>
 
           <h2 className="py-5 text-lg text-[#4a4741] border-b border-b-[#b7b7b7] md:text-2xl md:px-0">
@@ -47,7 +47,7 @@ const BlogDetails = () => {
                 src={clickedPost.video}
                 loop
                 muted
-                className="w-72 h-60 object-cover object-center md:w-[500px] md:h-[400px]"
+                className="w-72 h-60 object-cover object-center md:w-125 md:h-100"
               ></video>
               <FaPlay
                 onClick={handlePlay}
