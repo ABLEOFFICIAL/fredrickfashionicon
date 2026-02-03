@@ -39,7 +39,7 @@ const blogSchema = new mongoose.Schema(
       required: true,
     },
 
-    // ✅ UPDATED: Multiple categories (array)
+    // ✅ Multiple categories (array)
     category: {
       type: [String],
       enum: ["Clothes", "Shoes", "Bags"],
@@ -84,8 +84,9 @@ const blogSchema = new mongoose.Schema(
   }
 );
 
-// Auto-generate slug from title
+// ✅ FIXED: Pre-save middleware with proper function syntax
 blogSchema.pre("save", function (next) {
+  // Generate slug if not present
   if (!this.slug && this.title) {
     this.slug = this.title
       .toLowerCase()
@@ -93,10 +94,12 @@ blogSchema.pre("save", function (next) {
       .replace(/^-+|-+$/g, "");
   }
 
+  // Set publishedAt date if publishing for first time
   if (this.published && !this.publishedAt) {
     this.publishedAt = new Date();
   }
 
+  // ✅ Must call next() to continue
   next();
 });
 
