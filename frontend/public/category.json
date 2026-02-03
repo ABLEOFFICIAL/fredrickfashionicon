@@ -2,7 +2,7 @@
   {
     "id": 1,
     "category": "cloth",
-    "image": "/confidence.PNG",
+    "image": "/shoot-10.PNG",
     "Tag": "Everyday Wear",
     "Heading": "Unleash Your Confidence Through Style",
     "Paragraph": "Whether it's a brunch date or a night out, find outfits that flatter your form and reflect your vibe. Our collections help you express your identity in every stitch.",
@@ -14,7 +14,7 @@
   {
     "id": 2,
     "category": "cloth",
-    "image": "/display-2.png",
+    "image": "/shoot-11.jpeg",
     "Tag": "Bold Fit",
     "Heading": "Confidence Looks Better When You Wear It",
     "Paragraph": "Featuring the signature FFI shirt, this look captures bold movement and fearless confidence. Designed for men who walk with purpose, style, and undeniable presence.",
@@ -26,7 +26,7 @@
   {
     "id": 3,
     "category": "bags",
-    "image": "/display-3.png",
+    "image": "/shoot-13.jpeg",
     "Tag": "Carry Chic",
     "Heading": "Bags That Speak Elegance",
     "Paragraph": "Elevate your outfit with bags that blend fashion and function — from everyday totes to statement clutches, your essentials deserve style.",
@@ -38,7 +38,7 @@
   {
     "id": 6,
     "category": "shoe",
-    "image": "/shoot-x.png",
+    "image": "/shoot-12.jpeg",
     "Tag": "Step Forward",
     "Heading": "Shoes Built for Style and Motion",
     "Paragraph": "Designed to move with confidence, our shoes combine comfort, durability, and bold design — perfect for making strong impressions with every step you take.",

@@ -1,3 +1,4 @@
+// File: frontend/app/x-AD-min/components/modals/ProductModal.jsx
 "use client";
 import React, { useState, useEffect } from "react";
 import { X, Plus, Trash2, Upload, Loader2 } from "lucide-react";

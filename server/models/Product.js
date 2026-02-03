@@ -1,4 +1,4 @@
-//server/models/Product.js
+//file: server/models/Product.js
 const mongoose = require("mongoose");
 
 const reviewSchema = new mongoose.Schema({

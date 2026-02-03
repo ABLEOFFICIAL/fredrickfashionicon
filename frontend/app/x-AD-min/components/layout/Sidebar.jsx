@@ -1,3 +1,4 @@
+// File: frontend/app/x-AD-min/components/layout/Sidebar.jsx
 "use client";
 import React from "react";
 import {

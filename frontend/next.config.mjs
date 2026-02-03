@@ -6,30 +6,49 @@
 
 // export default nextConfig;
 
-// next.config.js (or next.config.mjs)
+// // next.config.js (or next.config.mjs)
+
+// /** @type {import('next').NextConfig} */
+// const nextConfig = {
+//   // ... your existing config
+//   reactCompiler: true,
+//   // ✅ Enable larger file uploads (50MB for videos)
+//   experimental: {
+//     serverActions: {
+//       bodySizeLimit: "50mb",
+//     },
+//   },
+
+//   // Allow larger API request bodies
+//   api: {
+//     bodyParser: {
+//       sizeLimit: "50mb",
+//     },
+//   },
+
+//   // ... rest of your config
+// };
+
+// export default nextConfig;
+
+// // OR if using CommonJS (module.exports):
+// // module.exports = nextConfig;
+
+// next.config.js  (or next.config.mjs — same content)
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // ... your existing config
   reactCompiler: true,
-  // ✅ Enable larger file uploads (50MB for videos)
+
   experimental: {
     serverActions: {
       bodySizeLimit: "50mb",
     },
   },
 
-  // Allow larger API request bodies
-  api: {
-    bodyParser: {
-      sizeLimit: "50mb",
-    },
+  images: {
+    remotePatterns: [],
   },
-
-  // ... rest of your config
 };
 
 export default nextConfig;
-
-// OR if using CommonJS (module.exports):
-// module.exports = nextConfig;

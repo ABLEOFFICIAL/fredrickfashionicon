@@ -1,3 +1,4 @@
+// File: frontend/app/discover/components/DisplayProducts.jsx
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";

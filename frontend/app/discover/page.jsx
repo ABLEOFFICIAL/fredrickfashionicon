@@ -1,3 +1,4 @@
+//app/discover/page.jsx
 "use client";
 
 import AdBlock from "./components/AdBlock";
@@ -17,7 +18,6 @@ const DiscoveryPage = () => {
             <Category />
           </div>
           <div className="md:flex-1">
-            {/* <Sidebar /> */}
             <AdBlock />
             <FilterBlock />
             <DisplayProducts />

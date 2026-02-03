@@ -8,53 +8,63 @@ const About = () => {
 
   const ffiData = {
     products: "2,000,000",
-    employees: "500",
+    employees: "10",
     years: 1,
   };
+
   return (
     <>
       <div>
         <div className="max-w-287.5 mx-auto">
-          <section id="who-we-are" className="">
+          {/* WHO WE ARE */}
+          <section id="who-we-are">
             <div className="bg-[url('/feel.avif')] h-[35vh] md:h-[60vh] bg-center bg-cover bg-no-repeat text-[#f7f1e8] flex justify-center items-center text-2xl">
               Our <span className="slant">Mission</span>
             </div>
+
             <h3 className="text-center my-5 font-light text-2xl">Who We Are</h3>
-            <div className="flex flex-col md:flex-row justify-between items-center ">
-              <div className="w-1/2 flex justify-center items-center ">
-                <img className="w-24 md:w-52 " src="/logoImg.png" alt="" />
+
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <div className="w-1/2 flex justify-center items-center">
+                <img className="w-24 md:w-52" src="/darklogo.png" alt="" />
               </div>
+
               <p className="text-sm w-[80%] ml-auto md:w-1/2 md:ml-0 leading-6 py-10">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa
-                molestiae, impedit asperiores earum exercitationem maxime odio
-                libero illum, voluptatem ratione consequatur. Iusto minima unde
-                atque quam voluptatum omnis quisquam mollitia maxime deserunt
-                commodi blanditiis eligendi tenetur, ea dicta esse quos, facere
-                a eius fugiat rerum fugit debitis reprehenderit eveniet! Velit.
+                Fredrick Fashion Icon (FFI) is a unisex fashion brand created
+                for modern individuals who value confidence, class, and
+                intentional style. We design clothing, footwear, bags, and
+                accessories that help people look polished without chasing loud
+                or temporary trends. FFI exists to make everyday dressing
+                easier, more refined, and empowering — helping individuals
+                express growth, maturity, and self-respect through what they
+                wear.
               </p>
             </div>
           </section>
 
+          {/* STYLISH */}
           <section id="stylish" className="py-20">
-            <div className="bg-[url('/hero1.jpg')] h-[25vh] md:h-[40vh] bg-center bg-cover bg-no-repeat text-[#f7f1e8] flex justify-center items-center text-2xl">
+            <div className="bg-[url('/shoot-15.jpeg')] h-[25vh] md:h-[60vh] bg-center bg-cover bg-no-repeat text-[#f7f1e8] flex justify-center items-center text-2xl">
               <span className="slant">Stylish</span>
             </div>
+
             <p className="text-sm w-[80%] m-auto text-center leading-6 py-10 italic">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsa
-              molestiae, impedit asperiores earum exercitationem maxime odio
-              libero illum, voluptatem ratione consequatur. Iusto minima unde
-              atque quam voluptatum omnis quisquam mollitia maxime deserunt
-              commodi blanditiis eligendi tenetur, ea dicta esse quos, facere a
-              eius fugiat rerum fugit debitis reprehenderit eveniet! Velit.
+              At FFI, style is intentional. Every piece is thoughtfully designed
+              to balance simplicity, elegance, and confidence. Our collections
+              are made for people who want to feel put together in every space —
+              from work and social events to everyday life — without trying too
+              hard.
             </p>
           </section>
 
+          {/* DIFFERENCE */}
           <div id="difference" className="px-5">
             <h1 className="text-2xl w-[60%] md:w-[30%]">
               The Iconic{" "}
               <span className="slant block text-right">Difference</span>
             </h1>
-            <section className="overflow-auto ">
+
+            <section className="overflow-auto">
               <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
                 {images.map((img) => {
                   return (
@@ -64,7 +74,7 @@ const About = () => {
                         backgroundImage: `url(${img})`,
                         scrollbarWidth: "none",
                       }}
-                      className={`bg-no-repeat bg-center mx-auto bg-cover h-72 w-72 rounded shadow-md`}
+                      className="bg-no-repeat bg-center mx-auto bg-cover h-72 w-72 rounded shadow-md"
                     ></div>
                   );
                 })}
@@ -72,99 +82,100 @@ const About = () => {
             </section>
           </div>
 
+          {/* STATS */}
           <section className="py-14 px-5">
-            <p className="text-base border-b pt-4 pb-6 leading-7 md:text-xl md:flex md:justify-between md:items-center md:py-14">
-              <span className="text-3xl font-light block md:text-7xl">
-                {ffiData.products}+
-              </span>{" "}
-              products sold worldwide
-            </p>
             <p className="text-base border-b pt-4 pb-6 leading-7 md:text-xl md:flex md:justify-between md:items-center md:py-14">
               <span className="text-3xl font-light block md:text-7xl">
                 {ffiData.employees}+
               </span>{" "}
-              Employees
+              Dedicated creatives and production partners
             </p>
+
             <p className="text-base border-b pt-4 pb-6 leading-7 md:text-xl md:flex md:justify-between md:items-center md:py-14">
               <span className="text-3xl font-light block md:text-7xl">
                 {ffiData.years}+
               </span>{" "}
-              PHD working across an in-house inter disciplinary science team
+              Years of building intentional fashion experiences
             </p>
           </section>
 
+          {/* STYLISH ICONS */}
           <section className="py-20 px-5">
             <div className="bg-[url('/elegant-jewellry.avif')] h-[25vh] md:h-[40vh] bg-center bg-cover bg-no-repeat text-[#f7f1e8] flex justify-center items-center text-2xl"></div>
+
             <h3 className="font-light text-2xl pt-10 md:text-3xl md:text-center">
-              Stylish icons
+              Stylish Icons
             </h3>
+
             <p className="text-sm leading-6 py-4 md:w-150 md:mx-auto md:text-center">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate
-              molestiae totam nihil voluptatem aliquid, fugiat nobis laborum
-              assumenda quo molestias provident in nam omnis illum, perspiciatis
-              aperiam saepe, ex hic!
+              FFI pieces are designed for individuals who lead with confidence
+              and purpose. Our customers are not followers of trends — they are
+              icons in their own right, expressing elegance, discipline, and
+              pride through their personal style.
             </p>
           </section>
 
+          {/* VALUES */}
           <section
             id="our-values"
             className="px-5 bg-white py-16 md:grid md:grid-cols-3 md:gap-16"
           >
-            <h2 className="text-2xl font-light pb-6 md:text-5xl">Our values</h2>
+            <h2 className="text-2xl font-light pb-6 md:text-5xl">Our Values</h2>
+
             <div className="flex flex-col gap-10">
               <div className="flex flex-col gap-5">
                 <FaUsers className="size-10 border border-neutral-500 rounded p-2" />
-                <h4 className="text-lg font-medium">Not Me, We: Ubuntu</h4>
+                <h4 className="text-lg font-medium">
+                  Community & Collaboration
+                </h4>
                 <p>
-                  At Oura, we are one team. We each have a significant role to
-                  play–but we don’t win in silos. We know in order to succeed,
-                  we must do it together. We embrace the diversity of our
-                  locations,perspectives, and experiences to succeed as one
-                  company.
+                  FFI is built on community. We believe fashion is stronger when
+                  people grow together. From creatives to customers, we value
+                  shared purpose, collaboration, and mutual respect.
                 </p>
               </div>
+
               <div className="flex flex-col gap-5">
                 <FaUserTie className="size-10 border border-neutral-500 rounded p-2" />
-                <h4 className="text-lg font-medium">We Are Human First</h4>
+                <h4 className="text-lg font-medium">
+                  Confidence & Self-Respect
+                </h4>
                 <p>
-                  Humanity is present in all that we do. We are passionate about
-                  building products that celebrate and support uniqueness,
-                  inclusivity, and diversity. We meet people where they are, as
-                  they are, and prioritize accessibility, by connecting with
-                  kindness and empathy
+                  Everything we create is meant to help people feel confident in
+                  who they are. Our designs support maturity, self-expression,
+                  and intentional living.
                 </p>
               </div>
+
               <div className="flex flex-col gap-5">
                 <IoCheckmark className="size-10 border border-neutral-500 rounded p-2" />
-                <h4 className="text-lg font-medium">Trust Matters</h4>
+                <h4 className="text-lg font-medium">Quality & Integrity</h4>
                 <p>
-                  If we say we’ll do something, we do it. We always show up with
-                  integrity, and we prioritize privacy– because it doesn’t just
-                  matter to us, but to you, as well. We do the right thing, even
-                  when no one is looking. It is vital to us that our community
-                  and teammates know that they can rely on our products,
-                  information, and perspective.
+                  We are committed to quality in design, fabric, and delivery.
+                  What we promise is what we deliver — with honesty, care, and
+                  attention to detail.
                 </p>
               </div>
             </div>
+
             <div className="pt-10 md:pt-0 flex flex-col gap-10">
               <div className="flex flex-col gap-5">
                 <LuPyramid className="size-10 border border-neutral-500 rounded p-2" />
-                <h4 className="text-lg font-medium">We Aim Higher</h4>
+                <h4 className="text-lg font-medium">Purpose-Driven Growth</h4>
                 <p>
-                  Good enough isn’t good enough—we want to be the best. We are
-                  bravely curious and optimistic about our ideas for the future,
-                  and exploration is in our DNA. We act with courage, challenge
-                  the status quo, take risks, and discover new. We execute with
-                  excellence.
+                  We aim higher than trends. FFI is built for long-term impact —
+                  growing into a leading African fashion brand with global
+                  relevance.
                 </p>
               </div>
+
               <div className="flex flex-col gap-5">
                 <FaRegEye className="size-10 border border-neutral-500 rounded p-2" />
-                <h4 className="text-lg font-medium">We find solutions</h4>
+                <h4 className="text-lg font-medium">Vision & Innovation</h4>
                 <p>
-                  We confront obstacles head-on. Even if we disagree, we share
-                  one common goal: solving the problem, together.
+                  We constantly evolve through creativity, storytelling, and
+                  design innovation — building fashion experiences that inspire
+                  pride and purpose.
                 </p>
               </div>
             </div>
@@ -176,5 +187,3 @@ const About = () => {
 };
 
 export default About;
-/* f7f1e8 */
-/* 4a4741 */

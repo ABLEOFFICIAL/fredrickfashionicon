@@ -23,7 +23,7 @@ const StyleMoments = () => {
       quote: "Wearing this, I don’t just feel dressed—I feel defined",
       author: "Ugochi M.",
       role: "ELEGANCE+ Muse",
-      img: "/shoot-2.png",
+      img: "/shoot-14.jpeg",
       overlay: "/20260121_222103.png",
     },
     {

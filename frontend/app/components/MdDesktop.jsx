@@ -176,7 +176,7 @@ const MdDesktop = () => {
               </div>
 
               {/* Image Card */}
-              <div className="grid gap-5 content-around w-full h-48 md:h-64 bg-center bg-cover bg-[url(/mood.avif)] rounded-2xl p-3">
+              <div className="grid gap-5 content-around w-full h-48 md:h-64 bg-center bg-cover bg-[url(/start-ur-day.png)] rounded-2xl p-3">
                 <h4 className="text-[#f7f1e8] block lg:hidden 2xl:block text-md md:text-2xl xl:text-4xl font-bold md:font-light">
                   Fredrick Fashion Icon <span className="slant">is here</span>
                 </h4>

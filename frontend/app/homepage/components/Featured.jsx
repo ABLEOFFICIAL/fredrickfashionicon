@@ -65,7 +65,7 @@ const Featured = () => {
   const images = [
     // "/dress1.jpg",
     "/product-1.PNG",
-    "/bag1.jpg",
+    "/shoot-5.png",
     "/product-5.PNG",
     "/product-3.PNG",
     // "/fan1.jpg",

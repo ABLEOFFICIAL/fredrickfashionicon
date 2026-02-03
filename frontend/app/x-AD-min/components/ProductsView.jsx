@@ -1,3 +1,4 @@
+// File: frontend/app/x-AD-min/components/ProductsView.jsx
 "use client";
 import React, { useState } from "react";
 import { Plus, Edit2, Trash2, Search, Star } from "lucide-react";
