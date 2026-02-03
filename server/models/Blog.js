@@ -1,52 +1,28 @@
-// const mongoose = require("mongoose");
-
-// const blogSchema = new mongoose.Schema({
-//   title: { type: String, required: true },
-//   content: { type: String, required: true },
-//   author: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-//   image: { type: String },
-//   tags: [{ type: String }],
-//   published: { type: Boolean, default: false },
-//   createdAt: { type: Date, default: Date.now },
-//   updatedAt: { type: Date, default: Date.now },
-// });
-
-// module.exports = mongoose.model("Blog", blogSchema);
-
 // server/models/Blog.js
 const mongoose = require("mongoose");
 
-// Content block schema - supports text, images, and videos
+// Content block schema - text, image, video only
 const contentBlockSchema = new mongoose.Schema({
   type: {
     type: String,
-    enum: ["text", "image", "video", "heading"],
+    enum: ["text", "image", "video"],
     required: true,
   },
   order: { type: Number, required: true },
 
   // For text blocks
-  heading: { type: String },
   text: { type: String },
 
   // For image blocks
   image: {
     url: { type: String },
     caption: { type: String },
-    alt: { type: String },
   },
 
   // For video blocks
   video: {
     url: { type: String },
-    thumbnailUrl: { type: String },
     caption: { type: String },
-    duration: { type: String }, // e.g., "5:30"
-    platform: {
-      type: String,
-      enum: ["youtube", "vimeo", "direct", "other"],
-      default: "direct",
-    },
   },
 });
 
@@ -55,7 +31,6 @@ const blogSchema = new mongoose.Schema(
     // Basic Info
     title: { type: String, required: true, trim: true },
     slug: { type: String, unique: true, sparse: true },
-    excerpt: { type: String, maxlength: 300 }, // Short summary for listings
 
     // Author
     author: {
@@ -64,40 +39,31 @@ const blogSchema = new mongoose.Schema(
       required: true,
     },
 
-    // Featured Media
-    featuredImage: { type: String }, // Main thumbnail
-    featuredVideo: {
-      url: { type: String },
-      thumbnailUrl: { type: String },
-      platform: {
-        type: String,
-        enum: ["youtube", "vimeo", "direct", "other"],
+    // ✅ UPDATED: Multiple categories (array)
+    category: {
+      type: [String],
+      enum: ["Clothes", "Shoes", "Bags"],
+      required: true,
+      validate: {
+        validator: function (v) {
+          return v && v.length > 0;
+        },
+        message: "At least one category is required",
       },
     },
 
-    // Content Sections - Flexible blocks
-    contentBlocks: [contentBlockSchema],
-
-    // Legacy content field (for backward compatibility)
-    content: { type: String },
-
-    // Metadata
+    // Tags
     tags: [{ type: String }],
-    category: {
-      type: String,
-      enum: [
-        "tutorial",
-        "news",
-        "announcement",
-        "product",
-        "lifestyle",
-        "technology",
-        "fashion",
-        "business",
-        "other",
-      ],
-      default: "other",
+
+    // Featured Media
+    featuredImage: { type: String },
+    featuredVideo: {
+      url: { type: String },
+      platform: { type: String, default: "direct" },
     },
+
+    // Content blocks
+    contentBlocks: [contentBlockSchema],
 
     // Publishing
     published: { type: Boolean, default: false },
@@ -106,10 +72,6 @@ const blogSchema = new mongoose.Schema(
     // Engagement
     views: { type: Number, default: 0 },
     likes: { type: Number, default: 0 },
-
-    // SEO
-    metaTitle: { type: String },
-    metaDescription: { type: String, maxlength: 160 },
 
     // Timestamps
     createdAt: { type: Date, default: Date.now },
@@ -122,7 +84,7 @@ const blogSchema = new mongoose.Schema(
   }
 );
 
-// Auto-generate slug from title if not provided
+// Auto-generate slug from title
 blogSchema.pre("save", function (next) {
   if (!this.slug && this.title) {
     this.slug = this.title
@@ -131,7 +93,6 @@ blogSchema.pre("save", function (next) {
       .replace(/^-+|-+$/g, "");
   }
 
-  // Set publishedAt when first published
   if (this.published && !this.publishedAt) {
     this.publishedAt = new Date();
   }
@@ -139,23 +100,14 @@ blogSchema.pre("save", function (next) {
   next();
 });
 
-// Virtual for reading time estimation
+// Virtual for reading time
 blogSchema.virtual("readingTime").get(function () {
   let wordCount = 0;
 
-  // Count words in legacy content
-  if (this.content) {
-    wordCount += this.content.split(/\s+/).length;
-  }
-
-  // Count words in content blocks
   if (this.contentBlocks) {
     this.contentBlocks.forEach((block) => {
       if (block.text) {
         wordCount += block.text.split(/\s+/).length;
-      }
-      if (block.heading) {
-        wordCount += block.heading.split(/\s+/).length;
       }
     });
   }
@@ -165,7 +117,7 @@ blogSchema.virtual("readingTime").get(function () {
   return minutes || 1;
 });
 
-// Index for better performance
+// Indexes
 blogSchema.index({ published: 1, createdAt: -1 });
 blogSchema.index({ slug: 1 });
 blogSchema.index({ tags: 1 });
