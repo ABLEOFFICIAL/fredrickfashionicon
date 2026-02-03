@@ -80,12 +80,15 @@ const AdBlock = () => {
                     <p className="text-sm sm:text-base text-white/90 mb-4 sm:mb-6 max-w-md">
                       {ad.description}
                     </p>
-                    <MyBtn
+                    {/* <MyBtn
                       to={"/ComingSoon"}
                       classname="bg-white text-[#4a4741] px-5 sm:px-6 py-2.5 sm:py-3 rounded-full w-fit font-medium hover:bg-gray-100 transition-colors text-sm sm:text-base shadow-lg"
                     >
                       Shop Now
-                    </MyBtn>
+                    </MyBtn> */}
+                    <span className="text-sm sm:text-base text-white/90 mb-4 sm:mb-6 max-w-md">
+                      Coming Soon...
+                    </span>
                   </div>
                 </div>
               ))}
@@ -134,12 +137,15 @@ const AdBlock = () => {
                     <p className="text-lg lg:text-xl text-white/90 mb-8 max-w-lg transform transition-all duration-700 delay-200">
                       {ad.description}
                     </p>
-                    <MyBtn
+                    {/* <MyBtn
                       to={"/ComingSoon"}
                       classname="bg-white text-[#4a4741] px-8 py-3.5 rounded-full w-fit font-semibold hover:bg-gray-100 hover:shadow-2xl transition-all transform hover:scale-105 text-base shadow-xl"
                     >
                       Shop Now
-                    </MyBtn>
+                    </MyBtn> */}
+                    <span className="text-sm sm:text-base text-white/90 mb-4 sm:mb-6 max-w-md italic">
+                      Coming Soon...
+                    </span>
                   </div>
                 </div>
               ))}
