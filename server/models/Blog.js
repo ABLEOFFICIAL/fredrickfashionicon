@@ -1,6 +1,10 @@
 // server/models/Blog.js
 const mongoose = require("mongoose");
 
+console.log(
+  "🔍 LOADING BLOG MODEL - VERSION 3.0 WITH ARRAY CATEGORIES AND CACHE CLEAR"
+);
+
 // Content block schema - text, image, video only
 const contentBlockSchema = new mongoose.Schema({
   type: {
@@ -84,22 +88,26 @@ const blogSchema = new mongoose.Schema(
   }
 );
 
-// ✅ FIXED: Pre-save middleware with proper function syntax
+// ✅ Pre-save middleware - MUST use function() not arrow function
 blogSchema.pre("save", function (next) {
+  console.log("🔍 Pre-save hook executing for blog:", this.title);
+
   // Generate slug if not present
   if (!this.slug && this.title) {
     this.slug = this.title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "");
+    console.log("✅ Generated slug:", this.slug);
   }
 
   // Set publishedAt date if publishing for first time
   if (this.published && !this.publishedAt) {
     this.publishedAt = new Date();
+    console.log("✅ Set publishedAt:", this.publishedAt);
   }
 
-  // ✅ Must call next() to continue
+  console.log("✅ Calling next() to continue save");
   next();
 });
 
@@ -126,4 +134,14 @@ blogSchema.index({ slug: 1 });
 blogSchema.index({ tags: 1 });
 blogSchema.index({ category: 1 });
 
-module.exports = mongoose.model("Blog", blogSchema);
+// ✅ CRITICAL FIX: Delete existing model if it exists (for hot reload)
+if (mongoose.models.Blog) {
+  console.log("⚠️ Deleting existing Blog model from cache");
+  delete mongoose.models.Blog;
+}
+
+// Export the model
+const Blog = mongoose.model("Blog", blogSchema);
+console.log("✅ Blog model created successfully");
+
+module.exports = Blog;
