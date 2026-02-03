@@ -89,7 +89,7 @@ const blogSchema = new mongoose.Schema(
 );
 
 // ✅ Pre-save middleware - MUST use function() not arrow function
-blogSchema.pre("save", function (next) {
+blogSchema.pre("save", async function () {
   console.log("🔍 Pre-save hook executing for blog:", this.title);
 
   // Generate slug if not present
@@ -106,9 +106,6 @@ blogSchema.pre("save", function (next) {
     this.publishedAt = new Date();
     console.log("✅ Set publishedAt:", this.publishedAt);
   }
-
-  console.log("✅ Calling next() to continue save");
-  next();
 });
 
 // Virtual for reading time
