@@ -1,101 +1,3 @@
-// // server/routes/blogRoutes.js
-// const router = require("express").Router();
-// const Blog = require("../models/Blog");
-// const { protect } = require("../middleware/auth");
-
-// // Get all blogs
-// router.get("/", async (req, res, next) => {
-//   try {
-//     const { page = 1, limit = 10 } = req.query;
-
-//     const blogs = await Blog.find({ published: true })
-//       .populate("author", "name email avatar")
-//       .limit(limit * 1)
-//       .skip((page - 1) * limit)
-//       .sort({ createdAt: -1 });
-
-//     const count = await Blog.countDocuments({ published: true });
-
-//     res.json({
-//       success: true,
-//       blogs,
-//       totalPages: Math.ceil(count / limit),
-//       currentPage: page,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
-// // Create Blog
-// router.post("/", protect, async (req, res, next) => {
-//   try {
-//     const blog = await Blog.create({
-//       ...req.body,
-//       author: req.user._id,
-//     });
-
-//     res.status(201).json({ success: true, blog });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
-// // Edit Blog
-// router.put("/:id", protect, async (req, res, next) => {
-//   try {
-//     const blog = await Blog.findById(req.params.id);
-
-//     if (!blog) {
-//       return res
-//         .status(404)
-//         .json({ success: false, message: "Blog not found" });
-//     }
-
-//     if (blog.author.toString() !== req.user._id.toString()) {
-//       return res
-//         .status(403)
-//         .json({ success: false, message: "Not authorized" });
-//     }
-
-//     const updated = await Blog.findByIdAndUpdate(
-//       req.params.id,
-//       { ...req.body, updatedAt: Date.now() },
-//       { new: true, runValidators: true }
-//     );
-
-//     res.json({ success: true, blog: updated });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
-// // Delete Blog
-// router.delete("/:id", protect, async (req, res, next) => {
-//   try {
-//     const blog = await Blog.findById(req.params.id);
-
-//     if (!blog) {
-//       return res
-//         .status(404)
-//         .json({ success: false, message: "Blog not found" });
-//     }
-
-//     if (blog.author.toString() !== req.user._id.toString()) {
-//       return res
-//         .status(403)
-//         .json({ success: false, message: "Not authorized" });
-//     }
-
-//     await Blog.findByIdAndDelete(req.params.id);
-//     res.json({ success: true, message: "Blog deleted" });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-
-// module.exports = router;
-
 // server/routes/blogRoutes.js
 const router = require("express").Router();
 const Blog = require("../models/Blog");
@@ -106,7 +8,7 @@ const { protect, adminOnly } = require("../middleware/auth");
 // ============================================
 
 // Get all published blogs with filters
-router.get("/", async (req, res, next) => {
+router.get("/", async (req, res) => {
   try {
     const {
       page = 1,
@@ -155,12 +57,16 @@ router.get("/", async (req, res, next) => {
       },
     });
   } catch (error) {
-    next(error);
+    console.error("Error fetching blogs:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch blogs",
+    });
   }
 });
 
 // Get single blog by slug or ID
-router.get("/:identifier", async (req, res, next) => {
+router.get("/:identifier", async (req, res) => {
   try {
     const { identifier } = req.params;
 
@@ -190,12 +96,16 @@ router.get("/:identifier", async (req, res, next) => {
 
     res.json({ success: true, blog });
   } catch (error) {
-    next(error);
+    console.error("Error fetching blog:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch blog",
+    });
   }
 });
 
 // Get featured/trending blogs
-router.get("/featured/list", async (req, res, next) => {
+router.get("/featured/list", async (req, res) => {
   try {
     const blogs = await Blog.find({ published: true })
       .populate("author", "name email avatar")
@@ -205,7 +115,11 @@ router.get("/featured/list", async (req, res, next) => {
 
     res.json({ success: true, blogs });
   } catch (error) {
-    next(error);
+    console.error("Error fetching featured blogs:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch featured blogs",
+    });
   }
 });
 
@@ -214,7 +128,7 @@ router.get("/featured/list", async (req, res, next) => {
 // ============================================
 
 // Get all blogs (including unpublished) - Admin only
-router.get("/admin/all", protect, async (req, res, next) => {
+router.get("/admin/all", protect, async (req, res) => {
   try {
     const { page = 1, limit = 20, published } = req.query;
 
@@ -242,13 +156,19 @@ router.get("/admin/all", protect, async (req, res, next) => {
       },
     });
   } catch (error) {
-    next(error);
+    console.error("Error fetching admin blogs:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch blogs",
+    });
   }
 });
 
-// Create new blog
-router.post("/", protect, async (req, res, next) => {
+// Create new blog - ✅ FIXED ERROR HANDLING
+router.post("/", protect, async (req, res) => {
   try {
+    console.log("📥 Creating blog with data:", req.body);
+
     const blogData = {
       ...req.body,
       author: req.user._id,
@@ -271,19 +191,40 @@ router.post("/", protect, async (req, res, next) => {
       "name email avatar"
     );
 
+    console.log("✅ Blog created successfully:", populatedBlog._id);
+
     res.status(201).json({
       success: true,
       blog: populatedBlog,
       message: "Blog created successfully",
     });
   } catch (error) {
-    next(error);
+    console.error("❌ Error creating blog:", error);
+
+    // Handle validation errors specifically
+    if (error.name === "ValidationError") {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+        errors: Object.keys(error.errors).reduce((acc, key) => {
+          acc[key] = error.errors[key].message;
+          return acc;
+        }, {}),
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to create blog",
+    });
   }
 });
 
-// Update blog
-router.put("/:id", protect, async (req, res, next) => {
+// Update blog - ✅ FIXED ERROR HANDLING
+router.put("/:id", protect, async (req, res) => {
   try {
+    console.log("📝 Updating blog:", req.params.id);
+
     const blog = await Blog.findById(req.params.id);
 
     if (!blog) {
@@ -320,18 +261,37 @@ router.put("/:id", protect, async (req, res, next) => {
       { new: true, runValidators: true }
     ).populate("author", "name email avatar");
 
+    console.log("✅ Blog updated successfully");
+
     res.json({
       success: true,
       blog: updated,
       message: "Blog updated successfully",
     });
   } catch (error) {
-    next(error);
+    console.error("❌ Error updating blog:", error);
+
+    // Handle validation errors
+    if (error.name === "ValidationError") {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+        errors: Object.keys(error.errors).reduce((acc, key) => {
+          acc[key] = error.errors[key].message;
+          return acc;
+        }, {}),
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to update blog",
+    });
   }
 });
 
 // Delete blog
-router.delete("/:id", protect, async (req, res, next) => {
+router.delete("/:id", protect, async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
 
@@ -360,12 +320,16 @@ router.delete("/:id", protect, async (req, res, next) => {
       message: "Blog deleted successfully",
     });
   } catch (error) {
-    next(error);
+    console.error("Error deleting blog:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to delete blog",
+    });
   }
 });
 
 // Toggle publish status
-router.patch("/:id/publish", protect, async (req, res, next) => {
+router.patch("/:id/publish", protect, async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
 
@@ -402,12 +366,16 @@ router.patch("/:id/publish", protect, async (req, res, next) => {
       } successfully`,
     });
   } catch (error) {
-    next(error);
+    console.error("Error toggling publish status:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to toggle publish status",
+    });
   }
 });
 
 // Like blog
-router.post("/:id/like", async (req, res, next) => {
+router.post("/:id/like", async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
 
@@ -426,7 +394,11 @@ router.post("/:id/like", async (req, res, next) => {
       likes: blog.likes,
     });
   } catch (error) {
-    next(error);
+    console.error("Error liking blog:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to like blog",
+    });
   }
 });
 
