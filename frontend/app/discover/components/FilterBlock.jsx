@@ -1,5 +1,4 @@
 // File: frontend/app/discover/components/FilterBlock.jsx
-"use client";
 import React, { useState } from "react";
 import { SlidersHorizontal, X } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";

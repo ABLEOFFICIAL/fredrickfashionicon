@@ -1,5 +1,4 @@
 // File: frontend/app/discover/components/AdBlock.jsx
-"use client";
 import MyBtn from "@/app/components/MyBtn";
 import React, { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
